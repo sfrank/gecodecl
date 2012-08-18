@@ -1,0 +1,14 @@
+Some design decisions(-) and TODOs(*) to support my memory later
+(in time lined order of occurrence):
+
+- FFI functions keep their C level name to serve as a clear marker
+  since a Lisp abstraction for normal use is provided (and is the
+  only sane way to use anyway). 
+
+* The currently solution for exeception catching works only for
+  non-treaded uses. If a new thread is created and causes an
+  exception it will not appear on the Lisp side. Explore how
+  others solved this (maybe create an initial thread to set up
+  the exception handling machinery?)
+
+
