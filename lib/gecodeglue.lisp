@@ -113,6 +113,7 @@
   (op int-relation-type)
   (v1 size)
   (val :int)
+  (mode reify-mode)
   (v2 size)
   (icl int-consistency-level))
 
@@ -121,6 +122,7 @@
   (op int-relation-type)
   (v1 size)
   (v2 size)
+  (mode reify-mode)
   (b1 size)
   (icl int-consistency-level))
 
@@ -417,6 +419,7 @@
   (v :pointer)
   (count size)
   (value :int)
+  (mode reify-mode)
   (bvar :int)
   (icl int-consistency-level))
 
@@ -426,6 +429,7 @@
   (v :pointer)
   (count size)
   (var :int)
+  (mode reify-mode)
   (bvar :int)
   (icl int-consistency-level))
 
@@ -454,6 +458,7 @@
   (v :pointer)
   (count size)
   (value :int)
+  (mode reify-mode)
   (bvar :int)
   (icl int-consistency-level))
 
@@ -464,6 +469,7 @@
   (v :pointer)
   (count size)
   (var :int)
+  (mode reify-mode)
   (bvar :int)
   (icl int-consistency-level))
 
@@ -489,6 +495,7 @@
   (v :pointer)
   (count size)
   (value :int)
+  (mode reify-mode)
   (bvar :int)
   (icl int-consistency-level))
 
@@ -498,6 +505,7 @@
   (v :pointer)
   (count size)
   (var :int)
+  (mode reify-mode)
   (bvar :int)
   (icl int-consistency-level))
 
@@ -526,6 +534,7 @@
   (v :pointer)
   (count size)
   (value :int)
+  (mode reify-mode)
   (bvar :int)
   (icl int-consistency-level))
 
@@ -536,6 +545,7 @@
   (v :pointer)
   (count size)
   (var :int)
+  (mode reify-mode)
   (bvar :int)
   (icl int-consistency-level))
 
