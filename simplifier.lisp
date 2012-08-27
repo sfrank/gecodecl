@@ -157,7 +157,7 @@
        (- (* (- x 1) (+ x 1)) (- (^ x 2) 1)) => 0"
   (cond ((numberp x) x)
         ((var-p x) (poly x 0 1))
-        ((and (exp-p x) (get (expr-op x) 'prefix->canon))
+        ((exp-p x)
          (apply (get-fn (expr-op x))
                 (mapcar #'prefix->canon (exp-args x))))
         (t (error "Not a polynomial: ~a" x))))
@@ -199,7 +199,7 @@ CL::* for numbers."
          (setf poly (poly*poly poly p)))))))
 
 (defun poly/ (&rest args)
-  "Polynomial multiplication where (/ P) returns (/ 1 P) as with
+  "Polynomial division where (/ P) returns (/ 1 P) as with
 CL::/ for numbers."
   (case (length args)
     (1 (poly/poly 1 (first args)))
@@ -476,20 +476,11 @@ Handles operators with any number of args."
   result)
 
 (defstruct (rat (:constructor make-rat (numer denom)))
-  (numer 0  :type (or symbol integer polynomial))
-  (denom 1 :type (or symbol integer polynomial)))
+  (numer 0  :type (or integer polynomial))
+  (denom 1 :type (or integer polynomial)))
 
 (defun rational-p (poly)
   (typep poly 'rat))
-
-#+(or)
-(defun make-rat (numerator denominator)
-  "Build a rational: a quotient of two polynomials."
-  (cons numerator denominator)
-  #+ (or)
-  (if (numberp denominator)
-      (k*poly (/ 1 denominator) numerator)
-      (cons numerator denominator)))
 
 (defun normalize-rat (rat)
   (cond
@@ -514,17 +505,15 @@ Handles operators with any number of args."
 
 (defun rat-numerator (rat)
   "The numerator of a rational expression."
-  (typecase rat
+  (etypecase rat
     (rat (rat-numer rat))
-    (number (numerator rat))
-    (t rat)))
+    (number (numerator rat))))
 
 (defun rat-denominator (rat)
   "The denominator of a rational expression."
-  (typecase rat
+  (etypecase rat
     (rat (rat-denom rat))
-    (number (denominator rat))
-    (t 1)))
+    (number (denominator rat))))
 
 (defun rat*rat (x y)
   "Multiply rationals: a/b * c/d = a*c/b*d"
