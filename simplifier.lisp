@@ -83,8 +83,8 @@
 
 ;;;; Definition of the Canonical Polynomial Representation
 
-(declaim (inline main-var degree coef var-p
-                 var= var> poly make-poly))
+(declaim (inline main-var degree coef var-p var= var>
+                 poly make-poly exp-p exp-args))
 
 ;; two variables are equal if they are of the same type and their
 ;; indices are equal
@@ -620,16 +620,15 @@ of the toplevel in the polynomial p."
 (defun poly/poly (p q)
   "Divide p by q: if d is the greatest common divisor of p and q
 then p/q = (p/d) / (q/d). Note if q=1, then p/q = p."
-  (handler-case 
-      (if (eql q 1)
-          p
-          (let ((d (poly-gcd p q)))
-            (if (eql d 1)
-                (normalize-rat (poly/poly-helper p q)) ; (normalize-rat (make-rat p q))
-                (normalize-rat (make-rat (poly/poly-helper p d)
-                                         (poly/poly-helper q d))))))
-    (non-integer-result ()
-      (normalize-rat (make-rat p q)))))
+  (if (numberp q)
+      (poly/k p q)
+      (handler-case 
+        (let ((d (poly-gcd p q)))
+          (normalize-rat
+           (make-rat (poly/poly-helper p d)
+                     (poly/poly-helper q d))))
+        (non-integer-result ()
+          (normalize-rat (make-rat p q))))))
 
 (defun poly/poly-helper (p s)
   "Switches to the right division funktion, depending on argument
@@ -644,22 +643,22 @@ types."
                     (signal 'non-integer-result))) 
 	       (t (make-rat p s); (error "Division by a polynomial of higher degree!")
                 )))
-	((or (numberp s)
-             (var> (main-var s) (main-var p)))
+	((numberp s)
 	 (poly/k p s))
-	((var> (main-var p) (main-var s))
-	 (error "Division by a polynomial of higher degree!"))
-	(t (poly/poly-do-it p s))))
+	(t
+         (poly/poly-do-it p s))))
 
 (defun poly/k (p s)
   "Divides a polynomial by a scalar."
-  (handler-case (let ((q (copy-seq p)))
-                  (do ((i (1- (length p))
-                         (1- i)))
-                      ((= i 0) q)
-                    (setf (svref q i) (poly/poly-helper (svref q i) s))))
-    (non-integer-result ()
-      (make-rat p s))))
+  (if (= s 1)
+      p
+      (handler-case (let ((q (copy-seq p)))
+                      (do ((i (1- (length p))
+                              (1- i)))
+                          ((= i 0) q)
+                        (setf (svref q i) (poly/poly-helper (svref q i) s))))
+        (non-integer-result ()
+          (make-rat p s)))))
 
 (defun poly/poly-do-it (p s)
   "Divides two polynomials p and s."
@@ -674,11 +673,12 @@ types."
 	  (do* ((i l1 (length p)))
 	       ((< i l2) (error "Quotient not exact"))
 	    (setf (svref q (+ 1 i (- l2))) (poly/poly (leading-coef p) leading-s))
-	    (setq p (normalize-poly (poly+poly p
-					       (poly*poly (subseq q 0 (+ 2 i (- l2)))
-							  sneg))))
-	    (if (eql 0 p)
-		(return (normalize-poly q))))))))
+            ;(format t "step 1~%")
+	    (setq p  (poly+poly p (poly*poly (subseq q 0 (+ 2 i (- l2)))
+                                             sneg)))
+            ;(format t "step 2~%")
+	    (when (eql 0 p)
+              (return (normalize-poly q))))))))
 
 ;;; Example
 #+ (or)

@@ -24,7 +24,7 @@
     :depends-on (package types gecodeglue)
     :pathname ""
     :components ((:file "core")
-                 ;(:file "simplifier" :depends-on ("core"))
-                 (:file "interface" :depends-on ("core")))))
+                 (:file "simplifier" :depends-on ("core"))
+                 (:file "interface" :depends-on ("core" "simplifier")))))
   :depends-on
   (:alexandria :cffi :trivial-garbage))

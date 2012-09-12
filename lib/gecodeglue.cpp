@@ -415,12 +415,12 @@ void gecode_rel_bvar_bvar(CLSpace *space, IntRelType op,
                           size_t v1, size_t v2, IntConLevel icl) {
   rel(*space, space->getBoolVar(v1), op, space->getBoolVar(v2), icl); }
 
-void gecode_rel_bvar_int_bvar(CLSpace *space, IntRelType op, size_t v1,
-                              int val, ReifyMode mode, size_t v2, IntConLevel icl) {
+void gecode_rel_bvar_int_reified(CLSpace *space, IntRelType op, size_t v1,
+                                 int val, ReifyMode mode, size_t v2, IntConLevel icl) {
   rel(*space, space->getBoolVar(v1), op, val, Reify(space->getBoolVar(v2), mode), icl); }
 
-void gecode_rel_bvar_bvar_bvar(CLSpace *space, IntRelType op, size_t v1,
-                               size_t v2, ReifyMode mode, size_t b1, IntConLevel icl) {
+void gecode_rel_bvar_bvar_reified(CLSpace *space, IntRelType op, size_t v1,
+                                  size_t v2, ReifyMode mode, size_t b1, IntConLevel icl) {
   rel(*space, space->getBoolVar(v1), op, space->getBoolVar(v2),
       Reify(space->getBoolVar(b1), mode), icl);
 }
@@ -525,13 +525,13 @@ void gecode_rel_ivar_ivar(CLSpace *space, IntRelType op,
                           size_t v1, size_t v2, IntConLevel icl) {
   rel(*space, space->getIntVar(v1), op, space->getIntVar(v2), icl); }
 
-void gecode_rel_ivar_int_bvar(CLSpace *space, IntRelType op, size_t v1,
-                              int val, ReifyMode mode, size_t b1, IntConLevel icl) {
+void gecode_rel_ivar_int_reified(CLSpace *space, IntRelType op, size_t v1,
+                                 int val, ReifyMode mode, size_t b1, IntConLevel icl) {
   rel(*space, space->getIntVar(v1), op, val, 
       Reify(space->getBoolVar(b1), mode), icl); }
 
-void gecode_rel_ivar_ivar_bvar(CLSpace *space, IntRelType op, size_t v1,
-                               size_t v2, ReifyMode mode, size_t b1, IntConLevel icl) {
+void gecode_rel_ivar_ivar_reified(CLSpace *space, IntRelType op, size_t v1,
+                                  size_t v2, ReifyMode mode, size_t b1, IntConLevel icl) {
   rel(*space, space->getIntVar(v1), op, space->getIntVar(v2),
       Reify(space->getBoolVar(b1), mode), icl);
 }
@@ -831,18 +831,18 @@ void gecode_lin_ivars_ivar(CLSpace *space, IntRelType rel, int v[],
   linear(*space, va, rel, space->getIntVar(var), icl);
 }
 
-void gecode_lin_ivars_int_bvar(CLSpace *space, IntRelType rel, int v[],
-                               vector<IntVar>::size_type count, int value,
-                               ReifyMode mode, int bvar, IntConLevel icl) {
+void gecode_lin_ivars_int_reified(CLSpace *space, IntRelType rel, int v[],
+                                  vector<IntVar>::size_type count, int value,
+                                  ReifyMode mode, int bvar, IntConLevel icl) {
   IntVarArgs va(count);
   for(unsigned i=0; i<count; i++)
     { va[i]=space->getIntVar(v[i]); }
   linear(*space, va, rel, value, Reify(space->getBoolVar(bvar), mode), icl);
 }
 
-void gecode_lin_ivars_ivar_bvar(CLSpace *space, IntRelType rel, int v[],
-                                vector<IntVar>::size_type count, int var,
-                                ReifyMode mode, int bvar, IntConLevel icl) {
+void gecode_lin_ivars_ivar_reified(CLSpace *space, IntRelType rel, int v[],
+                                   vector<IntVar>::size_type count, int var,
+                                   ReifyMode mode, int bvar, IntConLevel icl) {
   IntVarArgs va(count);
   for(unsigned i=0; i<count; i++)
     { va[i]=space->getIntVar(v[i]); }
@@ -869,9 +869,9 @@ void gecode_lin_ints_ivars_ivar(CLSpace *space, IntRelType rel, int ints[], int 
   linear(*space, ia, va, rel, space->getIntVar(var), icl);
 }
 
-void gecode_lin_ints_ivars_int_bvar(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                    vector<IntVar>::size_type count, int value,
-                                    ReifyMode mode, int bvar, IntConLevel icl) {
+void gecode_lin_ints_ivars_int_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
+                                       vector<IntVar>::size_type count, int value,
+                                       ReifyMode mode, int bvar, IntConLevel icl) {
   IntVarArgs va(count);
   IntArgs ia(count, ints);
   for(unsigned i=0; i<count; i++)
@@ -879,9 +879,9 @@ void gecode_lin_ints_ivars_int_bvar(CLSpace *space, IntRelType rel, int ints[], 
   linear(*space, ia, va, rel, value, Reify(space->getBoolVar(bvar), mode), icl);
 }
 
-void gecode_lin_ints_ivars_ivar_bvar(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                     vector<IntVar>::size_type count, int var,
-                                     ReifyMode mode, int bvar, IntConLevel icl) {
+void gecode_lin_ints_ivars_ivar_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
+                                        vector<IntVar>::size_type count, int var,
+                                        ReifyMode mode, int bvar, IntConLevel icl) {
   IntVarArgs va(count);
   IntArgs ia(count, ints);
   for(unsigned i=0; i<count; i++)
@@ -909,18 +909,18 @@ void gecode_lin_bvars_ivar(CLSpace *space, IntRelType rel, int v[],
   linear(*space, va, rel, space->getIntVar(var), icl);
 }
 
-void gecode_lin_bvars_int_bvar(CLSpace *space, IntRelType rel, int v[],
-                               vector<BoolVar>::size_type count, int value,
-                               ReifyMode mode, int bvar, IntConLevel icl) {
+void gecode_lin_bvars_int_reified(CLSpace *space, IntRelType rel, int v[],
+                                  vector<BoolVar>::size_type count, int value,
+                                  ReifyMode mode, int bvar, IntConLevel icl) {
   BoolVarArgs va(count);
   for(unsigned i=0; i<count; i++)
     { va[i]=space->getBoolVar(v[i]); }
   linear(*space, va, rel, value, Reify(space->getBoolVar(bvar), mode), icl);
 }
 
-void gecode_lin_bvars_ivar_bvar(CLSpace *space, IntRelType rel, int v[],
-                                vector<BoolVar>::size_type count, int var,
-                                ReifyMode mode, int bvar, IntConLevel icl) {
+void gecode_lin_bvars_ivar_reified(CLSpace *space, IntRelType rel, int v[],
+                                   vector<BoolVar>::size_type count, int var,
+                                   ReifyMode mode, int bvar, IntConLevel icl) {
   BoolVarArgs va(count);
   for(unsigned i=0; i<count; i++)
     { va[i]=space->getBoolVar(v[i]); }
@@ -947,9 +947,9 @@ void gecode_lin_ints_bvars_ivar(CLSpace *space, IntRelType rel, int ints[], int 
   linear(*space, ia, va, rel, space->getIntVar(var), icl);
 }
 
-void gecode_lin_ints_bvars_int_bvar(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                    vector<BoolVar>::size_type count, int value,
-                                    ReifyMode mode, int bvar, IntConLevel icl) {
+void gecode_lin_ints_bvars_int_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
+                                       vector<BoolVar>::size_type count, int value,
+                                       ReifyMode mode, int bvar, IntConLevel icl) {
   BoolVarArgs va(count);
   IntArgs ia(count, ints);
   for(unsigned i=0; i<count; i++)
@@ -957,9 +957,9 @@ void gecode_lin_ints_bvars_int_bvar(CLSpace *space, IntRelType rel, int ints[], 
   linear(*space, ia, va, rel, value, Reify(space->getBoolVar(bvar), mode), icl);
 }
 
-void gecode_lin_ints_bvars_ivar_bvar(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                     vector<BoolVar>::size_type count, int var,
-                                     ReifyMode mode, int bvar, IntConLevel icl) {
+void gecode_lin_ints_bvars_ivar_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
+                                        vector<BoolVar>::size_type count, int var,
+                                        ReifyMode mode, int bvar, IntConLevel icl) {
   BoolVarArgs va(count);
   IntArgs ia(count, ints);
   for(unsigned i=0; i<count; i++)

@@ -41,11 +41,11 @@ extern "C" {
   void gecode_rel_bvar_bvar(CLSpace *space, IntRelType op,
                             size_t v1, size_t v2, IntConLevel icl);
 
-  void gecode_rel_bvar_int_bvar(CLSpace *space, IntRelType op, size_t v1,
-                                int val, ReifyMode mode, size_t v2, IntConLevel icl);
+  void gecode_rel_bvar_int_reified(CLSpace *space, IntRelType op, size_t v1,
+                                   int val, ReifyMode mode, size_t v2, IntConLevel icl);
   
-  void gecode_rel_bvar_bvar_bvar(CLSpace *space, IntRelType op, size_t v1,
-                                 size_t v2, ReifyMode mode, size_t b1, IntConLevel icl);
+  void gecode_rel_bvar_bvar_reified(CLSpace *space, IntRelType op, size_t v1,
+                                    size_t v2, ReifyMode mode, size_t b1, IntConLevel icl);
 
   void gecode_rel_bvars(CLSpace *space, IntRelType op, int v[],
                         size_t count, IntConLevel icl);
@@ -89,11 +89,11 @@ extern "C" {
   void gecode_rel_ivar_ivar(CLSpace *space, IntRelType op,
                             size_t v1, size_t v2, IntConLevel icl);
 
-  void gecode_rel_ivar_int_bvar(CLSpace *space, IntRelType op, size_t v1,
-                                int val, ReifyMode mode, size_t b1, IntConLevel icl);
+  void gecode_rel_ivar_int_reified(CLSpace *space, IntRelType op, size_t v1,
+                                   int val, ReifyMode mode, size_t b1, IntConLevel icl);
 
-  void gecode_rel_ivar_ivar_bvar(CLSpace *space, IntRelType op, size_t v1,
-                                 size_t v2, ReifyMode mode, size_t b1, IntConLevel icl);
+  void gecode_rel_ivar_ivar_reified(CLSpace *space, IntRelType op, size_t v1,
+                                    size_t v2, ReifyMode mode, size_t b1, IntConLevel icl);
 
   void gecode_rel_ivars(CLSpace *space, IntRelType op, int v[],
                         size_t count, IntConLevel icl);
@@ -201,13 +201,13 @@ extern "C" {
   void gecode_lin_ivars_ivar(CLSpace *space, IntRelType rel, int v[],
                              size_t count, int var, IntConLevel icl);
 
-  void gecode_lin_ivars_int_bvar(CLSpace *space, IntRelType rel, int v[],
-                                 size_t count, int value, ReifyMode mode,
-                                 int bvar, IntConLevel icl);
+  void gecode_lin_ivars_int_reified(CLSpace *space, IntRelType rel, int v[],
+                                    size_t count, int value, ReifyMode mode,
+                                    int bvar, IntConLevel icl);
 
-  void gecode_lin_ivars_ivar_bvar(CLSpace *space, IntRelType rel, int v[],
-                                  size_t count, int var, ReifyMode mode, 
-                                  int bvar, IntConLevel icl);
+  void gecode_lin_ivars_ivar_reified(CLSpace *space, IntRelType rel, int v[],
+                                     size_t count, int var, ReifyMode mode, 
+                                     int bvar, IntConLevel icl);
 
   void gecode_lin_ints_ivars_int(CLSpace *space, IntRelType rel, int ints[], int v[],
                                  size_t count, int value, IntConLevel icl);
@@ -215,11 +215,11 @@ extern "C" {
   void gecode_lin_ints_ivars_ivar(CLSpace *space, IntRelType rel, int ints[], int v[],
                                   size_t count, int var, IntConLevel icl);
 
-  void gecode_lin_ints_ivars_int_bvar(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                      size_t count, int value, ReifyMode mode, int bvar, IntConLevel icl);
+  void gecode_lin_ints_ivars_int_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
+                                         size_t count, int value, ReifyMode mode, int bvar, IntConLevel icl);
 
-  void gecode_lin_ints_ivars_ivar_bvar(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                       size_t count, int var, ReifyMode mode, int bvar, IntConLevel icl);
+  void gecode_lin_ints_ivars_ivar_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
+                                          size_t count, int var, ReifyMode mode, int bvar, IntConLevel icl);
 
 
   /* boolean linear constraint */
@@ -229,11 +229,11 @@ extern "C" {
   void gecode_lin_bvars_ivar(CLSpace *space, IntRelType rel, int v[],
                              size_t count, int var, IntConLevel icl);
 
-  void gecode_lin_bvars_int_bvar(CLSpace *space, IntRelType rel, int v[],
-                                 size_t count, int value, ReifyMode mode, int bvar, IntConLevel icl);
+  void gecode_lin_bvars_int_reified(CLSpace *space, IntRelType rel, int v[],
+                                    size_t count, int value, ReifyMode mode, int bvar, IntConLevel icl);
 
-  void gecode_lin_bvars_ivar_bvar(CLSpace *space, IntRelType rel, int v[],
-                                  size_t count, int var, ReifyMode mode, int bvar, IntConLevel icl);
+  void gecode_lin_bvars_ivar_reified(CLSpace *space, IntRelType rel, int v[],
+                                     size_t count, int var, ReifyMode mode, int bvar, IntConLevel icl);
 
   void gecode_lin_ints_bvars_int(CLSpace *space, IntRelType rel, int ints[], int v[],
                                  size_t count, int value, IntConLevel icl);
@@ -241,13 +241,13 @@ extern "C" {
   void gecode_lin_ints_bvars_ivar(CLSpace *space, IntRelType rel, int ints[], int v[],
                                   size_t count, int var, IntConLevel icl);
 
-  void gecode_lin_ints_bvars_int_bvar(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                      size_t count, int value, ReifyMode mode, 
-                                      int bvar, IntConLevel icl);
+  void gecode_lin_ints_bvars_int_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
+                                         size_t count, int value, ReifyMode mode, 
+                                         int bvar, IntConLevel icl);
 
-  void gecode_lin_ints_bvars_ivar_bvar(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                       size_t count, int var, ReifyMode mode, 
-                                       int bvar, IntConLevel icl);
+  void gecode_lin_ints_bvars_ivar_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
+                                          size_t count, int var, ReifyMode mode, 
+                                          int bvar, IntConLevel icl);
 
 
 } /* extern C */

@@ -108,7 +108,7 @@
   (v2 size)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_rel_bvar_int_bvar" gecode_rel_bvar_int_bvar) :void
+(cffi:defcfun ("gecode_rel_bvar_int_reified" gecode_rel_bvar_int_reified) :void
   (space :pointer)
   (op int-relation-type)
   (v1 size)
@@ -117,7 +117,7 @@
   (v2 size)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_rel_bvar_bvar_bvar" gecode_rel_bvar_bvar_bvar) :void
+(cffi:defcfun ("gecode_rel_bvar_bvar_reified" gecode_rel_bvar_bvar_reified) :void
   (space :pointer)
   (op int-relation-type)
   (v1 size)
@@ -216,7 +216,7 @@
   (v2 size)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_rel_ivar_int_bvar" gecode_rel_ivar_int_bvar) :void
+(cffi:defcfun ("gecode_rel_ivar_int_reified" gecode_rel_ivar_int_reified) :void
   (space :pointer)
   (op int-relation-type)
   (v1 size)
@@ -225,7 +225,7 @@
   (b1 size)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_rel_ivar_ivar_bvar" gecode_rel_ivar_ivar_bvar) :void
+(cffi:defcfun ("gecode_rel_ivar_ivar_reified" gecode_rel_ivar_ivar_reified) :void
   (space :pointer)
   (op int-relation-type)
   (v1 size)
@@ -413,7 +413,7 @@
   (var :int)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_lin_ivars_int_bvar" gecode_lin_ivars_int_bvar) :void
+(cffi:defcfun ("gecode_lin_ivars_int_reified" gecode_lin_ivars_int_reified) :void
   (space :pointer)
   (rel int-relation-type)
   (v :pointer)
@@ -423,7 +423,7 @@
   (bvar :int)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_lin_ivars_ivar_bvar" gecode_lin_ivars_ivar_bvar) :void
+(cffi:defcfun ("gecode_lin_ivars_ivar_reified" gecode_lin_ivars_ivar_reified) :void
   (space :pointer)
   (rel int-relation-type)
   (v :pointer)
@@ -451,7 +451,7 @@
   (var :int)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_lin_ints_ivars_int_bvar" gecode_lin_ints_ivars_int_bvar) :void
+(cffi:defcfun ("gecode_lin_ints_ivars_int_reified" gecode_lin_ints_ivars_int_reified) :void
   (space :pointer)
   (rel int-relation-type)
   (ints :pointer)
@@ -462,7 +462,7 @@
   (bvar :int)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_lin_ints_ivars_ivar_bvar" gecode_lin_ints_ivars_ivar_bvar) :void
+(cffi:defcfun ("gecode_lin_ints_ivars_ivar_reified" gecode_lin_ints_ivars_ivar_reified) :void
   (space :pointer)
   (rel int-relation-type)
   (ints :pointer)
@@ -489,7 +489,7 @@
   (var :int)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_lin_bvars_int_bvar" gecode_lin_bvars_int_bvar) :void
+(cffi:defcfun ("gecode_lin_bvars_int_reified" gecode_lin_bvars_int_reified) :void
   (space :pointer)
   (rel int-relation-type)
   (v :pointer)
@@ -499,7 +499,7 @@
   (bvar :int)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_lin_bvars_ivar_bvar" gecode_lin_bvars_ivar_bvar) :void
+(cffi:defcfun ("gecode_lin_bvars_ivar_reified" gecode_lin_bvars_ivar_reified) :void
   (space :pointer)
   (rel int-relation-type)
   (v :pointer)
@@ -527,7 +527,7 @@
   (var :int)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_lin_ints_bvars_int_bvar" gecode_lin_ints_bvars_int_bvar) :void
+(cffi:defcfun ("gecode_lin_ints_bvars_int_reified" gecode_lin_ints_bvars_int_reified) :void
   (space :pointer)
   (rel int-relation-type)
   (ints :pointer)
@@ -538,7 +538,7 @@
   (bvar :int)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_lin_ints_bvars_ivar_bvar" gecode_lin_ints_bvars_ivar_bvar) :void
+(cffi:defcfun ("gecode_lin_ints_bvars_ivar_reified" gecode_lin_ints_bvars_ivar_reified) :void
   (space :pointer)
   (rel int-relation-type)
   (ints :pointer)
