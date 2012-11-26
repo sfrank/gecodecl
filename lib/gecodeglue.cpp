@@ -337,27 +337,27 @@ void inline checkBranchers(CLSpace *space) {
     // branch on all IntVars
     size = space->getIntVarSize();
     if(size == 1) {
-      branch(*space,space->getIntVar(0), INT_VAL_SPLIT_MIN);
+      branch(*space,space->getIntVar(0), INT_VAL_SPLIT_MIN());
     }
     else if(size > 1) {
       IntVarArgs vars(size);
       for(int i=0; i<size; i++) {
         vars[i] = space->getIntVar(i);
       }
-      branch(*space, vars, INT_VAR_SIZE_MIN, INT_VAL_SPLIT_MIN);
+      branch(*space, vars, INT_VAR_SIZE_MIN(), INT_VAL_SPLIT_MIN());
     }
     
     // branch on all BoolVars
     size = space->getBoolVarSize();
     if(size == 1) {
-      branch(*space,space->getBoolVar(0), INT_VAL_MIN);
+      branch(*space,space->getBoolVar(0), INT_VAL_MIN());
     }
     else if(size > 1) {
       BoolVarArgs vars(size);
       for(int i=0; i<size; i++) {
         vars[i] = space->getBoolVar(i);
       }
-      branch(*space, vars, INT_VAR_AFC_MIN, INT_VAL_MIN);
+      branch(*space, vars, INT_VAR_AFC_MIN(), INT_VAL_MIN());
     }
   }
 }
