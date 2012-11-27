@@ -302,6 +302,110 @@ STATUS gecode_get_float_info(CLSpace *space, size_t var,
 
 
 // Branchers
+IntVarBranch INT_VAR_NONE(void){
+  return Gecode::INT_VAR_NONE();
+}
+IntVarBranch INT_VAR_RND(unsigned int seed){
+  return Gecode::INT_VAR_RND(Rnd(seed));
+}
+/* TODO: check whether to insert MERIT variants */
+IntVarBranch INT_VAR_DEGREE_MIN(void){
+  return Gecode::INT_VAR_DEGREE_MIN(NULL);
+}
+IntVarBranch INT_VAR_DEGREE_MAX(void){
+  return Gecode::INT_VAR_DEGREE_MAX(NULL);
+}
+IntVarBranch INT_VAR_AFC_MIN(void){
+  return Gecode::INT_VAR_AFC_MIN(NULL);
+}
+IntVarBranch INT_VAR_AFC_MAX(void){
+  return Gecode::INT_VAR_AFC_MAX(NULL);
+}
+/* TODO: check whether to insert ACTIVITY variants */
+/*
+IntVarBranch INT_VAR_ACTIVITY_MIN_ints
+  (CLSpace *space, size_t *vars, size_t count, double d)
+{
+  IntVarArgs va(count);
+  for(unsigned i=0; i<count; i++)
+    { va[i]=space->getIntVar(vars[i]); }
+  return INT_VAR_ACTIVITY_MIN(IntActivity(*space,va,d));
+}
+*/
+IntVarBranch INT_VAR_MIN_MIN(void){
+  return Gecode::INT_VAR_MIN_MIN(NULL);
+}
+IntVarBranch INT_VAR_MIN_MAX(void){
+  return Gecode::INT_VAR_MIN_MAX(NULL);
+}
+IntVarBranch INT_VAR_MAX_MIN(void){
+  return Gecode::INT_VAR_MAX_MIN(NULL);
+}
+IntVarBranch INT_VAR_MAX_MAX(void){
+  return Gecode::INT_VAR_MAX_MAX(NULL);
+}
+IntVarBranch INT_VAR_SIZE_MIN(void){
+  return Gecode::INT_VAR_SIZE_MIN(NULL);
+}
+IntVarBranch INT_VAR_SIZE_MAX(void){
+  return Gecode::INT_VAR_SIZE_MAX(NULL);
+}
+IntVarBranch INT_VAR_SIZE_DEGREE_MIN(void){
+  return Gecode::INT_VAR_SIZE_DEGREE_MIN(NULL);
+}
+IntVarBranch INT_VAR_SIZE_DEGREE_MAX(void){
+  return Gecode::INT_VAR_SIZE_DEGREE_MAX(NULL);
+}
+IntVarBranch INT_VAR_SIZE_AFC_MIN(void){
+  return Gecode::INT_VAR_SIZE_AFC_MIN(NULL);
+}
+IntVarBranch INT_VAR_SIZE_AFC_MAX(void){
+  return Gecode::INT_VAR_SIZE_AFC_MAX(NULL);
+}
+/* TODO: check whether to insert ACTIVITY variants */
+IntVarBranch INT_VAR_REGRET_MIN_MIN(void){
+  return Gecode::INT_VAR_REGRET_MIN_MIN(NULL);
+}
+IntVarBranch INT_VAR_REGRET_MIN_MAX(void){
+  return Gecode::INT_VAR_REGRET_MIN_MAX(NULL);
+}
+IntVarBranch INT_VAR_REGRET_MAX_MIN(void){
+  return Gecode::INT_VAR_REGRET_MAX_MIN(NULL);
+}
+IntVarBranch INT_VAR_REGRET_MAX_MAX(void){
+  return Gecode::INT_VAR_REGRET_MAX_MAX(NULL);
+}
+
+IntValBranch INT_VAL_MIN(void){
+  return Gecode::INT_VAL_MIN();
+}
+IntValBranch INT_VAL_MED(void){
+  return Gecode::INT_VAL_MED();
+}
+IntValBranch INT_VAL_MAX(void){
+  return Gecode::INT_VAL_MAX();
+}
+IntValBranch INT_VAL_RND(unsigned int seed){
+  return Gecode::INT_VAL_RND(Rnd(seed));
+}
+IntValBranch INT_VAL_SPLIT_MIN(void){
+  return Gecode::INT_VAL_SPLIT_MIN();
+}
+IntValBranch INT_VAL_SPLIT_MAX(void){
+  return Gecode::INT_VAL_SPLIT_MAX();
+}
+IntValBranch INT_VAL_RANGE_MIN(void){
+  return Gecode::INT_VAL_RANGE_MIN();
+}
+IntValBranch INT_VAL_RANGE_MAX(void){
+  return Gecode::INT_VAL_RANGE_MAX();
+}
+IntValBranch INT_VALUES_MIN(void){
+  return Gecode::INT_VALUES_MIN();
+}
+IntValBranch INT_VALUES_MAX(void){
+  return Gecode::INT_VALUES_MAX();
+}
 
 void gecode_branch_int_var(CLSpace *space, size_t var, IntValBranch val) {
   branch(*space, space->getIntVar(var), val);
@@ -337,27 +441,27 @@ void inline checkBranchers(CLSpace *space) {
     // branch on all IntVars
     size = space->getIntVarSize();
     if(size == 1) {
-      branch(*space,space->getIntVar(0), INT_VAL_SPLIT_MIN());
+      branch(*space,space->getIntVar(0), Gecode::INT_VAL_SPLIT_MIN());
     }
     else if(size > 1) {
       IntVarArgs vars(size);
       for(int i=0; i<size; i++) {
         vars[i] = space->getIntVar(i);
       }
-      branch(*space, vars, INT_VAR_SIZE_MIN(), INT_VAL_SPLIT_MIN());
+      branch(*space, vars, Gecode::INT_VAR_SIZE_MIN(), Gecode::INT_VAL_SPLIT_MIN());
     }
     
     // branch on all BoolVars
     size = space->getBoolVarSize();
     if(size == 1) {
-      branch(*space,space->getBoolVar(0), INT_VAL_MIN());
+      branch(*space,space->getBoolVar(0), Gecode::INT_VAL_MIN());
     }
     else if(size > 1) {
       BoolVarArgs vars(size);
       for(int i=0; i<size; i++) {
         vars[i] = space->getBoolVar(i);
       }
-      branch(*space, vars, INT_VAR_AFC_MIN(), INT_VAL_MIN());
+      branch(*space, vars, Gecode::INT_VAR_AFC_MIN(), Gecode::INT_VAL_MIN());
     }
   }
 }

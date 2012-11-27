@@ -6,7 +6,6 @@
 
 (defctype size :unsigned-int)
 
-
 ;;; modification events
 
 (defcenum modevent-int
@@ -36,7 +35,7 @@
 
 
 ;;; brancher types
-
+#+(or)
 (defcenum bvar-sel
   :bvar-none
   :bvar-rnd
@@ -60,6 +59,7 @@
   :bvar-regret-max-max
   )
 
+#+(or)
 (defcenum bval-sel
   :bval-min
   :bval-med
