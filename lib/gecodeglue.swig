@@ -5,6 +5,9 @@
 %}
 
 %typemap(cin) size_t "size";
+%typemap(cout) size_t "size";
+
+%typemap(cin) CLSpace* "space-type";
 
 %typemap(cout) STATUS  "variable-status";
 

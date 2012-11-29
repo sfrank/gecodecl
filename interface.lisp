@@ -21,7 +21,7 @@
 
 (defmethod rel-post (rel (x boolvar) (y fixnum) (b null) clevel space)
   (check-type rel int-relation-type)
-  (gcd-rel-bvar-int (gspace-sap space)
+  (gcd-rel-bvar-int space
                     rel
                     (gvariable-index x)
                     y
@@ -29,7 +29,7 @@
 
 (defmethod rel-post (rel (x intvar) (y fixnum) (b null) clevel space)
   (assert (member rel '(:irt-= :irt-/= :irt-<= :irt-< :irt->= :irt->)))
-  (gcd-rel-ivar-int (gspace-sap space)
+  (gcd-rel-ivar-int space
                     rel
                     (gvariable-index x)
                     y
@@ -43,7 +43,7 @@
 
 (defmethod rel-post (rel (x boolvar) (y fixnum) (b boolvar) clevel space)
   (assert (member rel '(:irt-= :irt-/= :irt-<= :irt-< :irt->= :irt->)))
-  (gcd-rel-bvar-int-bvar (gspace-sap space)
+  (gcd-rel-bvar-int-bvar space
                          rel
                          (gvariable-index x)
                          y
@@ -52,7 +52,7 @@
 
 (defmethod rel-post (rel (x intvar) (y fixnum) (b boolvar) clevel space)
   (assert (member rel '(:irt-= :irt-/= :irt-<= :irt-< :irt->= :irt->)))
-  (gcd-rel-ivar-int-bvar (gspace-sap space)
+  (gcd-rel-ivar-int-bvar space
                          rel
                          (gvariable-index x)
                          y
@@ -67,7 +67,7 @@
 
 (defmethod rel-post (rel (x boolvar) (y boolvar) (b null) clevel space)
   (assert (member rel '(:irt-= :irt-/= :irt-<= :irt-< :irt->= :irt->)))
-  (gcd-rel-bvar-bvar (gspace-sap space)
+  (gcd-rel-bvar-bvar space
                      rel
                      (gvariable-index x)
                      (gvariable-index y)
@@ -75,7 +75,7 @@
 
 (defmethod rel-post (rel (x intvar) (y intvar) (b null) clevel space)
   (assert (member rel '(:irt-= :irt-/= :irt-<= :irt-< :irt->= :irt->)))
-  (gcd-rel-ivar-ivar (gspace-sap space)
+  (gcd-rel-ivar-ivar space
                      rel
                      (gvariable-index x)
                      (gvariable-index y)
@@ -83,7 +83,7 @@
 
 (defmethod rel-post (rel (x boolvar) (y boolvar) (b boolvar) clevel space)
   (assert (member rel '(:irt-= :irt-/= :irt-<= :irt-< :irt->= :irt->)))
-  (gcd-rel-bvar-bvar-bvar (gspace-sap space)
+  (gcd-rel-bvar-bvar-bvar space
                           rel
                           (gvariable-index x)
                           (gvariable-index y)
@@ -92,7 +92,7 @@
 
 (defmethod rel-post (rel (x intvar) (y intvar) (b boolvar) clevel space)
   (assert (member rel '(:irt-= :irt-/= :irt-<= :irt-< :irt->= :irt->)))
-  (gcd-rel-ivar-ivar-bvar (gspace-sap space)
+  (gcd-rel-ivar-ivar-bvar space
                           rel
                           (gvariable-index x)
                           (gvariable-index y)
@@ -115,7 +115,7 @@
                                (gvariable-index v))
                          (incf i))
                    x)
-              (gcd-rel-ivars (gspace-sap space) rel vars length clevel))
+              (gcd-rel-ivars space rel vars length clevel))
             (error "Every element of X must be of the same variable type INTVAR."))
         (if (every #'boolvar-p x)
             (with-foreign-object (vars :int length)
@@ -124,7 +124,7 @@
                                (gvariable-index v))
                          (incf i))
                    x)
-              (gcd-rel-bvars (gspace-sap space) rel vars length clevel))
+              (gcd-rel-bvars space rel vars length clevel))
             (error "Every element of X must be of the same variable type BOOLVAR.")))))
 
 (defmethod rel-post (rel (x sequence) (y fixnum) (b null) clevel space)
@@ -139,7 +139,7 @@
                                (gvariable-index v))
                          (incf i))
                    x)
-              (gcd-rel-ivars-int (gspace-sap space) rel vars length y clevel))
+              (gcd-rel-ivars-int space rel vars length y clevel))
             (error "Every element of X must be of the same variable type INTVAR."))
         (if (every #'boolvar-p x)
             (with-foreign-object (vars :int length)
@@ -148,7 +148,7 @@
                                (gvariable-index v))
                          (incf i))
                    x)
-              (gcd-rel-bvars-int (gspace-sap space) rel vars length y clevel))
+              (gcd-rel-bvars-int space rel vars length y clevel))
             (error "Every element of X must be of the same variable type BOOLVAR.")))))
 
 (defmethod rel-post (rel (x sequence) (y sequence) (b null) clevel space)
@@ -172,7 +172,7 @@
                                (gvariable-index v))
                          (incf i))
                    y)
-              (gcd-rel-ivars-ivars (gspace-sap space)
+              (gcd-rel-ivars-ivars space
                                    rel xvars xlength yvars ylength clevel))
             (error "Every element of X and Y must be of the same variable type INTVAR."))
         (if (and (every #'boolvar-p x)
@@ -190,7 +190,7 @@
                                (gvariable-index v))
                          (incf i))
                    y)
-              (gcd-rel-bvars-bvars (gspace-sap space)
+              (gcd-rel-bvars-bvars space
                                    rel xvars xlength yvars ylength clevel))
             (error "Every element of X and Y must be of the same variable type BOOLVAR.")))))
 
@@ -201,11 +201,11 @@
   (cond 
     ((and (typep x 'intvar)
           (typep y 'intvar))
-     (gcd-rel-ivar-ivar (gspace-sap space)
+     (gcd-rel-ivar-ivar space
                         relation (gvariable-index x) (gvariable-index y)))
     ((and (typep x 'boolvar)
           (typep y 'boolvar))
-     (gcd-rel-bvar-bvar (gspace-sap space)
+     (gcd-rel-bvar-bvar space
                         relation (gvariable-index x) (gvariable-index y)))
     (t
      (error "NUM-REL: X and Y must be of equal type of either INTVAR or BOOLVAR."))))
@@ -231,7 +231,7 @@
 (defmethod bop-post (bop (x boolvar) (y boolvar) (b integer) clevel space)
   (check-type bop bool-operation-type)
   (check-type b (integer 0 1))
-  (gcd-op-bvar-bvar-int (gspace-sap space)
+  (gcd-op-bvar-bvar-int space
                         bop
                         (gvariable-index x)
                         (gvariable-index y)
@@ -240,7 +240,7 @@
 
 (defmethod bop-post (bop (x boolvar) (y boolvar) (b boolvar) clevel space)
   (check-type bop bool-operation-type)
-  (gcd-op-bvar-bvar-int (gspace-sap space)
+  (gcd-op-bvar-bvar-int space
                         bop
                         (gvariable-index x)
                         (gvariable-index y)
@@ -263,7 +263,7 @@
                            (gvariable-index v))
                      (incf i))
                x)
-          (gcd-op-bvars-int (gspace-sap space) bop vars length y clevel))
+          (gcd-op-bvars-int space bop vars length y clevel))
         (error "Every element of X must be of the variable type BOOLVAR."))))
 
 (defmethod bop-post (bop (x sequence) (y boolvar) (b null) clevel space)
@@ -281,7 +281,7 @@
                            (gvariable-index v))
                      (incf i))
                x)
-          (gcd-op-bvars-bvar (gspace-sap space) bop vars length (gvariable-index y) clevel))
+          (gcd-op-bvars-bvar space bop vars length (gvariable-index y) clevel))
         (error "Every element of X must be of the variable type BOOLVAR."))))
 
 (defmethod bop-post (bop (x sequence) (y sequence) (b integer) clevel space)
@@ -307,7 +307,7 @@
                            (gvariable-index v))
                      (incf i))
                y)
-          (gcd-op-bvars-bvars-int (gspace-sap space) bop 
+          (gcd-op-bvars-bvars-int space bop 
                                   xvars xlength
                                   yvars ylength 
                                   b clevel))
@@ -335,7 +335,7 @@
                            (gvariable-index v))
                      (incf i))
                y)
-          (gcd-op-bvars-bvars-bvar (gspace-sap space) bop 
+          (gcd-op-bvars-bvars-bvar space bop 
                                    xvars xlength
                                    yvars ylength 
                                    (gvariable-index b) clevel))
@@ -361,7 +361,7 @@
                            (gvariable-index x))
                      (incf i))
                vseq)
-          (gcd-distinct-intvars (gspace-sap space) vars vlength clevel))
+          (gecode_distinct_ivars space vars vlength clevel))
         (error "Every element of VSEQ must be of type INTVAR."))))
 
 (defmethod distinct-g ((vseq sequence) (cseq sequence) &key clevel space)
@@ -383,8 +383,8 @@
                          (setf (mem-aref offsets :int i) y)
                          (incf i))
                    vseq cseq)
-              (gcd-distinct-ints-intvars
-               (gspace-sap space) offsets vars vlength clevel))
+              (gecode_distinct_ints_ivars
+               space offsets vars vlength clevel))
             (error "Every element of CSEQ must be of type FIXNUM."))
         (error "Every element of VSEQ must be of type INTVAR."))))
 
@@ -410,7 +410,7 @@
                             (incf i))
                       vseq cseq)
                  (gcd-distinct-ints-intvars
-                  (gspace-sap space) offsets vars vlength clevel))
+                  space offsets vars vlength clevel))
                (error "Every element of CSEQ must be of type FIXNUM.")))
           (t
            (with-foreign-object (vars :int vlength)
@@ -419,7 +419,7 @@
                               (gvariable-index x))
                         (incf i))
                   vseq)
-             (gcd-distinct-intvars (gspace-sap space) vars vlength clevel))))
+             (gcd-distinct-intvars space vars vlength clevel))))
         (error "Every element of VSEQ must be of type INTVAR."))))
 
 #+ (or)
@@ -428,7 +428,6 @@
          (x (add-int-variable *gspace* 1 3))
          (y (add-int-variable *gspace* 3 3))
          dfs)
-    ;;(post-num-rel *gspace* :irt-< x y)
     (distinct-g (list x y) nil)
     (setf dfs (make-dfs *gspace*))
     (loop for s = (search-next dfs)
@@ -459,7 +458,7 @@
                                (gvariable-index y))
                          (incf i))
                    xseq yseq)
-              (gcd-sorted-intvars-intvars (gspace-sap space) xa ya length clevel))
+              (gcd-sorted-intvars-intvars space xa ya length clevel))
             (error "XSEQ and YSEQ must be of equal length."))
         (error "Every elements of XSEQ and YSEQ must be of type INTVAR."))))
 
@@ -487,7 +486,7 @@
                                (gvariable-index z))
                          (incf i))
                    xseq yseq zseq)
-              (gcd-sorted-intvars-intvars-intvars (gspace-sap space)
+              (gcd-sorted-intvars-intvars-intvars space
                                                   xa ya za length clevel))
             (error "XSEQ, YSEQ and ZSEQ must be of equal length."))
         (error "Every elements of XSEQ, YSEQ, ZSEQ must be of type INTVAR."))))

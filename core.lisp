@@ -46,51 +46,6 @@
 (cffi:use-foreign-library gecode-glue)
 
 
-;;; low level variable and space abstraction
-
-(defstruct gvariable
-  (index 0 :type (integer 0 #.most-positive-fixnum)))
-
-(defstruct (intvar (:include gvariable)
-                   (:constructor make-intvar (index))))
-
-(defstruct (boolvar (:include intvar)
-                    (:constructor make-boolvar (index))))
-
-(defstruct (floatvar (:include gvariable)
-                     (:constructor make-floatvar (index))))
-
-(defstruct (gspace (:constructor %make-space)
-                   (:constructor %make-space-boa (sap int-notifiers))
-                   (:copier %copy-space))
-  (sap (gecode_space_create) :type sb-sys:system-area-pointer :read-only t)
-  (int-notifiers))
-
-(defun reclaim-space (sap)
-  (lambda ()
-    ;;(format t "Space GCed...~%")
-    (gecode_space_delete sap)))
-
-(defun make-gspace ()
-  (let ((space (%make-space)))
-    (tg:finalize space (reclaim-space (gspace-sap space)))
-    space))
-
-(defun make-gspace-from-ref (sap)
-  (let ((space (%make-space-boa sap nil)))
-    (tg:finalize space (reclaim-space sap))
-    space))
-
-(defun copy-gspace (space)
-  (declare (type gspace space))
-  (let ((copy (%make-space-boa (gecode_space_copy (gspace-sap space))
-                               (gspace-int-notifiers space))))
-    (tg:finalize space (reclaim-space (gspace-sap copy)))
-    copy))
-
-
-(defparameter *gspace* nil)
-
 ;;; callbacks
 
 ;; The handler function for all C++ exceptions, standard and Gecode
@@ -114,7 +69,7 @@
           (make-array 10 
                       :adjustable t
                       :fill-pointer 0)))
-  (gecode_intClChannel (gspace-sap space)
+  (gecode_intClChannel space
                        (gvariable-index variable)
                        (vector-push-extend function
                                            (gspace-int-notifiers space))))
@@ -132,7 +87,7 @@
 ;;; IntVars
 (defun add-int-variable (space &optional (min -1000000000) (max 1000000000))
   (declare (type gspace space))
-  (make-intvar (gecode_int_addvar (gspace-sap space) min max)))
+  (make-intvar (gecode_int_addvar space min max)))
 
 (defun integer-info (space variable)
   (declare (type gspace space)
@@ -140,7 +95,7 @@
   (with-foreign-objects ((min :int)
                          (max :int)
                          (size :int))
-    (values (gecode_get_int_info (gspace-sap space)
+    (values (gecode_get_int_info space
                                  (gvariable-index variable) min max size)
             (list (mem-ref min :int)
                   (mem-ref max :int)
@@ -171,7 +126,7 @@
 (defun add-float-variable (space &optional (min most-negative-double-float)
                                            (max most-positive-double-float))
   (declare (type gspace space))
-  (make-floatvar (gecode_float_addvar (gspace-sap space) min max)))
+  (make-floatvar (gecode_float_addvar space min max)))
 
 (defun float-info (space variable)
   (declare (type gspace space)
@@ -179,7 +134,7 @@
   (with-foreign-objects ((min :double)
                          (max :double)
                          (median :double))
-    (values (gecode_get_float_info (gspace-sap space)
+    (values (gecode_get_float_info space
                                    (gvariable-index variable) min max median)
             (list (mem-ref min :double)
                   (mem-ref max :double)
@@ -213,7 +168,7 @@
 
 (defun make-dfs (space)
   (declare (type gspace space))
-  (let ((dfs (%make-dfs-boa (gecode_dfs_engine_create (gspace-sap space)))))
+  (let ((dfs (%make-dfs-boa (gecode_dfs_engine_create space))))
     (tg:finalize dfs (reclaim-dfs (dfs-sap dfs)))
     dfs))
 
@@ -225,7 +180,7 @@
 (defun make-bab (space min-var)
   (declare (type gspace space)
            (type intvar min-var))
-  (let ((bab (%make-bab-boa (gecode_bab_engine_create (gspace-sap space)
+  (let ((bab (%make-bab-boa (gecode_bab_engine_create space
                                                       (gvariable-index min-var)))))
     (tg:finalize bab (reclaim-bab (bab-sap bab)))
     bab))
