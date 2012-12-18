@@ -38,57 +38,67 @@
                              :test #'eq)) )
     `(and keyword (satisfies ,operation))))
 
-;;; low level variable and space abstraction
-
-(defstruct gvariable
-  (index 0 :type (integer 0 #.most-positive-fixnum)))
-
-(defstruct (intvar (:include gvariable)
-                   (:constructor make-intvar (index))))
-
-(defstruct (boolvar (:include intvar)
-                    (:constructor make-boolvar (index))))
-
-(defstruct (floatvar (:include gvariable)
-                     (:constructor make-floatvar (index))))
-
-(defstruct (gspace (:constructor %make-space)
-                   (:constructor %make-space-boa (sap int-notifiers))
-                   (:copier %copy-space))
-  (sap (gecode_space_create) :type sb-sys:system-area-pointer :read-only t)
-  (int-notifiers))
-
-(defun reclaim-space (sap)
-  (lambda ()
-    ;;(format t "Space GCed...~%")
-    (gecode_space_delete sap)))
-
-(defun make-gspace ()
-  (let ((space (%make-space)))
-    (tg:finalize space (reclaim-space space))
-    space))
-
-(defun make-gspace-from-ref (sap)
-  (let ((space (%make-space-boa sap nil)))
-    (tg:finalize space (reclaim-space sap))
-    space))
-
-(defun copy-gspace (space)
-  (declare (type gspace space))
-  (let ((copy (%make-space-boa (gecode_space_copy space)
-                               (gspace-int-notifiers space))))
-    (tg:finalize space (reclaim-space copy))
-    copy))
-
 (defparameter *gspace* nil)
 
 
 ;;; CFFI type translators
 
-(define-foreign-type space-type () ()
+(cffi:define-foreign-type space-type () ()
   (:actual-type :pointer)
   (:simple-parser space-type))
 
 (defmethod expand-to-foreign (space (type space-type))
   `(gspace-sap ,space))
+
+(cffi:define-foreign-type search-type () ()
+  (:actual-type :pointer)
+  (:simple-parser search-type))
+
+(defmethod expand-to-foreign (engine (type search-type))
+  `(engine-sap ,engine))
+
+
+;;; foreign libraries
+
+(cffi:define-foreign-library gecode-kernel
+  (t (:default "libgecodekernel")))
+
+(cffi:define-foreign-library gecode-support
+  (t (:default "libgecodesupport")))
+
+(cffi:define-foreign-library gecode-int
+  (t (:default "libgecodeint")))
+
+(cffi:define-foreign-library libgmp
+  (t (:default "libgmp")))
+(cffi:define-foreign-library libmpfr
+  (t (:default "libmpfr")))
+
+(cffi:define-foreign-library gecode-float
+  (t (:default "libgecodefloat")))
+
+(cffi:define-foreign-library gecode-set
+  (t (:default "libgecodeset")))
+
+(cffi:define-foreign-library gecode-search
+  (t (:default "libgecodesearch")))
+
+(cffi:define-foreign-library gecode-minimodel
+  (t (:default "libgecodeminimodel")))
+
+(cffi:use-foreign-library gecode-kernel)
+(cffi:use-foreign-library gecode-support)
+(cffi:use-foreign-library gecode-int)
+(cffi:use-foreign-library libgmp)
+(cffi:use-foreign-library libmpfr)
+(cffi:use-foreign-library gecode-float)
+(cffi:use-foreign-library gecode-set)
+(cffi:use-foreign-library gecode-search)
+(cffi:use-foreign-library gecode-minimodel)
+
+
+(cffi:define-foreign-library gecode-glue
+  (t (:default "./lib/libgecodeglue")))
+(cffi:use-foreign-library gecode-glue)
+
 

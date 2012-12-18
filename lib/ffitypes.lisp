@@ -4,11 +4,11 @@
 
 ;;; size_t
 
-(defctype size :unsigned-int)
+(cffi:defctype size :unsigned-int)
 
 ;;; modification events
 
-(defcenum modevent-int
+(cffi:defcenum modevent-int
   (:var-failed -1)
   (:var-none 0)
   (:var-assigned 1)
@@ -18,17 +18,17 @@
 
 ;;; store and variable types
 
-(defcenum space-status
+(cffi:defcenum space-status
   (:ss-failed -2)
   (:ss-solved -1)
   (:ss-branch 0))
 
-(defcenum variable-status
+(cffi:defcenum variable-status
   (:space-failed -2)
   (:var-unassigned -1)
   (:var-assigned 0))
 
-(defcenum reify-mode
+(cffi:defcenum reify-mode
   (:<=> 0) ; b=1 <=> C
   (:<== 1) ; b=1 <== C
   (:==> 2)); b=1 ==> C
@@ -36,7 +36,7 @@
 
 ;;; brancher types
 #+(or)
-(defcenum bvar-sel
+(cffi:defcenum bvar-sel
   :bvar-none
   :bvar-rnd
   :bvar-degree-min
@@ -60,7 +60,7 @@
   )
 
 #+(or)
-(defcenum bval-sel
+(cffi:defcenum bval-sel
   :bval-min
   :bval-med
   :bval-max
@@ -76,7 +76,7 @@
 
 ;;; propagator and operation types
 
-(defcenum int-relation-type
+(cffi:defcenum int-relation-type
   :irt-=
   :irt-/=
   :irt-<=
@@ -84,21 +84,21 @@
   :irt->=
   :irt->)
 
-(defcenum bool-operation-type
+(cffi:defcenum bool-operation-type
   :bot-and
   :bot-or
   :bot-imp
   :bot-eqv
   :bot-xor)
 
-(defcenum int-consistency-level
+(cffi:defcenum int-consistency-level
   :icl-val                ; Value consistency (naive)
   :icl-bnd                ; Bounds consistency.
   :icl-dom                ; Domain consistency.
   :icl-def                ; The default consistency for a constraint.
   )
 
-;;(defcenum set-rel-type
+;;(cffi:defcenum set-rel-type
 ;;  :srt-eq                               ; equality
 ;;  :srt-nq                               ; disequality
 ;;  :srt-sub                              ; subset
@@ -108,7 +108,7 @@
 ;;  )
 
 
-;;(defcenum set-op-type
+;;(cffi:defcenum set-op-type
 ;;  :sot-union                            ; union
 ;;  :sot-dunion                           ; disjoint union
 ;;  :sot-inter                            ; intersection

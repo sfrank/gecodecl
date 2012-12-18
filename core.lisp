@@ -2,50 +2,6 @@
 
 (in-package :gecodecl)
 
-;;; foreign libraries
-
-(define-foreign-library gecode-kernel
-  (t (:default "libgecodekernel")))
-
-(define-foreign-library gecode-support
-  (t (:default "libgecodesupport")))
-
-(define-foreign-library gecode-int
-  (t (:default "libgecodeint")))
-
-(define-foreign-library libgmp
-  (t (:default "libgmp")))
-(define-foreign-library libmpfr
-  (t (:default "libmpfr")))
-
-(define-foreign-library gecode-float
-  (t (:default "libgecodefloat")))
-
-(define-foreign-library gecode-set
-  (t (:default "libgecodeset")))
-
-(define-foreign-library gecode-search
-  (t (:default "libgecodesearch")))
-
-(define-foreign-library gecode-minimodel
-  (t (:default "libgecodeminimodel")))
-
-(cffi:use-foreign-library gecode-kernel)
-(cffi:use-foreign-library gecode-support)
-(cffi:use-foreign-library gecode-int)
-(cffi:use-foreign-library libgmp)
-(cffi:use-foreign-library libmpfr)
-(cffi:use-foreign-library gecode-float)
-(cffi:use-foreign-library gecode-set)
-(cffi:use-foreign-library gecode-search)
-(cffi:use-foreign-library gecode-minimodel)
-
-
-(define-foreign-library gecode-glue
-  (t (:default "./lib/libgecodeglue")))
-(cffi:use-foreign-library gecode-glue)
-
-
 ;;; callbacks
 
 ;; The handler function for all C++ exceptions, standard and Gecode
@@ -82,6 +38,48 @@
 (defvar *gecodecl-initialized-p* (progn
                                    (init-gecode)
                                    t))
+
+;;; low level variable and space abstraction
+
+(defstruct gvariable
+  (index 0 :type (integer 0 #.most-positive-fixnum)))
+
+(defstruct (intvar (:include gvariable)
+                   (:constructor make-intvar (index))))
+
+(defstruct (boolvar (:include intvar)
+                    (:constructor make-boolvar (index))))
+
+(defstruct (floatvar (:include gvariable)
+                     (:constructor make-floatvar (index))))
+
+(defstruct (gspace (:constructor %make-space)
+                   (:constructor %make-space-boa (sap int-notifiers))
+                   (:copier %copy-space))
+  (sap (gecode_space_create) :type sb-sys:system-area-pointer :read-only t)
+  (int-notifiers))
+
+(defun reclaim-space (sap)
+  (lambda ()
+    ;;(format t "Space GCed...~%")
+    (gecode_space_delete sap)))
+
+(defun make-gspace ()
+  (let ((space (%make-space)))
+    (tg:finalize space (reclaim-space space))
+    space))
+
+(defun make-gspace-from-ref (sap)
+  (let ((space (%make-space-boa sap nil)))
+    (tg:finalize space (reclaim-space sap))
+    space))
+
+(defun copy-gspace (space)
+  (declare (type gspace space))
+  (let ((copy (%make-space-boa (gecode_space_copy space)
+                               (gspace-int-notifiers space))))
+    (tg:finalize space (reclaim-space copy))
+    copy))
 
 
 ;;; IntVars
@@ -162,36 +160,36 @@
                 (:include engine)))
 
 ;;; depth first search (DFS)
-(defun reclaim-dfs (sap)
+(defun reclaim-dfs (engine)
   (lambda ()
-    (gecode_dfs_engine_delete sap)))
+    (gecode_dfs_engine_delete engine)))
 
 (defun make-dfs (space)
   (declare (type gspace space))
   (let ((dfs (%make-dfs-boa (gecode_dfs_engine_create space))))
-    (tg:finalize dfs (reclaim-dfs (dfs-sap dfs)))
+    (tg:finalize dfs (reclaim-dfs dfs))
     dfs))
 
 ;;; branch and bound (BAB)
-(defun reclaim-bab (sap)
+(defun reclaim-bab (engine)
   (lambda ()
-    (gecode_bab_engine_delete sap)))
+    (gecode_bab_engine_delete engine)))
 
 (defun make-bab (space min-var)
   (declare (type gspace space)
            (type intvar min-var))
   (let ((bab (%make-bab-boa (gecode_bab_engine_create space
                                                       (gvariable-index min-var)))))
-    (tg:finalize bab (reclaim-bab (bab-sap bab)))
+    (tg:finalize bab (reclaim-bab bab))
     bab))
 
 ;;; solution search for both engine types
 (defun search-next (engine)
   (etypecase engine
-    (dfs (let ((space (gecode_dfs_engine_next (engine-sap engine))))
+    (dfs (let ((space (gecode_dfs_engine_next engine)))
            (unless (null-pointer-p space)
              (make-gspace-from-ref space))))
-    (bab (let ((space (gecode_bab_engine_next (engine-sap engine))))
+    (bab (let ((space (gecode_bab_engine_next engine)))
            (unless (null-pointer-p space)
              (make-gspace-from-ref space))))))
 

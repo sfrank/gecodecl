@@ -6,7 +6,7 @@
 
 (in-package :gecodecl)
 
-
+;;; CFFI type translators
 
 (cffi:defcfun ("gecode_init_exceptionHandler" gecode_init_exceptionHandler) :void
   (fptr :pointer))
@@ -144,20 +144,20 @@
   (space space-type))
 
 (cffi:defcfun ("gecode_dfs_engine_delete" gecode_dfs_engine_delete) :void
-  (dfs :pointer))
+  (dfs search-type))
 
 (cffi:defcfun ("gecode_dfs_engine_next" gecode_dfs_engine_next) :pointer
-  (dfs :pointer))
+  (dfs search-type))
 
 (cffi:defcfun ("gecode_bab_engine_create" gecode_bab_engine_create) :pointer
   (space space-type)
   (minVar size))
 
 (cffi:defcfun ("gecode_bab_engine_delete" gecode_bab_engine_delete) :void
-  (bab :pointer))
+  (bab search-type))
 
 (cffi:defcfun ("gecode_bab_engine_next" gecode_bab_engine_next) :pointer
-  (bab :pointer))
+  (bab search-type))
 
 (cffi:defcfun ("gecode_rel_bvar_int" gecode_rel_bvar_int) :void
   (space space-type)

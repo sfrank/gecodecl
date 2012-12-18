@@ -8,22 +8,13 @@
   :description "gecodecl"
   :serial t
   :components
-  ((:module package
+  ((:module base
     :pathname ""
-    :components ((:file "package")))
-   (:module types
-    :depends-on (package)
-    :pathname ""
-    :components ((:file "types")))
-   (:module gecodeglue
-    :depends-on (package types)
-    :pathname "lib"
-    :components ((:file "ffitypes")
-                 (:file "gecodeglue" :depends-on ("ffitypes"))))
-   (:module base
-    :depends-on (package types gecodeglue)
-    :pathname ""
-    :components ((:file "core")
+    :components ((:file "package")
+                 (:file "types" :depends-on ("package"))
+                 (:file "lib/ffitypes" :depends-on ("package"))
+                 (:file "lib/gecodeglue" :depends-on ("types" "lib/ffitypes"))
+                 (:file "core" :depends-on ("lib/gecodeglue"))
                  (:file "simplifier" :depends-on ("core"))
                  (:file "interface" :depends-on ("core" "simplifier")))))
   :depends-on
