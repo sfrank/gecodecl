@@ -59,10 +59,10 @@
   (sap (gecode_space_create) :type sb-sys:system-area-pointer :read-only t)
   (int-notifiers))
 
-(defun reclaim-space (sap)
+(defun reclaim-space (space)
   (lambda ()
-    ;;(format t "Space GCed...~%")
-    (gecode_space_delete sap)))
+    (format t "Space GCed...~%")
+    (gecode_space_delete space)))
 
 (defun make-gspace ()
   (let ((space (%make-space)))
@@ -71,7 +71,7 @@
 
 (defun make-gspace-from-ref (sap)
   (let ((space (%make-space-boa sap nil)))
-    (tg:finalize space (reclaim-space sap))
+    (tg:finalize space (reclaim-space space))
     space))
 
 (defun copy-gspace (space)
@@ -94,7 +94,7 @@
                          (max :int)
                          (size :int))
     (values (gecode_get_int_info space
-                                 (gvariable-index variable) min max size)
+                                 variable min max size)
             (list (mem-ref min :int)
                   (mem-ref max :int)
                   (mem-ref size :int)))))
@@ -196,16 +196,22 @@
 #+ (or)
 (defun test ()
   (let* ((*gspace* (make-gspace))
-         (x (add-int-variable *gspace* 1 3))
+         (x (add-int-variable *gspace* 1 4))
          (y (add-int-variable *gspace* 3 3))
+         (i (list 0 1))
+         (l (list x y))
          dfs)
-    (post-num-rel *gspace* :irt-< x y)
+    ;(post-num-rel *gspace* :irt-< x y)
+    ;(gecode_dst_ivars *gspace* l :icl-def)
+    (gecode_dst_ints_ivars *gspace* i l :icl-def)
+    ;(distinct-g l nil)
     (setf dfs (make-dfs *gspace*))
     (loop for s = (search-next dfs)
           until (null s)
-          do (format t "X: ~A~%Y: ~A~%~%"
-                     (integer-value s x)
-                     (integer-value s y)))))
+          do (let ((*gspace* s))
+               (format t "X: ~A~%Y: ~A~%~%"
+                       (integer-value s x)
+                       (integer-value s y))))))
 
 #+ (or)
 (defun test-bab ()

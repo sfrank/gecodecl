@@ -6,7 +6,34 @@
 
 (in-package :gecodecl)
 
-;;; CFFI type translators
+
+
+(cl:defconstant _GECODEGLUE_H 1)
+
+(cffi:defcfun ("gecode_varargs_create" gecode_varargs_create) :pointer
+  (n :int))
+
+(cffi:defcfun ("gecode_varargs_set" gecode_varargs_set) :void
+  (v :pointer)
+  (i :int)
+  (e intvar-type))
+
+(cffi:defcfun ("gecode_varargs_delete" gecode_varargs_delete) :void
+  (v :pointer))
+
+(cffi:defcfun ("gecode_intargs_create" gecode_intargs_create) :pointer
+  (n :int))
+
+(cffi:defcfun ("gecode_intargs_set" gecode_intargs_set) :void
+  (v :pointer)
+  (i :int)
+  (e :int))
+
+(cffi:defcfun ("gecode_intargs_adr" gecode_intargs_adr) :pointer
+  (v :pointer))
+
+(cffi:defcfun ("gecode_intargs_delete" gecode_intargs_delete) :void
+  (v :pointer))
 
 (cffi:defcfun ("gecode_init_exceptionHandler" gecode_init_exceptionHandler) :void
   (fptr :pointer))
@@ -40,9 +67,26 @@
   (min :double)
   (max :double))
 
-(cffi:defcfun ("gecode_get_int_info" gecode_get_int_info) variable-status
+(cffi:defcfun ("gecode_get_boolvar_by_index" gecode_get_boolvar_by_index) :pointer
+  (space space-type)
+  (index size))
+
+(cffi:defcfun ("gecode_get_intvar_by_index" gecode_get_intvar_by_index) :pointer
+  (space space-type)
+  (index size))
+
+(cffi:defcfun ("gecode_get_floatvar_by_index" gecode_get_floatvar_by_index) :pointer
+  (space space-type)
+  (index size))
+
+(cffi:defcfun ("gecode_get_bool_info" gecode_get_bool_info) variable-status
   (space space-type)
   (var size)
+  (value :pointer))
+
+(cffi:defcfun ("gecode_get_int_info" gecode_get_int_info) variable-status
+  (space space-type)
+  (var intvar-type)
   (min :pointer)
   (max :pointer)
   (size :pointer))
@@ -321,6 +365,17 @@
   (count1 size)
   (v2 :pointer)
   (count2 size)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dst_ivars" gecode_dst_ivars) :void
+  (space space-type)
+  (va intvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dst_ints_ivars" gecode_dst_ints_ivars) :void
+  (space space-type)
+  (ia intargs-type)
+  (va intvarargs-type)
   (icl int-consistency-level))
 
 (cffi:defcfun ("gecode_distinct_ivars" gecode_distinct_ivars) :void

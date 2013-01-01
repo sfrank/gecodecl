@@ -1,4 +1,25 @@
+#ifndef _GECODEGLUE_H
+#define _GECODEGLUE_H       1
+
 extern "C" {
+
+  /* slightly extended IntVarArgs vectors though by using the FFI we
+     will use them for all variable types where it is possible; this
+     is a kludge and circumvents the C++ type checker but makes our
+     life a lot easier since we can now use CFFI type translators and
+     don't have to hand code all the conversions by hand in C.
+     (Though it is slightly slower since the argument array is not
+     stack allocated) */
+  CLVarArgs *gecode_varargs_create(int n);
+  void gecode_varargs_set(CLVarArgs *v, int i, const IntVar* e);
+  void gecode_varargs_delete(CLVarArgs *v);
+
+  /* integer argument arrays */
+  CLIntArgs *gecode_intargs_create(int n);
+  void gecode_intargs_set(CLIntArgs *v, int i, int e);
+  int *gecode_intargs_adr(CLIntArgs *v);
+  void gecode_intargs_delete(CLIntArgs *v);
+
   /* exceptions */
   void gecode_init_exceptionHandler(void (*fptr)(const char*));
 
@@ -15,7 +36,11 @@ extern "C" {
   size_t gecode_bool_addvar(CLSpace *space);
   size_t gecode_int_addvar(CLSpace *space, int min, int max);
   size_t gecode_float_addvar(CLSpace *space, double min, double max);
-  STATUS gecode_get_int_info(CLSpace *space, size_t var, int *min, int *max, int *size);
+  BoolVar  gecode_get_boolvar_by_index(CLSpace *space, size_t index);
+  IntVar  *gecode_get_intvar_by_index(CLSpace *space, size_t index);
+  FloatVar gecode_get_floatvar_by_index(CLSpace *space, size_t index);
+  STATUS gecode_get_bool_info(CLSpace *space, size_t var, int *value);
+  STATUS gecode_get_int_info(CLSpace *space, IntVar *var, int *min, int *max, int *size);
   STATUS gecode_get_float_info(CLSpace *space, size_t var, double *min, double *max, double *median);
 
   /* branchers */
@@ -147,6 +172,8 @@ extern "C" {
 
 
   /* distinct constraint */
+  void gecode_dst_ivars(CLSpace *space, IntVarArgs *va, IntConLevel icl);
+  void gecode_dst_ints_ivars(CLSpace *space, IntArgs *ia, IntVarArgs *va, IntConLevel icl);
   void gecode_distinct_ivars(CLSpace *space, const  int vars[], 
                              size_t count, IntConLevel icl);
 
@@ -290,3 +317,5 @@ extern "C" {
 
 
 } /* extern C */
+
+#endif /* gecodeglue.h */

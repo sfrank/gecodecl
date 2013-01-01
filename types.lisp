@@ -57,6 +57,53 @@
 (defmethod expand-to-foreign (engine (type search-type))
   `(engine-sap ,engine))
 
+(cffi:define-foreign-type intvar-type () ()
+  (:actual-type :pointer)
+  (:simple-parser intvar-type))
+
+(defmethod expand-to-foreign (intvar (type intvar-type))
+  `(gecode_get_intvar_by_index *gspace* (intvar-index ,intvar)))
+
+(cffi:define-foreign-type intvarargs-type () ()
+  (:actual-type :pointer)
+  (:simple-parser intvarargs-type))
+
+;; ,var is the argument array
+(defmethod expand-to-foreign-dyn (value var body (type intvarargs-type))
+  `(let* ((length (length ,value))
+          (,var (gecode_varargs_create length))
+          (i -1))
+     (declare (type fixnum i length))
+     (map nil
+          (lambda (x)
+            (declare (type intvar x))
+            (gecode_varargs_set ,var (incf i) x))
+          ,value)
+     (unwind-protect 
+          (progn ,@body)
+       (gecode_varargs_delete ,var))))
+
+(cffi:define-foreign-type intargs-type () ()
+  (:actual-type :pointer)
+  (:simple-parser intargs-type))
+
+;; ,var is the argument array
+(defmethod expand-to-foreign-dyn (value var body (type intargs-type))
+  `(let* ((length (length ,value))
+          (,var (gecode_intargs_create length))
+          (adr (gecode_intargs_adr ,var))
+          (i -1))
+     (declare (type fixnum i length))
+     (map nil
+          (lambda (x)
+            (declare (type fixnum x))
+            ;(gecode_intargs_set ,var (incf i) x)
+            (setf (mem-aref adr :int (incf i)) x))
+          ,value)
+     (unwind-protect 
+          (progn ,@body)
+       (gecode_intargs_delete ,var))))
+
 
 ;;; foreign libraries
 
@@ -97,8 +144,10 @@
 (cffi:use-foreign-library gecode-minimodel)
 
 
+(pushnew #P"./lib/" *foreign-library-directories* :test #'equal)
+
 (cffi:define-foreign-library gecode-glue
-  (t (:default "./lib/libgecodeglue")))
+  (t (:default "libgecodeglue")))
 (cffi:use-foreign-library gecode-glue)
 
 

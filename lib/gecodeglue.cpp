@@ -176,15 +176,20 @@ public:
     return intVariables.size() - 1;
   }
 
-  IntVar inline getIntVar(vector<IntVar>::size_type var) const {
+  IntVar getIntVar(vector<IntVar>::size_type var) const {
     assert(var < intVariables.size());
     return (intVariables[var]);
+  }
+
+  IntVar *getIntVarp(vector<IntVar>::size_type var) {
+    return &(intVariables[var]);
   }
 
   vector<IntVar>::size_type inline getIntVarSize(void) {
     return intVariables.size();
   }
-   
+
+  /*   
   STATUS inline getIntInfo(vector<IntVar>::size_type var,
                            int *min, int *max, int *size) {
     SpaceStatus state = status();
@@ -203,6 +208,28 @@ public:
       return VAR_UNASSIGNED;
     } else {
       *min = v.val();
+      *max = *min;
+      return VAR_ASSIGNED;
+    }
+  }
+  */
+  STATUS inline getIntInfo(IntVar *var,
+                           int *min, int *max, int *size) {
+    SpaceStatus state = status();
+    if (state==SS_FAILED) {
+      *size = 0;
+      *min = 0;
+      *max = 0;
+      return STATE_FAILED;
+    }
+
+    *size = var->size();
+    if (*size > 1) {
+      *min = var->min();
+      *max = var->max();
+      return VAR_UNASSIGNED;
+    } else {
+      *min = var->val();
       *max = *min;
       return VAR_ASSIGNED;
     }
@@ -256,9 +283,77 @@ public:
   */
 };
 
+class CLVarArgs : public VarArgArray<IntVar> {
+public:
+  static void* operator new(size_t) {
+    return ::operator new(sizeof(CLVarArgs));
+  }
+
+  static void  operator delete(void* v) {
+    ::operator delete(v);
+  };
+  
+  CLVarArgs(int n) : VarArgArray<IntVar>(n){};
+  ~CLVarArgs(void) {
+    if (capacity > onstack_size)
+      heap.free(a,capacity);
+  }
+
+  void set(int i, const IntVar* e) {
+    a[i] = *e;
+  }
+};
+
+class CLIntArgs : public IntArgs {
+public:
+  static void* operator new(size_t) {
+    return ::operator new(sizeof(CLIntArgs));
+  }
+
+  static void  operator delete(void* v) {
+    ::operator delete(v);
+  };
+  
+  CLIntArgs(int n) : IntArgs(n){};
+  ~CLIntArgs(void) {
+    if (capacity > onstack_size)
+      heap.free(a,capacity);
+  }
+
+  void set(int i, int e) {
+    a[i] = e;
+  }
+
+  int *adr(void) {
+    return a;
+  }
+};
+
 #include "gecodeglue.h"
 
 extern "C" {
+  
+CLVarArgs *gecode_varargs_create(int n) {
+    return new CLVarArgs(n); 
+}
+void gecode_varargs_set(CLVarArgs *v, int i, const IntVar* e) {
+  v->set(i, e);
+}
+void gecode_varargs_delete(CLVarArgs *v) {
+  delete v; }
+
+CLIntArgs *gecode_intargs_create(int n) {
+    return new CLIntArgs(n); 
+}
+void gecode_intargs_set(CLIntArgs *v, int i, int e) {
+  v->set(i, e);
+}
+int *gecode_intargs_adr(CLIntArgs *v) {
+  return v->adr();
+}
+void gecode_intargs_delete(CLIntArgs *v) {
+  delete v; }
+
 
 void gecode_intClChannel(CLSpace *space, vector<IntVar>::size_type x0, unsigned idx) {
   Int::IntView x(space->getIntVar(x0));
@@ -289,10 +384,23 @@ size_t gecode_float_addvar(CLSpace *space, double min, double max) {
   return space->addFloatVariable(min, max); }
 
 
+BoolVar gecode_get_boolvar_by_index(CLSpace *space, size_t index) {
+  return space->getBoolVar(index);
+}
+
+IntVar *gecode_get_intvar_by_index(CLSpace *space, size_t index) {
+  return space->getIntVarp(index);
+}
+
+FloatVar gecode_get_floatvar_by_index(CLSpace *space, size_t index) {
+  return space->getFloatVar(index);
+}
+
+
 STATUS gecode_get_bool_info(CLSpace *space, size_t var, int *value) {
   return space->getBoolInfo(var, value); }
 
-STATUS gecode_get_int_info(CLSpace *space, size_t var,
+STATUS gecode_get_int_info(CLSpace *space, IntVar *var,
                            int *min, int *max, int *size) {
   return space->getIntInfo(var, min, max, size); }
 
@@ -673,6 +781,18 @@ void gecode_rel_ivars_ivars(CLSpace *space, IntRelType op,
 
 
 /* distinct constraint */
+void gecode_dst_ivars(CLSpace *space, IntVarArgs *va, IntConLevel icl) {
+  EXCSTART
+    distinct(*space, *va, icl);
+  EXCSTOP
+}
+
+void gecode_dst_ints_ivars(CLSpace *space, IntArgs *ia, IntVarArgs *va, IntConLevel icl) {
+  EXCSTART
+    distinct(*space, *ia, *va, icl);
+  EXCSTOP
+}
+
 
 void gecode_distinct_ivars(CLSpace *space, const  int vars[], 
                            vector<IntVar>::size_type count,
