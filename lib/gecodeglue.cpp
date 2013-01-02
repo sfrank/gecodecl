@@ -145,25 +145,27 @@ public:
   }
 
   BoolVar inline getBoolVar(vector<BoolVar>::size_type var) const {
-    assert(var < boolVariables.size());
     return (boolVariables[var]);
+  }
+
+  BoolVar* getBoolVarp(vector<BoolVar>::size_type var) {
+    return &(boolVariables[var]);
   }
 
   vector<BoolVar>::size_type inline getBoolVarSize(void) {
     return boolVariables.size();
   }
 
-  STATUS inline getBoolInfo(vector<BoolVar>::size_type var, int *value) {
+  STATUS inline getBoolInfo(BoolVar* var, int *value) {
     SpaceStatus state = status();
     if (state==SS_FAILED) {
       return STATE_FAILED;
     }
 
-    BoolVar v = getBoolVar(var);
-    if (v.none()) {
+    if (var->none()) {
       return VAR_UNASSIGNED;
     } else {
-      *value = v.val();
+      *value = var->val();
       return VAR_ASSIGNED;
     }
   }
@@ -177,11 +179,10 @@ public:
   }
 
   IntVar getIntVar(vector<IntVar>::size_type var) const {
-    assert(var < intVariables.size());
     return (intVariables[var]);
   }
 
-  IntVar *getIntVarp(vector<IntVar>::size_type var) {
+  IntVar* getIntVarp(vector<IntVar>::size_type var) {
     return &(intVariables[var]);
   }
 
@@ -244,16 +245,18 @@ public:
   }
 
   FloatVar inline getFloatVar(vector<FloatVar>::size_type var) const {
-    assert(var < floatVariables.size());
     return (floatVariables[var]);
+  }
+
+  FloatVar* getFloatVarp(vector<FloatVar>::size_type var) {
+    return &(floatVariables[var]);
   }
 
   vector<FloatVar>::size_type inline getFloatVarSize(void) {
     return floatVariables.size();
   }
  
-  STATUS inline getFloatInfo(vector<FloatVar>::size_type var,
-                           double *min, double *max, double *med) {
+  STATUS inline getFloatInfo(FloatVar* var, double *min, double *max, double *med) {
     SpaceStatus state = status();
     if (state==SS_FAILED) {
       *med = 0.0;
@@ -262,11 +265,10 @@ public:
       return STATE_FAILED;
     }
 
-    FloatVar v = getFloatVar(var);
-    *min = v.min();
-    *max = v.max();
-    *med = v.med();
-    if (v.size() == 0.0) {
+    *min = var->min();
+    *max = var->max();
+    *med = var->med();
+    if (var->size() == 0.0) {
       return VAR_ASSIGNED;
     }
     else {
@@ -320,10 +322,6 @@ public:
       heap.free(a,capacity);
   }
 
-  void set(int i, int e) {
-    a[i] = e;
-  }
-
   int *adr(void) {
     return a;
   }
@@ -344,9 +342,6 @@ void gecode_varargs_delete(CLVarArgs *v) {
 
 CLIntArgs *gecode_intargs_create(int n) {
     return new CLIntArgs(n); 
-}
-void gecode_intargs_set(CLIntArgs *v, int i, int e) {
-  v->set(i, e);
 }
 int *gecode_intargs_adr(CLIntArgs *v) {
   return v->adr();
@@ -384,27 +379,27 @@ size_t gecode_float_addvar(CLSpace *space, double min, double max) {
   return space->addFloatVariable(min, max); }
 
 
-BoolVar gecode_get_boolvar_by_index(CLSpace *space, size_t index) {
-  return space->getBoolVar(index);
+BoolVar* gecode_get_boolvar_by_index(CLSpace *space, size_t index) {
+  return space->getBoolVarp(index);
 }
 
-IntVar *gecode_get_intvar_by_index(CLSpace *space, size_t index) {
+IntVar* gecode_get_intvar_by_index(CLSpace *space, size_t index) {
   return space->getIntVarp(index);
 }
 
-FloatVar gecode_get_floatvar_by_index(CLSpace *space, size_t index) {
-  return space->getFloatVar(index);
+FloatVar* gecode_get_floatvar_by_index(CLSpace *space, size_t index) {
+  return space->getFloatVarp(index);
 }
 
 
-STATUS gecode_get_bool_info(CLSpace *space, size_t var, int *value) {
+STATUS gecode_get_bool_info(CLSpace *space, BoolVar* var, int *value) {
   return space->getBoolInfo(var, value); }
 
-STATUS gecode_get_int_info(CLSpace *space, IntVar *var,
+STATUS gecode_get_int_info(CLSpace *space, IntVar* var,
                            int *min, int *max, int *size) {
   return space->getIntInfo(var, min, max, size); }
 
-STATUS gecode_get_float_info(CLSpace *space, size_t var,
+STATUS gecode_get_float_info(CLSpace *space, FloatVar* var,
                            double *min, double *max, double *median) {
   return space->getFloatInfo(var, min, max, median); }
 
@@ -413,6 +408,11 @@ STATUS gecode_get_float_info(CLSpace *space, size_t var,
 IntVarBranch INT_VAR_NONE(void){
   return Gecode::INT_VAR_NONE();
 }
+
+IntVarBranch* INT_VAR_NONEp(void){
+ return new IntVarBranch(IntVarBranch::SEL_NONE,NULL);
+}
+
 IntVarBranch INT_VAR_RND(unsigned int seed){
   return Gecode::INT_VAR_RND(Rnd(seed));
 }
@@ -515,28 +515,22 @@ IntValBranch INT_VALUES_MAX(void){
   return Gecode::INT_VALUES_MAX();
 }
 
-void gecode_branch_int_var(CLSpace *space, size_t var, IntValBranch val) {
-  branch(*space, space->getIntVar(var), val);
+void gecode_branch_ivar(CLSpace *space, IntVar* var, IntValBranch* valb) {
+  branch(*space, *var, *valb);
 }
 
-void gecode_branch_int_vars(CLSpace *space, size_t *vars, vector<IntVar>::size_type count,
-                            IntVarBranch var, IntValBranch val) {
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(vars[i]); }
-  branch(*space, va, var, val);
+void gecode_branch_int_vars(CLSpace *space, IntVarArgs* vars,
+                            IntVarBranch* varb, IntValBranch* valb) {
+  branch(*space, *vars, *varb, *valb);
 }
 
-void gecode_branch_bool_var(CLSpace *space, size_t var, IntValBranch val) {
-  branch(*space, space->getBoolVar(var), val);
+void gecode_branch_bvar(CLSpace *space, BoolVar* var, IntValBranch* valb) {
+  branch(*space, *var, *valb);
 }
 
-void gecode_branch_bool_vars(CLSpace *space, size_t *vars, vector<BoolVar>::size_type count,
-                            IntVarBranch var, IntValBranch val) {
-  BoolVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(vars[i]); }
-  branch(*space, va, var, val);
+void gecode_branch_bool_vars(CLSpace *space, BoolVarArgs* vars,
+                            IntVarBranch* varb, IntValBranch* valb) {
+  branch(*space, *vars, *varb, *valb);
 }
 
 
@@ -588,7 +582,10 @@ DFS<CLSpace> *gecode_dfs_engine_create(CLSpace *space){
 void gecode_dfs_engine_delete(DFS<CLSpace> *dfs){ delete dfs;}
 
 CLSpace *gecode_dfs_engine_next(DFS<CLSpace> *dfs){
-  return dfs->next();
+  EXCSTART
+    return dfs->next();
+  EXCSTOP
+    return NULL;
 }
 
 BAB<CLSpace> *gecode_bab_engine_create(CLSpace *space,
@@ -609,7 +606,7 @@ CLSpace *gecode_bab_engine_next(BAB<CLSpace> *bab){
   EXCSTART
     return bab->next();
   EXCSTOP
-  return NULL;
+    return NULL;
 }
 
 
@@ -620,237 +617,140 @@ CLSpace *gecode_bab_engine_next(BAB<CLSpace> *bab){
 /* finite domain boolean relations */
 
 void gecode_rel_bvar_int(CLSpace *space, IntRelType op,
-                         size_t v, int value, IntConLevel icl) {
-  rel(*space, space->getBoolVar(v), op, value, icl); }
+                         BoolVar* v, int value, IntConLevel icl) {
+  rel(*space, *v, op, value, icl); }
 
 void gecode_rel_bvar_bvar(CLSpace *space, IntRelType op,
-                          size_t v1, size_t v2, IntConLevel icl) {
-  rel(*space, space->getBoolVar(v1), op, space->getBoolVar(v2), icl); }
+                          BoolVar* v1, BoolVar* v2, IntConLevel icl) {
+  rel(*space, *v1, op, *v2, icl); }
 
-void gecode_rel_bvar_int_reified(CLSpace *space, IntRelType op, size_t v1,
-                                 int val, ReifyMode mode, size_t v2, IntConLevel icl) {
-  rel(*space, space->getBoolVar(v1), op, val, Reify(space->getBoolVar(v2), mode), icl); }
+void gecode_rel_bvar_int_reified(CLSpace *space, IntRelType op, BoolVar* v1,
+                                 int val, ReifyMode mode, BoolVar* v2, IntConLevel icl) {
+  rel(*space, *v1, op, val, Reify(*v2, mode), icl); }
 
-void gecode_rel_bvar_bvar_reified(CLSpace *space, IntRelType op, size_t v1,
-                                  size_t v2, ReifyMode mode, size_t b1, IntConLevel icl) {
-  rel(*space, space->getBoolVar(v1), op, space->getBoolVar(v2),
-      Reify(space->getBoolVar(b1), mode), icl);
+void gecode_rel_bvar_bvar_reified(CLSpace *space, IntRelType op, BoolVar* v1,
+                                  BoolVar* v2, ReifyMode mode, BoolVar* b1, IntConLevel icl) {
+  rel(*space, *v1, op, *v2,
+      Reify(*b1, mode), icl);
 }
 
-void gecode_rel_bvars(CLSpace *space, IntRelType op, int v[],
-                      vector<IntVar>::size_type count, IntConLevel icl) {
-  BoolVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  rel(*space, va, op, icl);
+void gecode_rel_bvars(CLSpace *space, IntRelType op, BoolVarArgs* v,
+                      IntConLevel icl) {
+  rel(*space, *v, op, icl);
 }
 
-void gecode_rel_bvars_int(CLSpace *space, IntRelType op, int v[],
-                          vector<IntVar>::size_type count, int value,
-                          IntConLevel icl) {
-  BoolVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  rel(*space, va, op, value, icl);
+void gecode_rel_bvars_int(CLSpace *space, IntRelType op, BoolVarArgs* v,
+                          int value, IntConLevel icl) {
+  rel(*space, *v, op, value, icl);
 }
 
 void gecode_rel_bvars_bvars(CLSpace *space, IntRelType op,
-                            int v1[], vector<IntVar>::size_type count1,
-                            int v2[], vector<IntVar>::size_type count2,
+                            BoolVarArgs* v1, BoolVarArgs* v2,
                             IntConLevel icl) {
-  BoolVarArgs v1a(count1);
-  BoolVarArgs v2a(count2);
-  for(unsigned i=0; i<count1; i++)
-    { v1a[i]=space->getBoolVar(v1[i]); }
-  for(unsigned i=0; i<count2; i++)
-    { v2a[i]=space->getBoolVar(v2[i]); }
-  rel(*space, v1a, op, v2a, icl);
+  rel(*space, *v1, op, *v2, icl);
 }
 
 
 /* boolean operations */
 
-void gecode_op_bvar_bvar_bvar(CLSpace *space, BoolOpType op, size_t v1,
-                              size_t v2, size_t b1, IntConLevel icl) {
-  rel(*space, space->getBoolVar(v1), op, space->getBoolVar(v2),
-      space->getBoolVar(b1), icl);
+void gecode_op_bvar_bvar_bvar(CLSpace *space, BoolOpType op, BoolVar* v1,
+                              BoolVar* v2, BoolVar* b1, IntConLevel icl) {
+  rel(*space, *v1, op, *v2, *b1, icl);
 }
 
-void gecode_op_bvar_bvar_int(CLSpace *space, BoolOpType op, size_t v1,
-                             size_t v2, int n, IntConLevel icl) {
-  rel(*space, space->getBoolVar(v1), op, space->getBoolVar(v2), n, icl);
+void gecode_op_bvar_bvar_int(CLSpace *space, BoolOpType op, BoolVar* v1,
+                             BoolVar* v2, int n, IntConLevel icl) {
+  rel(*space, *v1, op, *v2, n, icl);
 }
 
-void gecode_op_bvars_int(CLSpace *space, BoolOpType op, int v[],
-                          vector<BoolVar>::size_type count, int value,
-                          IntConLevel icl) {
-  BoolVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  rel(*space, op, va, value, icl);
+void gecode_op_bvars_int(CLSpace *space, BoolOpType op, BoolVarArgs* v,
+                          int value, IntConLevel icl) {
+  rel(*space, op, *v, value, icl);
 }
 
-void gecode_op_bvars_bvar(CLSpace *space, BoolOpType op, int v[],
-                          vector<BoolVar>::size_type count, int var,
-                          IntConLevel icl) {
-  BoolVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  rel(*space, op, va, space->getBoolVar(var), icl);
+void gecode_op_bvars_bvar(CLSpace *space, BoolOpType op, BoolVarArgs* v,
+                          BoolVar* var, IntConLevel icl) {
+  rel(*space, op, *v, *var, icl);
 }
 
 void gecode_clause_bvars_bvars_int(CLSpace *space, BoolOpType op,
-                                   int v1[], vector<BoolVar>::size_type count1,
-                                   int v2[], vector<BoolVar>::size_type count2,
-                                   int n,
-                                   IntConLevel icl) {
-  BoolVarArgs v1a(count1);
-  BoolVarArgs v2a(count2);
-  for(unsigned i=0; i<count1; i++)
-    { v1a[i]=space->getBoolVar(v1[i]); }
-  for(unsigned i=0; i<count2; i++)
-    { v2a[i]=space->getBoolVar(v2[i]); }
-  clause(*space, op, v1a, v2a, n, icl);
+                                   BoolVarArgs* v1, BoolVarArgs* v2,
+                                   int n, IntConLevel icl) {
+  clause(*space, op, *v1, *v2, n, icl);
 }
 
 void gecode_clause_bvars_bvars_bvar(CLSpace *space, BoolOpType op,
-                                    int v1[], vector<BoolVar>::size_type count1,
-                                    int v2[], vector<BoolVar>::size_type count2,
-                                    int bvar,
-                                    IntConLevel icl) {
-  BoolVarArgs v1a(count1);
-  BoolVarArgs v2a(count2);
-  for(unsigned i=0; i<count1; i++)
-    { v1a[i]=space->getBoolVar(v1[i]); }
-  for(unsigned i=0; i<count2; i++)
-    { v2a[i]=space->getBoolVar(v2[i]); }
-  clause(*space, op, v1a, v2a, space->getBoolVar(bvar), icl);
+                                    BoolVarArgs* v1, BoolVarArgs* v2,
+                                    BoolVar* bvar, IntConLevel icl) {
+  clause(*space, op, *v1, *v2, *bvar, icl);
 }
 
 /* finite domain integer relations */
 
 void gecode_rel_ivar_int(CLSpace *space, IntRelType op,
-                         size_t v, int value, IntConLevel icl) {
-  rel(*space, space->getIntVar(v), op, value, icl); }
+                         IntVar* v, int value, IntConLevel icl) {
+  rel(*space, *v, op, value, icl); }
 
 void gecode_rel_ivar_ivar(CLSpace *space, IntRelType op,
-                          size_t v1, size_t v2, IntConLevel icl) {
-  rel(*space, space->getIntVar(v1), op, space->getIntVar(v2), icl); }
+                          IntVar* v1, IntVar* v2, IntConLevel icl) {
+  rel(*space, *v1, op, *v2, icl); }
 
-void gecode_rel_ivar_int_reified(CLSpace *space, IntRelType op, size_t v1,
-                                 int val, ReifyMode mode, size_t b1, IntConLevel icl) {
-  rel(*space, space->getIntVar(v1), op, val, 
-      Reify(space->getBoolVar(b1), mode), icl); }
+void gecode_rel_ivar_int_reified(CLSpace *space, IntRelType op, IntVar* v1,
+                                 int val, ReifyMode mode, BoolVar* b1, IntConLevel icl) {
+  rel(*space, *v1, op, val, 
+      Reify(*b1, mode), icl); }
 
-void gecode_rel_ivar_ivar_reified(CLSpace *space, IntRelType op, size_t v1,
-                                  size_t v2, ReifyMode mode, size_t b1, IntConLevel icl) {
-  rel(*space, space->getIntVar(v1), op, space->getIntVar(v2),
-      Reify(space->getBoolVar(b1), mode), icl);
+void gecode_rel_ivar_ivar_reified(CLSpace *space, IntRelType op, IntVar* v1,
+                                  IntVar* v2, ReifyMode mode, BoolVar* b1, IntConLevel icl) {
+  rel(*space, *v1, op, *v2, Reify(*b1, mode), icl);
 }
 
-void gecode_rel_ivars(CLSpace *space, IntRelType op, int v[],
-                      vector<IntVar>::size_type count, IntConLevel icl) {
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  rel(*space, va, op, icl);
+void gecode_rel_ivars(CLSpace *space, IntRelType op, IntVarArgs* v,
+                      IntConLevel icl) {
+  rel(*space, *v, op, icl);
 }
 
 
-void gecode_rel_ivars_int(CLSpace *space, IntRelType op, int v[],
-                          vector<IntVar>::size_type count, int value,
-                          IntConLevel icl) {
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  rel(*space, va, op, value, icl);
+void gecode_rel_ivars_int(CLSpace *space, IntRelType op, IntVarArgs* v,
+                          int value, IntConLevel icl) {
+  rel(*space, *v, op, value, icl);
 }
 
 void gecode_rel_ivars_ivars(CLSpace *space, IntRelType op,
-                            int v1[], vector<IntVar>::size_type count1,
-                            int v2[], vector<IntVar>::size_type count2,
+                            IntVarArgs* v1, IntVarArgs* v2,
                             IntConLevel icl) {
-  IntVarArgs v1a(count1);
-  IntVarArgs v2a(count2);
-  for(unsigned i=0; i<count1; i++)
-    { v1a[i]=space->getIntVar(v1[i]); }
-  for(unsigned i=0; i<count2; i++)
-    { v2a[i]=space->getIntVar(v2[i]); }
-  rel(*space, v1a, op, v2a, icl);
+  rel(*space, *v1, op, *v2, icl);
 }
 
 
 /* distinct constraint */
-void gecode_dst_ivars(CLSpace *space, IntVarArgs *va, IntConLevel icl) {
+void gecode_disinct_ivars(CLSpace *space, IntVarArgs *va, IntConLevel icl) {
   EXCSTART
     distinct(*space, *va, icl);
   EXCSTOP
 }
 
-void gecode_dst_ints_ivars(CLSpace *space, IntArgs *ia, IntVarArgs *va, IntConLevel icl) {
+void gecode_distinct_ints_ivars(CLSpace *space, IntArgs *ia, IntVarArgs *va, IntConLevel icl) {
   EXCSTART
     distinct(*space, *ia, *va, icl);
   EXCSTOP
 }
 
 
-void gecode_distinct_ivars(CLSpace *space, const  int vars[], 
-                           vector<IntVar>::size_type count,
-                           IntConLevel icl) {
+/* sorted constraint */
 
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(vars[i]); }
+void gecode_sorted_ivars_ivars(CLSpace *space, IntVarArgs* xvars,
+                               IntVarArgs* yvars, IntConLevel icl) {
   EXCSTART
-    distinct(*space, va, icl);
+    sorted(*space, *xvars, *yvars, icl);
   EXCSTOP
 }
 
-void gecode_distinct_ints_ivars(CLSpace *space, const int *intoffsets, const int *vars, 
-                                vector<IntVar>::size_type count, 
-                                IntConLevel icl) {
-  IntVarArgs va(count);
-  IntArgs ia(count);
-  for(unsigned i=0; i<count; i++) { 
-    va[i]=space->getIntVar(vars[i]);
-    ia[i] = intoffsets[i];
-  }
+void gecode_sorted_ivars_ivars_ivars(CLSpace *space, IntVarArgs* xvars,
+                                     IntVarArgs* yvars, IntVarArgs* zvars, 
+                                     IntConLevel icl) {
   EXCSTART
-  distinct(*space, ia, va, icl);
-  EXCSTOP
-}
-
-
-  /* sorted constraint */
-
-void gecode_sorted_ivars_ivars(CLSpace *space, const  int xvars[], const  int yvars[], 
-                         vector<IntVar>::size_type count, IntConLevel icl) {
-
-  IntVarArgs xva(count);
-  IntVarArgs yva(count);
-  for(unsigned i=0; i<count; i++) {
-    xva[i]=space->getIntVar(xvars[i]);
-    yva[i]=space->getIntVar(yvars[i]);
-  }
-  EXCSTART
-    sorted(*space, xva, yva, icl);
-  EXCSTOP
-}
-
-void gecode_sorted_ivars_ivars_ivars(CLSpace *space, const  int xvars[],
-                                     const  int yvars[], const  int zvars[], 
-                                     vector<IntVar>::size_type count, IntConLevel icl) {
-
-  IntVarArgs xva(count);
-  IntVarArgs yva(count);
-  IntVarArgs zva(count);
-  for(unsigned i=0; i<count; i++) {
-    xva[i]=space->getIntVar(xvars[i]);
-    yva[i]=space->getIntVar(yvars[i]);
-    zva[i]=space->getIntVar(zvars[i]);
-  }
-  EXCSTART
-    sorted(*space, xva, yva, zva, icl);
+    sorted(*space, *xvars, *yvars, *zvars, icl);
   EXCSTOP
 }
 
@@ -858,337 +758,198 @@ void gecode_sorted_ivars_ivars_ivars(CLSpace *space, const  int xvars[],
 /* channeling constraints */
 
 void gecode_channel_ivars_ivars(CLSpace *space,
-                                int v1[], int v2[],
-                                vector<IntVar>::size_type count,
+                                IntVarArgs* v1, IntVarArgs* v2,
                                 IntConLevel icl) {
-  IntVarArgs v1a(count);
-  IntVarArgs v2a(count);
-  for(unsigned i=0; i<count; i++)
-    { v1a[i]=space->getIntVar(v1[i]);
-      v2a[i]=space->getIntVar(v2[i]); }
-  channel(*space, v1a, v2a, icl);
+  channel(*space, *v1, *v2, icl);
 }
 
 void gecode_channel_ivars_int_ivars_int(CLSpace *space,
-                                        int v1[],
-                                        int xoff,
-                                        int v2[],
-                                        int yoff,
-                                        vector<IntVar>::size_type count,
+                                        IntVarArgs* v1, int xoff,
+                                        IntVarArgs* v2, int yoff,
                                         IntConLevel icl) {
-  IntVarArgs v1a(count);
-  IntVarArgs v2a(count);
-  for(unsigned i=0; i<count; i++)
-    { v1a[i]=space->getIntVar(v1[i]);
-      v2a[i]=space->getIntVar(v2[i]); }
-  channel(*space, v1a, xoff, v2a, yoff, icl);
+  channel(*space, *v1, xoff, *v2, yoff, icl);
 }
 
 void gecode_channel_bvar_ivar(CLSpace *space,
-                              vector<BoolVar>::size_type bvar,
-                              vector<IntVar>::size_type ivar,
+                              BoolVar* bvar, IntVar* ivar,
                               IntConLevel icl) {
-  channel(*space, space->getBoolVar(bvar), space->getIntVar(ivar), icl);
+  channel(*space, *bvar, *ivar, icl);
 }
 
 void gecode_channel_ivar_bvar(CLSpace *space,
-                              vector<IntVar>::size_type ivar,
-                              vector<BoolVar>::size_type bvar,
+                              IntVar* ivar, BoolVar* bvar,
                               IntConLevel icl) {
-  channel(*space, space->getIntVar(ivar), space->getBoolVar(bvar), icl);
+  channel(*space, *ivar, *bvar, icl);
 }
 
 void gecode_channel_bvars_ivar_int(CLSpace *space,
-                                   int v1[], vector<BoolVar>::size_type count,
-                                   vector<IntVar>::size_type ivar, int offset,
+                                   BoolVarArgs* v1, IntVar* ivar, int offset,
                                    IntConLevel icl) {
-  BoolVarArgs v1a(count);
-  for(unsigned i=0; i<count; i++)
-    { v1a[i]=space->getBoolVar(v1[i]); }
-  channel(*space, v1a, space->getIntVar(ivar), offset, icl);
+  channel(*space, *v1, *ivar, offset, icl);
 }
 
 /* integer arithmetic constraints */
 
 void gecode_min_ivar_ivar_ivar(CLSpace *space,
-                               vector<IntVar>::size_type x1,
-                               vector<IntVar>::size_type x2,
-                               vector<IntVar>::size_type ret,
+                               IntVar* x1, IntVar* x2, IntVar* ret,
                                IntConLevel icl) {
-  min(*space, 
-      space->getIntVar(x1), 
-      space->getIntVar(x2),
-      space->getIntVar(ret),
-      icl);
+  min(*space, *x1, *x2, *ret, icl);
 }
 
 void gecode_min_ivars_ivar(CLSpace *space,
-                           int v[], vector<IntVar>::size_type count,
-                           int y,
+                           IntVarArgs* v, IntVar* y,
                            IntConLevel icl) {
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  min(*space, va, space->getIntVar(y), icl);
+  min(*space, *v, *y, icl);
 }
 
 void gecode_max_ivar_ivar_ivar(CLSpace *space,
-                               vector<IntVar>::size_type x1,
-                               vector<IntVar>::size_type x2,
-                               vector<IntVar>::size_type ret,
+                               IntVar* x1, IntVar* x2, IntVar* ret,
                                IntConLevel icl) {
-  max(*space, 
-      space->getIntVar(x1), 
-      space->getIntVar(x2),
-      space->getIntVar(ret),
-      icl);
+  max(*space, *x1, *x2, *ret, icl);
 }
 
 void gecode_max_ivars_ivar(CLSpace *space,
-                           int v[], vector<IntVar>::size_type count,
-                           int y,
+                           IntVarArgs* v, IntVar* y,
                            IntConLevel icl) {
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  max(*space, va, space->getIntVar(y), icl);
+  max(*space, *v, *y, icl);
 }
 
 void gecode_abs_ivar_ivar(CLSpace *space,
-                          vector<IntVar>::size_type x1,
-                          vector<IntVar>::size_type x2,
+                          IntVar* x1, IntVar* x2,
                           IntConLevel icl) {
-  abs(*space, 
-      space->getIntVar(x1), 
-      space->getIntVar(x2),
-      icl);
+  abs(*space, *x1, *x2, icl);
 }
 
 void gecode_mul_ivar_ivar_ivar(CLSpace *space,
-                               vector<IntVar>::size_type x1,
-                               vector<IntVar>::size_type x2,
-                               vector<IntVar>::size_type ret,
+                               IntVar* x1, IntVar* x2, IntVar* ret,
                                IntConLevel icl) {
-  mult(*space, 
-       space->getIntVar(x1), 
-       space->getIntVar(x2),
-       space->getIntVar(ret),
-       icl);
+  mult(*space, *x1, *x2, *ret, icl);
 }
 
 void gecode_sqr_ivar_ivar(CLSpace *space,
-                          vector<IntVar>::size_type x1,
-                          vector<IntVar>::size_type x2,
+                          IntVar* x1, IntVar* x2,
                           IntConLevel icl) {
-  sqr(*space, 
-      space->getIntVar(x1), 
-      space->getIntVar(x2),
-      icl);
+  sqr(*space, *x1, *x2, icl);
 }
 
 void gecode_sqrt_ivar_ivar(CLSpace *space,
-                           vector<IntVar>::size_type x1,
-                           vector<IntVar>::size_type x2,
+                           IntVar* x1, IntVar* x2,
                            IntConLevel icl) {
-  sqrt(*space, 
-       space->getIntVar(x1), 
-       space->getIntVar(x2),
-       icl);
+  sqrt(*space, *x1, *x2, icl);
 }
 
 void gecode_divmod_ivar_ivar_ivar_ivar(CLSpace *space,
-                                       vector<IntVar>::size_type x0,
-                                       vector<IntVar>::size_type x1,
-                                       vector<IntVar>::size_type x2,
-                                       vector<IntVar>::size_type x3,
+                                       IntVar* x0,
+                                       IntVar* x1,
+                                       IntVar* x2,
+                                       IntVar* x3,
                                        IntConLevel icl) {
-  divmod(*space, 
-         space->getIntVar(x0), 
-         space->getIntVar(x1), 
-         space->getIntVar(x2),
-         space->getIntVar(x3),
-         icl);
+  divmod(*space, *x0, *x1, *x2, *x3, icl);
 }
 
 void gecode_div_ivar_ivar_ivar(CLSpace *space,
-                               vector<IntVar>::size_type x1,
-                               vector<IntVar>::size_type x2,
-                               vector<IntVar>::size_type ret,
+                               IntVar* x1, IntVar* x2, IntVar* ret,
                                IntConLevel icl) {
-  div(*space, 
-      space->getIntVar(x1), 
-      space->getIntVar(x2),
-      space->getIntVar(ret),
-      icl);
+  div(*space, *x1, *x2, *ret, icl);
 }
 
 void gecode_mod_ivar_ivar_ivar(CLSpace *space,
-                               vector<IntVar>::size_type x1,
-                               vector<IntVar>::size_type x2,
-                               vector<IntVar>::size_type ret,
+                               IntVar* x1, IntVar* x2, IntVar* ret,
                                IntConLevel icl) {
-  mod(*space, 
-      space->getIntVar(x1), 
-      space->getIntVar(x2),
-      space->getIntVar(ret),
-      icl);
+  mod(*space, *x1, *x2, *ret, icl);
 }
 
 
 /* integer linear constraint */
 
-void gecode_lin_ivars_int(CLSpace *space, IntRelType rel, int v[],
-                          vector<IntVar>::size_type count, int value,
-                          IntConLevel icl) {
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  linear(*space, va, rel, value, icl);
+void gecode_lin_ivars_int(CLSpace *space, IntRelType rel, IntVarArgs* v,
+                          int value, IntConLevel icl) {
+  linear(*space, *v, rel, value, icl);
 }
 
-void gecode_lin_ivars_ivar(CLSpace *space, IntRelType rel, int v[],
-                          vector<IntVar>::size_type count, int var,
-                          IntConLevel icl) {
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  linear(*space, va, rel, space->getIntVar(var), icl);
+void gecode_lin_ivars_ivar(CLSpace *space, IntRelType rel, IntVarArgs* v,
+                          IntVar* var, IntConLevel icl) {
+  linear(*space, *v, rel, *var, icl);
 }
 
-void gecode_lin_ivars_int_reified(CLSpace *space, IntRelType rel, int v[],
-                                  vector<IntVar>::size_type count, int value,
-                                  ReifyMode mode, int bvar, IntConLevel icl) {
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  linear(*space, va, rel, value, Reify(space->getBoolVar(bvar), mode), icl);
+void gecode_lin_ivars_int_reified(CLSpace *space, IntRelType rel, IntVarArgs* v,
+                                  int value, ReifyMode mode,
+                                  BoolVar* bvar, IntConLevel icl) {
+  linear(*space, *v, rel, value, Reify(*bvar, mode), icl);
 }
 
-void gecode_lin_ivars_ivar_reified(CLSpace *space, IntRelType rel, int v[],
-                                   vector<IntVar>::size_type count, int var,
-                                   ReifyMode mode, int bvar, IntConLevel icl) {
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  linear(*space, va, rel, space->getIntVar(var), Reify(space->getBoolVar(bvar),mode), icl);
+void gecode_lin_ivars_ivar_reified(CLSpace *space, IntRelType rel, IntVarArgs* v,
+                                   IntVar* var, ReifyMode mode,
+                                   BoolVar* bvar, IntConLevel icl) {
+  linear(*space, *v, rel, *var, Reify(*bvar,mode), icl);
 }
 
-void gecode_lin_ints_ivars_int(CLSpace *space, IntRelType rel, int ints[], int v[],
-                               vector<IntVar>::size_type count, int value,
-                               IntConLevel icl) {
-  IntVarArgs va(count);
-  IntArgs ia(count, ints);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  linear(*space, ia, va, rel, value, icl);
+void gecode_lin_ints_ivars_int(CLSpace *space, IntRelType rel, IntArgs* ints,
+                               IntVarArgs* v, int value, IntConLevel icl) {
+  linear(*space, *ints, *v, rel, value, icl);
 }
 
-void gecode_lin_ints_ivars_ivar(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                vector<IntVar>::size_type count, int var,
-                                IntConLevel icl) {
-  IntVarArgs va(count);
-  IntArgs ia(count, ints);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  linear(*space, ia, va, rel, space->getIntVar(var), icl);
+void gecode_lin_ints_ivars_ivar(CLSpace *space, IntRelType rel, IntArgs* ints,
+                                IntVarArgs* v, IntVar* var, IntConLevel icl) {
+  linear(*space, *ints, *v, rel, *var, icl);
 }
 
-void gecode_lin_ints_ivars_int_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                       vector<IntVar>::size_type count, int value,
-                                       ReifyMode mode, int bvar, IntConLevel icl) {
-  IntVarArgs va(count);
-  IntArgs ia(count, ints);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  linear(*space, ia, va, rel, value, Reify(space->getBoolVar(bvar), mode), icl);
+void gecode_lin_ints_ivars_int_reified(CLSpace *space, IntRelType rel, IntArgs* ints,
+                                       IntVarArgs* v, int value,
+                                       ReifyMode mode, BoolVar* bvar, IntConLevel icl) {
+  linear(*space, *ints, *v, rel, value, Reify(*bvar, mode), icl);
 }
 
-void gecode_lin_ints_ivars_ivar_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                        vector<IntVar>::size_type count, int var,
-                                        ReifyMode mode, int bvar, IntConLevel icl) {
-  IntVarArgs va(count);
-  IntArgs ia(count, ints);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(v[i]); }
-  linear(*space, ia, va, rel, space->getIntVar(var), Reify(space->getBoolVar(bvar), mode), icl);
+void gecode_lin_ints_ivars_ivar_reified(CLSpace *space, IntRelType rel, IntArgs* ints,
+                                        IntVarArgs* v, IntVar* var,
+                                        ReifyMode mode, BoolVar* bvar, IntConLevel icl) {
+  linear(*space, *ints, *v, rel, *var, Reify(*bvar, mode), icl);
 }
 
 /* boolean linear constraint */
 
-void gecode_lin_bvars_int(CLSpace *space, IntRelType rel, int v[],
-                          vector<BoolVar>::size_type count, int value,
-                          IntConLevel icl) {
-  BoolVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  linear(*space, va, rel, value, icl);
+void gecode_lin_bvars_int(CLSpace *space, IntRelType rel, BoolVarArgs* v,
+                          int value, IntConLevel icl) {
+  linear(*space, *v, rel, value, icl);
 }
 
-void gecode_lin_bvars_ivar(CLSpace *space, IntRelType rel, int v[],
-                          vector<BoolVar>::size_type count, int var,
-                          IntConLevel icl) {
-  BoolVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  linear(*space, va, rel, space->getIntVar(var), icl);
+void gecode_lin_bvars_ivar(CLSpace *space, IntRelType rel, BoolVarArgs* v,
+                          IntVar* var, IntConLevel icl) {
+  linear(*space, *v, rel, *var, icl);
 }
 
-void gecode_lin_bvars_int_reified(CLSpace *space, IntRelType rel, int v[],
-                                  vector<BoolVar>::size_type count, int value,
-                                  ReifyMode mode, int bvar, IntConLevel icl) {
-  BoolVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  linear(*space, va, rel, value, Reify(space->getBoolVar(bvar), mode), icl);
+void gecode_lin_bvars_int_reified(CLSpace *space, IntRelType rel, BoolVarArgs* v,
+                                  int value, ReifyMode mode, BoolVar* bvar,
+                                  IntConLevel icl) {
+  linear(*space, *v, rel, value, Reify(*bvar, mode), icl);
 }
 
-void gecode_lin_bvars_ivar_reified(CLSpace *space, IntRelType rel, int v[],
-                                   vector<BoolVar>::size_type count, int var,
-                                   ReifyMode mode, int bvar, IntConLevel icl) {
-  BoolVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  linear(*space, va, rel, space->getIntVar(var), Reify(space->getBoolVar(bvar), mode), icl);
+void gecode_lin_bvars_ivar_reified(CLSpace *space, IntRelType rel, BoolVarArgs* v,
+                                   IntVar* var, ReifyMode mode, BoolVar* bvar,
+                                   IntConLevel icl) {
+  linear(*space, *v, rel, *var, Reify(*bvar, mode), icl);
 }
 
-void gecode_lin_ints_bvars_int(CLSpace *space, IntRelType rel, int ints[], int v[],
-                               vector<BoolVar>::size_type count, int value,
-                               IntConLevel icl) {
-  BoolVarArgs va(count);
-  IntArgs ia(count, ints);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  linear(*space, ia, va, rel, value, icl);
+void gecode_lin_ints_bvars_int(CLSpace *space, IntRelType rel, IntArgs* ints,
+                               BoolVarArgs* v, int value, IntConLevel icl) {
+  linear(*space, *ints, *v, rel, value, icl);
 }
 
-void gecode_lin_ints_bvars_ivar(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                vector<BoolVar>::size_type count, int var,
-                                IntConLevel icl) {
-  BoolVarArgs va(count);
-  IntArgs ia(count, ints);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  linear(*space, ia, va, rel, space->getIntVar(var), icl);
+void gecode_lin_ints_bvars_ivar(CLSpace *space, IntRelType rel, IntArgs* ints,
+                                BoolVarArgs* v, IntVar* var, IntConLevel icl) {
+  linear(*space, *ints, *v, rel, *var, icl);
 }
 
-void gecode_lin_ints_bvars_int_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                       vector<BoolVar>::size_type count, int value,
-                                       ReifyMode mode, int bvar, IntConLevel icl) {
-  BoolVarArgs va(count);
-  IntArgs ia(count, ints);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  linear(*space, ia, va, rel, value, Reify(space->getBoolVar(bvar), mode), icl);
+void gecode_lin_ints_bvars_int_reified(CLSpace *space, IntRelType rel, IntArgs* ints,
+                                       BoolVarArgs* v, int value, ReifyMode mode,
+                                       BoolVar* bvar, IntConLevel icl) {
+  linear(*space, *ints, *v, rel, value, Reify(*bvar, mode), icl);
 }
 
-void gecode_lin_ints_bvars_ivar_reified(CLSpace *space, IntRelType rel, int ints[], int v[],
-                                        vector<BoolVar>::size_type count, int var,
-                                        ReifyMode mode, int bvar, IntConLevel icl) {
-  BoolVarArgs va(count);
-  IntArgs ia(count, ints);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getBoolVar(v[i]); }
-  linear(*space, ia, va, rel, space->getIntVar(var), Reify(space->getBoolVar(bvar), mode), icl);
+void gecode_lin_ints_bvars_ivar_reified(CLSpace *space, IntRelType rel, IntArgs* ints,
+                                        BoolVarArgs* v, IntVar* var, ReifyMode mode,
+                                        BoolVar* bvar, IntConLevel icl) {
+  linear(*space, *ints, *v, rel, *var, Reify(*bvar, mode), icl);
 }
 
 

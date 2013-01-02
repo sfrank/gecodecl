@@ -5,7 +5,7 @@
 ;;; callbacks
 
 ;; The handler function for all C++ exceptions, standard and Gecode
-;; specific ones. This was introduced to void the silent failing
+;; specific ones. This was introduced to avoid the silent failing
 ;; should an exception happen in foreign code. We will now get a Lisp
 ;; side error with the exception error message.
 (defcallback exception-fun :void ((msg :pointer))
@@ -104,7 +104,7 @@
       (integer-info space variable)
     (if (eq result :var-assigned)
         (car values)
-        (error "INTEGER-VALUE called on unassigned variable ~A" variable))))
+        (error "Value requested on unassigned variable ~A" variable))))
 
 ;;; BoolVars
 (defun add-bool-variable (space)
@@ -115,10 +115,16 @@
   (declare   (type gspace space)
              (type boolvar variable))
   (with-foreign-object (value :int)
-    (setf (mem-ref value :int) 0)
-    (values (gecode_get_bool_info space (gvariable-index variable) value)
+    ;(setf (mem-ref value :int) 0)
+    (values (gecode_get_bool_info space variable value)
             (mem-ref value :int))))
 
+(defun boolean-value (space variable)
+  (multiple-value-bind (result values)
+      (boolean-info space variable)
+    (if (eq result :var-assigned)
+        values
+        (error "Value requested on unassigned variable ~A" variable))))
 
 ;;; FloatVars
 (defun add-float-variable (space &optional (min most-negative-double-float)
@@ -132,8 +138,7 @@
   (with-foreign-objects ((min :double)
                          (max :double)
                          (median :double))
-    (values (gecode_get_float_info space
-                                   (gvariable-index variable) min max median)
+    (values (gecode_get_float_info space variable min max median)
             (list (mem-ref min :double)
                   (mem-ref max :double)
                   (mem-ref median :double)))))
@@ -143,7 +148,7 @@
       (float-info space variable)
     (if (eq result :var-assigned)
         (car values)
-        (error "FLOAT-VALUE called on unassigned variable ~A" variable))))
+        (error "Value requested on unassigned variable ~A" variable))))
 
 
 ;;;; search engine interface and abstraction
@@ -202,8 +207,8 @@
          (l (list x y))
          dfs)
     ;(post-num-rel *gspace* :irt-< x y)
-    ;(gecode_dst_ivars *gspace* l :icl-def)
-    (gecode_dst_ints_ivars *gspace* i l :icl-def)
+    ;(gecode_distinct_ivars *gspace* l :icl-def)
+    (gecode_distinct_ints_ivars *gspace* i l :icl-def)
     ;(distinct-g l nil)
     (setf dfs (make-dfs *gspace*))
     (loop for s = (search-next dfs)

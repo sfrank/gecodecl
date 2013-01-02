@@ -64,6 +64,21 @@
 (defmethod expand-to-foreign (intvar (type intvar-type))
   `(gecode_get_intvar_by_index *gspace* (intvar-index ,intvar)))
 
+(cffi:define-foreign-type boolvar-type () ()
+  (:actual-type :pointer)
+  (:simple-parser boolvar-type))
+
+(defmethod expand-to-foreign (boolvar (type boolvar-type))
+  `(gecode_get_boolvar_by_index *gspace* (boolvar-index ,boolvar)))
+
+(cffi:define-foreign-type floatvar-type () ()
+  (:actual-type :pointer)
+  (:simple-parser floatvar-type))
+
+(defmethod expand-to-foreign (floatvar (type floatvar-type))
+  `(gecode_get_floatvar_by_index *gspace* (floatvar-index ,floatvar)))
+
+
 (cffi:define-foreign-type intvarargs-type () ()
   (:actual-type :pointer)
   (:simple-parser intvarargs-type))
@@ -103,6 +118,24 @@
      (unwind-protect 
           (progn ,@body)
        (gecode_intargs_delete ,var))))
+
+(cffi:define-foreign-type boolvarargs-type () ()
+  (:actual-type :pointer)
+  (:simple-parser boolvarargs-type))
+
+(defmethod expand-to-foreign-dyn (value var body (type boolvarargs-type))
+  `(let* ((length (length ,value))
+          (,var (gecode_varargs_create length))
+          (i -1))
+     (declare (type fixnum i length))
+     (map nil
+          (lambda (x)
+            (declare (type boolvar x))
+            (gecode_varargs_set ,var (incf i) x))
+          ,value)
+     (unwind-protect 
+          (progn ,@body)
+       (gecode_varargs_delete ,var))))
 
 
 ;;; foreign libraries

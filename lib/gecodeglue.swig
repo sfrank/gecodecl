@@ -7,9 +7,9 @@
 %typemap(cin) size_t "size";
 %typemap(cout) size_t "size";
 
-%typemap(cin) BoolVar "boolvar-type";
+%typemap(cin) BoolVar* "boolvar-type";
 %typemap(cin) IntVar* "intvar-type";
-%typemap(cin) FloatVar "floatvar-type";
+%typemap(cin) FloatVar* "floatvar-type";
 
 %typemap(cin) CLSpace* "space-type";
 %typemap(cin) DFS<CLSpace>* "search-type";
@@ -22,6 +22,7 @@
 
 %typemap(cin) IntVarArgs*  "intvarargs-type";
 %typemap(cin) IntArgs*  "intargs-type";
+%typemap(cin) BoolVarArgs*  "boolvarargs-type";
 
 // %typemap(cin) IntVarBranch  "bvar-sel";
 // %typemap(cin) IntValBranch  "bval-sel";
