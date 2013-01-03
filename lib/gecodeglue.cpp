@@ -405,116 +405,6 @@ STATUS gecode_get_float_info(CLSpace *space, FloatVar* var,
 
 
 // Branchers
-IntVarBranch INT_VAR_NONE(void){
-  return Gecode::INT_VAR_NONE();
-}
-
-IntVarBranch* INT_VAR_NONEp(void){
- return new IntVarBranch(IntVarBranch::SEL_NONE,NULL);
-}
-
-IntVarBranch INT_VAR_RND(unsigned int seed){
-  return Gecode::INT_VAR_RND(Rnd(seed));
-}
-/* TODO: check whether to insert MERIT variants */
-IntVarBranch INT_VAR_DEGREE_MIN(void){
-  return Gecode::INT_VAR_DEGREE_MIN(NULL);
-}
-IntVarBranch INT_VAR_DEGREE_MAX(void){
-  return Gecode::INT_VAR_DEGREE_MAX(NULL);
-}
-IntVarBranch INT_VAR_AFC_MIN(void){
-  return Gecode::INT_VAR_AFC_MIN(NULL);
-}
-IntVarBranch INT_VAR_AFC_MAX(void){
-  return Gecode::INT_VAR_AFC_MAX(NULL);
-}
-/* TODO: check whether to insert ACTIVITY variants */
-/*
-IntVarBranch INT_VAR_ACTIVITY_MIN_ints
-  (CLSpace *space, size_t *vars, size_t count, double d)
-{
-  IntVarArgs va(count);
-  for(unsigned i=0; i<count; i++)
-    { va[i]=space->getIntVar(vars[i]); }
-  return INT_VAR_ACTIVITY_MIN(IntActivity(*space,va,d));
-}
-*/
-IntVarBranch INT_VAR_MIN_MIN(void){
-  return Gecode::INT_VAR_MIN_MIN(NULL);
-}
-IntVarBranch INT_VAR_MIN_MAX(void){
-  return Gecode::INT_VAR_MIN_MAX(NULL);
-}
-IntVarBranch INT_VAR_MAX_MIN(void){
-  return Gecode::INT_VAR_MAX_MIN(NULL);
-}
-IntVarBranch INT_VAR_MAX_MAX(void){
-  return Gecode::INT_VAR_MAX_MAX(NULL);
-}
-IntVarBranch INT_VAR_SIZE_MIN(void){
-  return Gecode::INT_VAR_SIZE_MIN(NULL);
-}
-IntVarBranch INT_VAR_SIZE_MAX(void){
-  return Gecode::INT_VAR_SIZE_MAX(NULL);
-}
-IntVarBranch INT_VAR_SIZE_DEGREE_MIN(void){
-  return Gecode::INT_VAR_SIZE_DEGREE_MIN(NULL);
-}
-IntVarBranch INT_VAR_SIZE_DEGREE_MAX(void){
-  return Gecode::INT_VAR_SIZE_DEGREE_MAX(NULL);
-}
-IntVarBranch INT_VAR_SIZE_AFC_MIN(void){
-  return Gecode::INT_VAR_SIZE_AFC_MIN(NULL);
-}
-IntVarBranch INT_VAR_SIZE_AFC_MAX(void){
-  return Gecode::INT_VAR_SIZE_AFC_MAX(NULL);
-}
-/* TODO: check whether to insert ACTIVITY variants */
-IntVarBranch INT_VAR_REGRET_MIN_MIN(void){
-  return Gecode::INT_VAR_REGRET_MIN_MIN(NULL);
-}
-IntVarBranch INT_VAR_REGRET_MIN_MAX(void){
-  return Gecode::INT_VAR_REGRET_MIN_MAX(NULL);
-}
-IntVarBranch INT_VAR_REGRET_MAX_MIN(void){
-  return Gecode::INT_VAR_REGRET_MAX_MIN(NULL);
-}
-IntVarBranch INT_VAR_REGRET_MAX_MAX(void){
-  return Gecode::INT_VAR_REGRET_MAX_MAX(NULL);
-}
-
-IntValBranch INT_VAL_MIN(void){
-  return Gecode::INT_VAL_MIN();
-}
-IntValBranch INT_VAL_MED(void){
-  return Gecode::INT_VAL_MED();
-}
-IntValBranch INT_VAL_MAX(void){
-  return Gecode::INT_VAL_MAX();
-}
-IntValBranch INT_VAL_RND(unsigned int seed){
-  return Gecode::INT_VAL_RND(Rnd(seed));
-}
-IntValBranch INT_VAL_SPLIT_MIN(void){
-  return Gecode::INT_VAL_SPLIT_MIN();
-}
-IntValBranch INT_VAL_SPLIT_MAX(void){
-  return Gecode::INT_VAL_SPLIT_MAX();
-}
-IntValBranch INT_VAL_RANGE_MIN(void){
-  return Gecode::INT_VAL_RANGE_MIN();
-}
-IntValBranch INT_VAL_RANGE_MAX(void){
-  return Gecode::INT_VAL_RANGE_MAX();
-}
-IntValBranch INT_VALUES_MIN(void){
-  return Gecode::INT_VALUES_MIN();
-}
-IntValBranch INT_VALUES_MAX(void){
-  return Gecode::INT_VALUES_MAX();
-}
-
 void gecode_branch_ivar(CLSpace *space, IntVar* var, IntValBranch* valb) {
   branch(*space, *var, *valb);
 }
@@ -531,6 +421,148 @@ void gecode_branch_bvar(CLSpace *space, BoolVar* var, IntValBranch* valb) {
 void gecode_branch_bool_vars(CLSpace *space, BoolVarArgs* vars,
                             IntVarBranch* varb, IntValBranch* valb) {
   branch(*space, *vars, *varb, *valb);
+}
+
+/* variable selectors for branchers */
+void gecode_ivar_selector_delete(IntVarBranch* s){
+  delete s;
+}
+
+IntVarBranch* INT_VAR_NONE(void){
+  // Gecode::INT_VAR_NONE();
+  return new IntVarBranch(IntVarBranch::SEL_NONE,NULL);
+}
+
+IntVarBranch* INT_VAR_RND(unsigned int seed){
+  // Gecode::INT_VAR_RND(Rnd(seed));
+  return new IntVarBranch(Rnd(seed));
+}
+/* TODO: check whether to insert MERIT variants */
+IntVarBranch* INT_VAR_DEGREE_MIN(void){
+  // Gecode::INT_VAR_DEGREE_MIN(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_DEGREE_MIN, NULL);
+}
+IntVarBranch* INT_VAR_DEGREE_MAX(void){
+  // Gecode::INT_VAR_DEGREE_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_DEGREE_MAX, NULL);
+}
+IntVarBranch* INT_VAR_AFC_MIN(void){
+  // Gecode::INT_VAR_AFC_MIN(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_AFC_MIN, NULL);
+}
+IntVarBranch* INT_VAR_AFC_MAX(void){
+  // Gecode::INT_VAR_AFC_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_AFC_MAX, NULL);
+}
+/* TODO: check whether to insert ACTIVITY variants */
+/*
+IntVarBranch* INT_VAR_ACTIVITY_MIN_ints
+  (CLSpace *space, IntVarArgs* vars, double d)
+{
+  return new INT_VAR_ACTIVITY_MIN(IntActivity(*space,*v,d));
+}
+*/
+IntVarBranch* INT_VAR_MIN_MIN(void){
+  // Gecode::INT_VAR_MIN_MIN(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_MIN_MIN, NULL);
+}
+IntVarBranch* INT_VAR_MIN_MAX(void){
+  // Gecode::INT_VAR_MIN_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_MIN_MAX, NULL);
+}
+IntVarBranch* INT_VAR_MAX_MIN(void){
+  // Gecode::INT_VAR_MAX_MIN(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_MAX_MIN, NULL);
+}
+IntVarBranch* INT_VAR_MAX_MAX(void){
+  // Gecode::INT_VAR_MAX_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_MAX_MAX, NULL);
+}
+IntVarBranch* INT_VAR_SIZE_MIN(void){
+  // Gecode::INT_VAR_SIZE_MIN(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_SIZE_MIN, NULL);
+}
+IntVarBranch* INT_VAR_SIZE_MAX(void){
+  // Gecode::INT_VAR_SIZE_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_SIZE_MAX, NULL);
+}
+IntVarBranch* INT_VAR_SIZE_DEGREE_MIN(void){
+  // Gecode::INT_VAR_SIZE_DEGREE_MIN(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_SIZE_MAX, NULL);
+}
+IntVarBranch* INT_VAR_SIZE_DEGREE_MAX(void){
+  // Gecode::INT_VAR_SIZE_DEGREE_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_SIZE_DEGREE_MIN, NULL);
+}
+IntVarBranch* INT_VAR_SIZE_AFC_MIN(void){
+  // Gecode::INT_VAR_SIZE_AFC_MIN(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_SIZE_AFC_MIN, NULL);
+}
+IntVarBranch* INT_VAR_SIZE_AFC_MAX(void){
+  // Gecode::INT_VAR_SIZE_AFC_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_SIZE_AFC_MAX, NULL);
+}
+/* TODO: check whether to insert ACTIVITY variants */
+IntVarBranch* INT_VAR_REGRET_MIN_MIN(void){
+  // Gecode::INT_VAR_REGRET_MIN_MIN(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_REGRET_MIN_MIN, NULL);
+}
+IntVarBranch* INT_VAR_REGRET_MIN_MAX(void){
+  // Gecode::INT_VAR_REGRET_MIN_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_REGRET_MIN_MAX, NULL);
+}
+IntVarBranch* INT_VAR_REGRET_MAX_MIN(void){
+  // Gecode::INT_VAR_REGRET_MAX_MIN(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_REGRET_MAX_MIN, NULL);
+}
+IntVarBranch* INT_VAR_REGRET_MAX_MAX(void){
+  // Gecode::INT_VAR_REGRET_MAX_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_REGRET_MAX_MAX, NULL);
+}
+
+/* value selectors for branchers */
+void gecode_ival_selector_delete(IntValBranch* s){
+  delete s;
+}
+IntValBranch* INT_VAL_MIN(void){
+  // Gecode::INT_VAL_MIN();
+  return new IntValBranch(IntValBranch::SEL_MIN);
+}
+IntValBranch* INT_VAL_MED(void){
+  // Gecode::INT_VAL_MED();
+  return new IntValBranch(IntValBranch::SEL_MED);
+}
+IntValBranch* INT_VAL_MAX(void){
+  // Gecode::INT_VAL_MAX();
+  return new IntValBranch(IntValBranch::SEL_MAX);
+}
+IntValBranch* INT_VAL_RND(unsigned int seed){
+  // Gecode::INT_VAL_RND(Rnd(seed));
+  return new IntValBranch(Rnd(seed));
+}
+IntValBranch* INT_VAL_SPLIT_MIN(void){
+  // Gecode::INT_VAL_SPLIT_MIN();
+  return new IntValBranch(IntValBranch::SEL_SPLIT_MIN);
+}
+IntValBranch* INT_VAL_SPLIT_MAX(void){
+  // Gecode::INT_VAL_SPLIT_MAX();
+  return new IntValBranch(IntValBranch::SEL_SPLIT_MAX);
+}
+IntValBranch* INT_VAL_RANGE_MIN(void){
+  // Gecode::INT_VAL_RANGE_MIN();
+  return new IntValBranch(IntValBranch::SEL_RANGE_MIN);
+}
+IntValBranch* INT_VAL_RANGE_MAX(void){
+  // Gecode::INT_VAL_RANGE_MAX();
+  return new IntValBranch(IntValBranch::SEL_RANGE_MAX);
+}
+IntValBranch* INT_VALUES_MIN(void){
+  // Gecode::INT_VALUES_MIN();
+  return new IntValBranch(IntValBranch::SEL_VALUES_MIN);
+}
+IntValBranch* INT_VALUES_MAX(void){
+  // Gecode::INT_VALUES_MAX();
+  return new IntValBranch(IntValBranch::SEL_VALUES_MAX);
 }
 
 
@@ -724,7 +756,7 @@ void gecode_rel_ivars_ivars(CLSpace *space, IntRelType op,
 
 
 /* distinct constraint */
-void gecode_disinct_ivars(CLSpace *space, IntVarArgs *va, IntConLevel icl) {
+void gecode_distinct_ivars(CLSpace *space, IntVarArgs *va, IntConLevel icl) {
   EXCSTART
     distinct(*space, *va, icl);
   EXCSTOP

@@ -11,6 +11,11 @@
 %typemap(cin) IntVar* "intvar-type";
 %typemap(cin) FloatVar* "floatvar-type";
 
+%typemap(cin) IntVarBranch*  "intvarselector-type";
+%typemap(cout) IntVarBranch*  "intvarselector-type";
+%typemap(cin) IntValBranch*  "intvalselector-type";
+%typemap(cout) IntValBranch*  "intvalselector-type";
+
 %typemap(cin) CLSpace* "space-type";
 %typemap(cin) DFS<CLSpace>* "search-type";
 %typemap(cin) BAB<CLSpace>* "search-type";

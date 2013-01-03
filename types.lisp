@@ -43,6 +43,7 @@
 
 ;;; CFFI type translators
 
+;; space
 (cffi:define-foreign-type space-type () ()
   (:actual-type :pointer)
   (:simple-parser space-type))
@@ -50,6 +51,7 @@
 (defmethod expand-to-foreign (space (type space-type))
   `(gspace-sap ,space))
 
+;; search 
 (cffi:define-foreign-type search-type () ()
   (:actual-type :pointer)
   (:simple-parser search-type))
@@ -57,6 +59,7 @@
 (defmethod expand-to-foreign (engine (type search-type))
   `(engine-sap ,engine))
 
+;; variables
 (cffi:define-foreign-type intvar-type () ()
   (:actual-type :pointer)
   (:simple-parser intvar-type))
@@ -78,21 +81,43 @@
 (defmethod expand-to-foreign (floatvar (type floatvar-type))
   `(gecode_get_floatvar_by_index *gspace* (floatvar-index ,floatvar)))
 
+;; branchers
+(cffi:define-foreign-type intvarselector-type () ()
+  (:actual-type :pointer)
+  (:simple-parser intvarselector-type))
 
+(defmethod expand-to-foreign (selector (type intvarselector-type))
+  `(selector-sap ,selector))
+(defmethod expand-from-foreign (sap (type intvarselector-type))
+  `(make-ivar-selector ,sap))
+
+(cffi:define-foreign-type intvalselector-type () ()
+  (:actual-type :pointer)
+  (:simple-parser intvalselector-type))
+
+(defmethod expand-to-foreign (selector (type intvalselector-type))
+  `(selector-sap ,selector))
+(defmethod expand-from-foreign (sap (type intvalselector-type))
+  `(make-ival-selector ,sap))
+
+
+;; argument vectors of various types
 (cffi:define-foreign-type intvarargs-type () ()
   (:actual-type :pointer)
   (:simple-parser intvarargs-type))
 
-;; ,var is the argument array
 (defmethod expand-to-foreign-dyn (value var body (type intvarargs-type))
   `(let* ((length (length ,value))
-          (,var (gecode_varargs_create length))
+          (,var (gecode_varargs_create length)) ; the argument array class
           (i -1))
      (declare (type fixnum i length))
      (map nil
           (lambda (x)
-            (declare (type intvar x))
-            (gecode_varargs_set ,var (incf i) x))
+            (let ((x (if (integerp x) ; if there is an integer coerce to variable
+                         (add-int-variable x x)
+                         x)))
+              (declare (type intvar x))
+              (gecode_varargs_set ,var (incf i) x)))
           ,value)
      (unwind-protect 
           (progn ,@body)
@@ -102,7 +127,6 @@
   (:actual-type :pointer)
   (:simple-parser intargs-type))
 
-;; ,var is the argument array
 (defmethod expand-to-foreign-dyn (value var body (type intargs-type))
   `(let* ((length (length ,value))
           (,var (gecode_intargs_create length))
@@ -112,7 +136,6 @@
      (map nil
           (lambda (x)
             (declare (type fixnum x))
-            ;(gecode_intargs_set ,var (incf i) x)
             (setf (mem-aref adr :int (incf i)) x))
           ,value)
      (unwind-protect 

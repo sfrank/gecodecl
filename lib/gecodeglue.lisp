@@ -96,86 +96,92 @@
 (cffi:defcfun ("gecode_branch_ivar" gecode_branch_ivar) :void
   (space space-type)
   (var intvar-type)
-  (valb :pointer))
+  (valb intvalselector-type))
 
 (cffi:defcfun ("gecode_branch_ivars" gecode_branch_ivars) :void
   (space space-type)
   (vars intvarargs-type)
-  (varb :pointer)
-  (valb :pointer))
+  (varb intvarselector-type)
+  (valb intvalselector-type))
 
 (cffi:defcfun ("gecode_branch_bvar" gecode_branch_bvar) :void
   (space space-type)
   (var boolvar-type)
-  (valb :pointer))
+  (valb intvalselector-type))
 
 (cffi:defcfun ("gecode_branch_bvars" gecode_branch_bvars) :void
   (space space-type)
   (vars boolvarargs-type)
-  (varb :pointer)
-  (valb :pointer))
+  (varb intvarselector-type)
+  (valb intvalselector-type))
 
-(cffi:defcfun ("INT_VAR_NONE" INT_VAR_NONE) :pointer)
+(cffi:defcfun ("gecode_ivar_selector_delete" gecode_ivar_selector_delete) :void
+  (s intvarselector-type))
 
-(cffi:defcfun ("INT_VAR_RND" INT_VAR_RND) :pointer
+(cffi:defcfun ("INT_VAR_NONE" INT_VAR_NONE) intvarselector-type)
+
+(cffi:defcfun ("INT_VAR_RND" INT_VAR_RND) intvarselector-type
   (seed :unsigned-int))
 
-(cffi:defcfun ("INT_VAR_DEGREE_MIN" INT_VAR_DEGREE_MIN) :pointer)
+(cffi:defcfun ("INT_VAR_DEGREE_MIN" INT_VAR_DEGREE_MIN) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_DEGREE_MAX" INT_VAR_DEGREE_MAX) :pointer)
+(cffi:defcfun ("INT_VAR_DEGREE_MAX" INT_VAR_DEGREE_MAX) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_AFC_MIN" INT_VAR_AFC_MIN) :pointer)
+(cffi:defcfun ("INT_VAR_AFC_MIN" INT_VAR_AFC_MIN) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_AFC_MAX" INT_VAR_AFC_MAX) :pointer)
+(cffi:defcfun ("INT_VAR_AFC_MAX" INT_VAR_AFC_MAX) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_MIN_MIN" INT_VAR_MIN_MIN) :pointer)
+(cffi:defcfun ("INT_VAR_MIN_MIN" INT_VAR_MIN_MIN) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_MIN_MAX" INT_VAR_MIN_MAX) :pointer)
+(cffi:defcfun ("INT_VAR_MIN_MAX" INT_VAR_MIN_MAX) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_MAX_MIN" INT_VAR_MAX_MIN) :pointer)
+(cffi:defcfun ("INT_VAR_MAX_MIN" INT_VAR_MAX_MIN) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_MAX_MAX" INT_VAR_MAX_MAX) :pointer)
+(cffi:defcfun ("INT_VAR_MAX_MAX" INT_VAR_MAX_MAX) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_SIZE_MIN" INT_VAR_SIZE_MIN) :pointer)
+(cffi:defcfun ("INT_VAR_SIZE_MIN" INT_VAR_SIZE_MIN) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_SIZE_MAX" INT_VAR_SIZE_MAX) :pointer)
+(cffi:defcfun ("INT_VAR_SIZE_MAX" INT_VAR_SIZE_MAX) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_SIZE_DEGREE_MIN" INT_VAR_SIZE_DEGREE_MIN) :pointer)
+(cffi:defcfun ("INT_VAR_SIZE_DEGREE_MIN" INT_VAR_SIZE_DEGREE_MIN) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_SIZE_DEGREE_MAX" INT_VAR_SIZE_DEGREE_MAX) :pointer)
+(cffi:defcfun ("INT_VAR_SIZE_DEGREE_MAX" INT_VAR_SIZE_DEGREE_MAX) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_SIZE_AFC_MIN" INT_VAR_SIZE_AFC_MIN) :pointer)
+(cffi:defcfun ("INT_VAR_SIZE_AFC_MIN" INT_VAR_SIZE_AFC_MIN) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_SIZE_AFC_MAX" INT_VAR_SIZE_AFC_MAX) :pointer)
+(cffi:defcfun ("INT_VAR_SIZE_AFC_MAX" INT_VAR_SIZE_AFC_MAX) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_REGRET_MIN_MIN" INT_VAR_REGRET_MIN_MIN) :pointer)
+(cffi:defcfun ("INT_VAR_REGRET_MIN_MIN" INT_VAR_REGRET_MIN_MIN) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_REGRET_MIN_MAX" INT_VAR_REGRET_MIN_MAX) :pointer)
+(cffi:defcfun ("INT_VAR_REGRET_MIN_MAX" INT_VAR_REGRET_MIN_MAX) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_REGRET_MAX_MIN" INT_VAR_REGRET_MAX_MIN) :pointer)
+(cffi:defcfun ("INT_VAR_REGRET_MAX_MIN" INT_VAR_REGRET_MAX_MIN) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_REGRET_MAX_MAX" INT_VAR_REGRET_MAX_MAX) :pointer)
+(cffi:defcfun ("INT_VAR_REGRET_MAX_MAX" INT_VAR_REGRET_MAX_MAX) intvarselector-type)
 
-(cffi:defcfun ("INT_VAL_MIN" INT_VAL_MIN) :pointer)
+(cffi:defcfun ("gecode_ival_selector_delete" gecode_ival_selector_delete) :void
+  (s intvalselector-type))
 
-(cffi:defcfun ("INT_VAL_MED" INT_VAL_MED) :pointer)
+(cffi:defcfun ("INT_VAL_MIN" INT_VAL_MIN) intvalselector-type)
 
-(cffi:defcfun ("INT_VAL_MAX" INT_VAL_MAX) :pointer)
+(cffi:defcfun ("INT_VAL_MED" INT_VAL_MED) intvalselector-type)
 
-(cffi:defcfun ("INT_VAL_RND" INT_VAL_RND) :pointer
+(cffi:defcfun ("INT_VAL_MAX" INT_VAL_MAX) intvalselector-type)
+
+(cffi:defcfun ("INT_VAL_RND" INT_VAL_RND) intvalselector-type
   (seed :unsigned-int))
 
-(cffi:defcfun ("INT_VAL_SPLIT_MIN" INT_VAL_SPLIT_MIN) :pointer)
+(cffi:defcfun ("INT_VAL_SPLIT_MIN" INT_VAL_SPLIT_MIN) intvalselector-type)
 
-(cffi:defcfun ("INT_VAL_SPLIT_MAX" INT_VAL_SPLIT_MAX) :pointer)
+(cffi:defcfun ("INT_VAL_SPLIT_MAX" INT_VAL_SPLIT_MAX) intvalselector-type)
 
-(cffi:defcfun ("INT_VAL_RANGE_MIN" INT_VAL_RANGE_MIN) :pointer)
+(cffi:defcfun ("INT_VAL_RANGE_MIN" INT_VAL_RANGE_MIN) intvalselector-type)
 
-(cffi:defcfun ("INT_VAL_RANGE_MAX" INT_VAL_RANGE_MAX) :pointer)
+(cffi:defcfun ("INT_VAL_RANGE_MAX" INT_VAL_RANGE_MAX) intvalselector-type)
 
-(cffi:defcfun ("INT_VALUES_MIN" INT_VALUES_MIN) :pointer)
+(cffi:defcfun ("INT_VALUES_MIN" INT_VALUES_MIN) intvalselector-type)
 
-(cffi:defcfun ("INT_VALUES_MAX" INT_VALUES_MAX) :pointer)
+(cffi:defcfun ("INT_VALUES_MAX" INT_VALUES_MAX) intvalselector-type)
 
 (cffi:defcfun ("gecode_dfs_engine_create" gecode_dfs_engine_create) :pointer
   (space space-type))

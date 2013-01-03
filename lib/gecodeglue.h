@@ -39,8 +39,10 @@ extern "C" {
   IntVar* gecode_get_intvar_by_index(CLSpace *space, size_t index);
   FloatVar* gecode_get_floatvar_by_index(CLSpace *space, size_t index);
   STATUS gecode_get_bool_info(CLSpace *space, BoolVar* var, int *value);
-  STATUS gecode_get_int_info(CLSpace *space, IntVar* var, int *min, int *max, int *size);
-  STATUS gecode_get_float_info(CLSpace *space, FloatVar* var, double *min, double *max, double *median);
+  STATUS gecode_get_int_info(CLSpace *space, IntVar* var, 
+			     int *min, int *max, int *size);
+  STATUS gecode_get_float_info(CLSpace *space, FloatVar* var,
+			       double *min, double *max, double *median);
 
   /* branchers */
   void gecode_branch_ivar(CLSpace *space, IntVar* var, IntValBranch* valb);
@@ -52,41 +54,43 @@ extern "C" {
                            IntVarBranch* varb, IntValBranch* valb);
 
   /* variable selectors for branchers */
-  IntVarBranch INT_VAR_NONE(void);
-  IntVarBranch INT_VAR_RND(unsigned int seed);
+  void gecode_ivar_selector_delete(IntVarBranch* s);
+  IntVarBranch* INT_VAR_NONE(void);
+  IntVarBranch* INT_VAR_RND(unsigned int seed);
   /* TODO: check whether to insert MERIT variants */
-  IntVarBranch INT_VAR_DEGREE_MIN(void);
-  IntVarBranch INT_VAR_DEGREE_MAX(void);
-  IntVarBranch INT_VAR_AFC_MIN(void);
-  IntVarBranch INT_VAR_AFC_MAX(void);
+  IntVarBranch* INT_VAR_DEGREE_MIN(void);
+  IntVarBranch* INT_VAR_DEGREE_MAX(void);
+  IntVarBranch* INT_VAR_AFC_MIN(void);
+  IntVarBranch* INT_VAR_AFC_MAX(void);
   /* TODO: check whether to insert ACTIVITY variants */
-  IntVarBranch INT_VAR_MIN_MIN(void);
-  IntVarBranch INT_VAR_MIN_MAX(void);
-  IntVarBranch INT_VAR_MAX_MIN(void);
-  IntVarBranch INT_VAR_MAX_MAX(void);
-  IntVarBranch INT_VAR_SIZE_MIN(void);
-  IntVarBranch INT_VAR_SIZE_MAX(void);
-  IntVarBranch INT_VAR_SIZE_DEGREE_MIN(void);
-  IntVarBranch INT_VAR_SIZE_DEGREE_MAX(void);
-  IntVarBranch INT_VAR_SIZE_AFC_MIN(void);
-  IntVarBranch INT_VAR_SIZE_AFC_MAX(void);
+  IntVarBranch* INT_VAR_MIN_MIN(void);
+  IntVarBranch* INT_VAR_MIN_MAX(void);
+  IntVarBranch* INT_VAR_MAX_MIN(void);
+  IntVarBranch* INT_VAR_MAX_MAX(void);
+  IntVarBranch* INT_VAR_SIZE_MIN(void);
+  IntVarBranch* INT_VAR_SIZE_MAX(void);
+  IntVarBranch* INT_VAR_SIZE_DEGREE_MIN(void);
+  IntVarBranch* INT_VAR_SIZE_DEGREE_MAX(void);
+  IntVarBranch* INT_VAR_SIZE_AFC_MIN(void);
+  IntVarBranch* INT_VAR_SIZE_AFC_MAX(void);
   /* TODO: check whether to insert ACTIVITY variants */
-  IntVarBranch INT_VAR_REGRET_MIN_MIN(void);
-  IntVarBranch INT_VAR_REGRET_MIN_MAX(void);
-  IntVarBranch INT_VAR_REGRET_MAX_MIN(void);
-  IntVarBranch INT_VAR_REGRET_MAX_MAX(void);
+  IntVarBranch* INT_VAR_REGRET_MIN_MIN(void);
+  IntVarBranch* INT_VAR_REGRET_MIN_MAX(void);
+  IntVarBranch* INT_VAR_REGRET_MAX_MIN(void);
+  IntVarBranch* INT_VAR_REGRET_MAX_MAX(void);
 
   /* value selectors for branchers */
-  IntValBranch INT_VAL_MIN(void);
-  IntValBranch INT_VAL_MED(void);
-  IntValBranch INT_VAL_MAX(void);
-  IntValBranch INT_VAL_RND(unsigned int seed);
-  IntValBranch INT_VAL_SPLIT_MIN(void);
-  IntValBranch INT_VAL_SPLIT_MAX(void);
-  IntValBranch INT_VAL_RANGE_MIN(void);
-  IntValBranch INT_VAL_RANGE_MAX(void);
-  IntValBranch INT_VALUES_MIN(void);
-  IntValBranch INT_VALUES_MAX(void);
+  void gecode_ival_selector_delete(IntValBranch* s);
+  IntValBranch* INT_VAL_MIN(void);
+  IntValBranch* INT_VAL_MED(void);
+  IntValBranch* INT_VAL_MAX(void);
+  IntValBranch* INT_VAL_RND(unsigned int seed);
+  IntValBranch* INT_VAL_SPLIT_MIN(void);
+  IntValBranch* INT_VAL_SPLIT_MAX(void);
+  IntValBranch* INT_VAL_RANGE_MIN(void);
+  IntValBranch* INT_VAL_RANGE_MAX(void);
+  IntValBranch* INT_VALUES_MIN(void);
+  IntValBranch* INT_VALUES_MAX(void);
 
   /* search engines */
   DFS<CLSpace> *gecode_dfs_engine_create(CLSpace *space);

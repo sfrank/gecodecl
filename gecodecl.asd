@@ -15,8 +15,8 @@
                  (:file "lib/ffitypes" :depends-on ("package"))
                  (:file "lib/gecodeglue" :depends-on ("types" "lib/ffitypes"))
                  (:file "core" :depends-on ("lib/gecodeglue"))
-                 ;(:file "simplifier" :depends-on ("core"))
-                 ;(:file "interface" :depends-on ("core" "simplifier"))
+                 (:file "interface" :depends-on ("core"))
+                 ;(:file "simplifier" :depends-on ("core" "interface"))
                  )))
   :depends-on
   (:alexandria :cffi :trivial-garbage))

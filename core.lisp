@@ -17,18 +17,19 @@
   ;;(format t "callback initiated~%")
   (funcall (aref (gspace-int-notifiers *gspace*) idx) mod))
 
-(defun add-int-callback (space variable function)
-  (declare (type gspace space)
-           (type intvar variable))
-  (unless (gspace-int-notifiers space)
-    (setf (gspace-int-notifiers space)
-          (make-array 10 
-                      :adjustable t
-                      :fill-pointer 0)))
-  (gecode_intClChannel space
-                       (gvariable-index variable)
-                       (vector-push-extend function
-                                           (gspace-int-notifiers space))))
+(defun add-int-callback (variable function)
+  (declare (type intvar variable))
+  (let ((space *gspace*))
+    (declare (type gspace space))
+    (unless (gspace-int-notifiers space)
+      (setf (gspace-int-notifiers space)
+            (make-array 10 
+                        :adjustable t
+                        :fill-pointer 0)))
+    (gecode_intClChannel space
+                         (gvariable-index variable)
+                         (vector-push-extend function
+                                             (gspace-int-notifiers space)))))
 
 
 (defun init-gecode ()
@@ -83,69 +84,63 @@
 
 
 ;;; IntVars
-(defun add-int-variable (space &optional (min -1000000000) (max 1000000000))
-  (declare (type gspace space))
-  (make-intvar (gecode_int_addvar space min max)))
+(defun add-int-variable ( &optional (min -1000000000) (max 1000000000))
+  (make-intvar (gecode_int_addvar *gspace* min max)))
 
-(defun integer-info (space variable)
-  (declare (type gspace space)
-           (type intvar variable))
+(defun integer-info (variable)
+  (declare (type intvar variable))
   (with-foreign-objects ((min :int)
                          (max :int)
                          (size :int))
-    (values (gecode_get_int_info space
+    (values (gecode_get_int_info *gspace*
                                  variable min max size)
             (list (mem-ref min :int)
                   (mem-ref max :int)
                   (mem-ref size :int)))))
 
-(defun integer-value (space variable)
+(defun integer-value (variable)
   (multiple-value-bind (result values)
-      (integer-info space variable)
+      (integer-info variable)
     (if (eq result :var-assigned)
         (car values)
         (error "Value requested on unassigned variable ~A" variable))))
 
 ;;; BoolVars
-(defun add-bool-variable (space)
-  (declare (type gspace space))
-  (make-boolvar (gecode_bool_addvar space)))
+(defun add-bool-variable ()
+  (make-boolvar (gecode_bool_addvar *gspace*)))
 
-(defun boolean-info (space variable)
-  (declare   (type gspace space)
-             (type boolvar variable))
+(defun boolean-info (variable)
+  (declare (type boolvar variable))
   (with-foreign-object (value :int)
     ;(setf (mem-ref value :int) 0)
-    (values (gecode_get_bool_info space variable value)
+    (values (gecode_get_bool_info *gspace* variable value)
             (mem-ref value :int))))
 
-(defun boolean-value (space variable)
+(defun boolean-value (variable)
   (multiple-value-bind (result values)
-      (boolean-info space variable)
+      (boolean-info variable)
     (if (eq result :var-assigned)
         values
         (error "Value requested on unassigned variable ~A" variable))))
 
 ;;; FloatVars
-(defun add-float-variable (space &optional (min most-negative-double-float)
-                                           (max most-positive-double-float))
-  (declare (type gspace space))
-  (make-floatvar (gecode_float_addvar space min max)))
+(defun add-float-variable (&optional (min most-negative-double-float)
+                                     (max most-positive-double-float))
+  (make-floatvar (gecode_float_addvar *gspace* min max)))
 
-(defun float-info (space variable)
-  (declare (type gspace space)
-           (type floatvar variable))
+(defun float-info (variable)
+  (declare (type floatvar variable))
   (with-foreign-objects ((min :double)
                          (max :double)
                          (median :double))
-    (values (gecode_get_float_info space variable min max median)
+    (values (gecode_get_float_info *gspace* variable min max median)
             (list (mem-ref min :double)
                   (mem-ref max :double)
                   (mem-ref median :double)))))
 
-(defun float-value (space variable)
+(defun float-value (variable)
   (multiple-value-bind (result values)
-      (float-info space variable)
+      (float-info variable)
     (if (eq result :var-assigned)
         (car values)
         (error "Value requested on unassigned variable ~A" variable))))
@@ -198,34 +193,29 @@
            (unless (null-pointer-p space)
              (make-gspace-from-ref space))))))
 
-#+ (or)
-(defun test ()
-  (let* ((*gspace* (make-gspace))
-         (x (add-int-variable *gspace* 1 4))
-         (y (add-int-variable *gspace* 3 3))
-         (i (list 0 1))
-         (l (list x y))
-         dfs)
-    ;(post-num-rel *gspace* :irt-< x y)
-    ;(gecode_distinct_ivars *gspace* l :icl-def)
-    (gecode_distinct_ints_ivars *gspace* i l :icl-def)
-    ;(distinct-g l nil)
-    (setf dfs (make-dfs *gspace*))
-    (loop for s = (search-next dfs)
-          until (null s)
-          do (let ((*gspace* s))
-               (format t "X: ~A~%Y: ~A~%~%"
-                       (integer-value s x)
-                       (integer-value s y))))))
 
-#+ (or)
-(defun test-bab ()
-  (let* ((*gspace* (make-gspace))
-         (x (add-int-variable *gspace* 1 3))
-         (y (add-int-variable *gspace* 3 3)))
-    (post-num-rel *gspace* :irt-< x y)
-    (let ((s (search-next (make-bab *gspace* x))))
-      (when s
-        (format t "X: ~A~%Y: ~A~%"
-                     (integer-value s x)
-                     (integer-value s y))))))
+;;; branching selectors
+(defstruct selector
+  (sap nil :type sb-sys:system-area-pointer :read-only t))
+(defstruct (ivar-selector (:constructor %make-ivar-selector (sap))
+                (:include selector)))
+(defstruct (ival-selector (:constructor %make-ival-selector (sap))
+                (:include selector)))
+
+(defun reclaim-ivar-selector (selector)
+  (lambda ()
+    (gecode_ivar_selector_delete selector)))
+(defun reclaim-ival-selector (selector)
+  (lambda ()
+    (gecode_ival_selector_delete selector)))
+
+(defun make-ivar-selector (sap)
+  (declare (type sb-sys:system-area-pointer sap))
+  (let ((selector (%make-ivar-selector sap)))
+    (tg:finalize selector (reclaim-ivar-selector selector))
+    selector))
+(defun make-ival-selector (sap)
+  (declare (type sb-sys:system-area-pointer sap))
+  (let ((selector (%make-ival-selector sap)))
+    (tg:finalize selector (reclaim-ival-selector selector))
+    selector))
