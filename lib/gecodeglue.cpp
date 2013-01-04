@@ -238,7 +238,7 @@ public:
 
   // float variables
 
-  vector<FloatVar>::size_type addFloatVariable(float min, float max) {
+  vector<FloatVar>::size_type addFloatVariable(double min, double max) {
     FloatVar var(*this, min, max);
     floatVariables.push_back(var);
     return floatVariables.size() - 1;
@@ -314,7 +314,7 @@ public:
 
   static void  operator delete(void* v) {
     ::operator delete(v);
-  };
+  }
   
   CLIntArgs(int n) : IntArgs(n){};
   ~CLIntArgs(void) {
@@ -327,11 +327,33 @@ public:
   }
 };
 
+class CLFloatArgs : public FloatArgs {
+public:
+  static void* operator new(size_t) {
+    return ::operator new(sizeof(CLFloatArgs));
+  }
+
+  static void  operator delete(void* v) {
+    ::operator delete(v);
+  }
+
+  CLFloatArgs(int n) : FloatArgs(n){};
+  ~CLFloatArgs(void) {
+    if (capacity > onstack_size)
+      heap.free(a,capacity);
+  }
+
+  FloatVal *adr(void) {
+    return a;
+  }
+
+};
+
 #include "gecodeglue.h"
 
 extern "C" {
   
-CLVarArgs *gecode_varargs_create(int n) {
+CLVarArgs* gecode_varargs_create(int n) {
     return new CLVarArgs(n); 
 }
 void gecode_varargs_set(CLVarArgs *v, int i, const IntVar* e) {
@@ -340,15 +362,14 @@ void gecode_varargs_set(CLVarArgs *v, int i, const IntVar* e) {
 void gecode_varargs_delete(CLVarArgs *v) {
   delete v; }
 
-CLIntArgs *gecode_intargs_create(int n) {
+CLIntArgs* gecode_intargs_create(int n) {
     return new CLIntArgs(n); 
 }
-int *gecode_intargs_adr(CLIntArgs *v) {
+int* gecode_intargs_adr(CLIntArgs *v) {
   return v->adr();
 }
 void gecode_intargs_delete(CLIntArgs *v) {
   delete v; }
-
 
 void gecode_intClChannel(CLSpace *space, vector<IntVar>::size_type x0, unsigned idx) {
   Int::IntView x(space->getIntVar(x0));
@@ -359,11 +380,22 @@ void gecode_intClChannel(CLSpace *space, vector<IntVar>::size_type x0, unsigned 
     { space->fail(); }
 }
 
-CLSpace *gecode_space_create(void) { return new CLSpace(); }
+CLFloatArgs* gecode_floatargs_create(int n) {
+    return new CLFloatArgs(n); 
+}
+void gecode_floatargs_set(CLFloatArgs *v, int i, double e) {
+  v->adr()[i] = FloatVal(e);
+}
+void gecode_floatargs_delete(CLFloatArgs *v) {
+  delete v; }
+
+
+
+CLSpace* gecode_space_create(void) { return new CLSpace(); }
 
 void gecode_space_delete(CLSpace *space) { delete space; }
 
-CLSpace *gecode_space_copy(CLSpace *space) {
+CLSpace* gecode_space_copy(CLSpace *space) {
   return (CLSpace *) space->clone(false); }
 
 SpaceStatus gecode_space_status(CLSpace *space){
@@ -982,6 +1014,274 @@ void gecode_lin_ints_bvars_ivar_reified(CLSpace *space, IntRelType rel, IntArgs*
                                         BoolVarArgs* v, IntVar* var, ReifyMode mode,
                                         BoolVar* bvar, IntConLevel icl) {
   linear(*space, *ints, *v, rel, *var, Reify(*bvar, mode), icl);
+}
+
+
+/* float domain specific functions */
+
+void gecode_rel_fvar_fvar(CLSpace *space, FloatRelType op, FloatVar* x0, FloatVar* x1) {
+  rel(*space, *x0, op, *x1); 
+}
+
+void gecode_rel_fvar_dbl(CLSpace *space, FloatRelType op, FloatVar* x0, double x1) {
+  rel(*space, *x0, op, FloatVal(x1)); 
+}
+
+void gecode_rel_fvar_dbl_reified(CLSpace *space, FloatRelType op, FloatVar* x0, double x1,
+				 ReifyMode mode, BoolVar* bvar) {
+  rel(*space, *x0, op, FloatVal(x1), Reify(*bvar, mode)); 
+}
+
+void gecode_rel_fvar_fvar_reified(CLSpace *space, FloatRelType op, FloatVar* x0, FloatVar* x1,
+				  ReifyMode mode, BoolVar* bvar) {
+  rel(*space, *x0, op, *x1, Reify(*bvar, mode)); 
+}
+
+void gecode_rel_fvars_dbl(CLSpace *space, FloatRelType op, FloatVarArgs* x0, double x1) {
+  rel(*space, *x0, op, FloatVal(x1)); 
+}
+
+void gecode_rel_fvars_fvar(CLSpace *space, FloatRelType op, FloatVarArgs* x0, FloatVar* x1) {
+  rel(*space, *x0, op, *x1); 
+}
+
+void gecode_min_fvar_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1, FloatVar* x2) {
+  min(*space, *x0, *x1, *x2); 
+}
+
+void gecode_min_fvars_fvar(CLSpace *space, FloatVarArgs* x, FloatVar* y) {
+  min(*space, *x, *y); 
+}
+
+void gecode_max_fvar_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1, FloatVar* x2) {
+  max(*space, *x0, *x1, *x2); 
+}
+
+void gecode_max_fvars_fvar(CLSpace *space, FloatVarArgs* x, FloatVar* y) {
+  max(*space, *x, *y); 
+}
+
+void gecode_abs_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+  abs(*space, *x0, *x1); 
+}
+
+void gecode_mult_fvar_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1, FloatVar* x2) {
+  mult(*space, *x0, *x1, *x2); 
+}
+
+void gecode_sqr_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+  sqr(*space, *x0, *x1); 
+}
+
+void gecode_sqrt_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+  sqrt(*space, *x0, *x1); 
+}
+
+void gecode_pow_fvar_uint_fvar(CLSpace *space, FloatVar* x0, unsigned int pow, FloatVar* x1) {
+  Gecode::pow(*space, *x0, pow, *x1); 
+}
+
+void gecode_nroot_fvar_uint_fvar(CLSpace *space, FloatVar* x0, unsigned int pow, FloatVar* x1) {
+  nroot(*space, *x0, pow, *x1); 
+}
+
+void gecode_div_fvar_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1, FloatVar* x2) {
+  div(*space, *x0, *x1, *x2); 
+}
+
+void gecode_exp_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+  exp(*space, *x0, *x1); 
+}
+
+void gecode_log_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+  log(*space, *x0, *x1); 
+}
+
+void gecode_pow_dbl_fvar_fvar(CLSpace *space, double base, FloatVar* x0, FloatVar* x1) {
+  pow(*space, FloatNum(base), *x0, *x1); 
+}
+
+void gecode_log_dbl_fvar_fvar(CLSpace *space, double base, FloatVar* x0, FloatVar* x1) {
+  log(*space, FloatNum(base), *x0, *x1); 
+}
+
+void gecode_asin_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+  asin(*space, *x0, *x1); 
+}
+
+void gecode_sin_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+    sin(*space, *x0, *x1); 
+}
+
+void gecode_acos_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+    acos(*space, *x0, *x1); 
+}
+
+void gecode_cos_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+    cos(*space, *x0, *x1); 
+}
+
+void gecode_atan_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+    atan(*space, *x0, *x1); 
+}
+
+void gecode_tan_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
+    tan(*space, *x0, *x1); 
+}
+
+void gecode_lin_fvars_dbl(CLSpace *space, FloatRelType rel, FloatVarArgs* x,
+                          double c) {
+  linear(*space, *x, rel, FloatNum(c));
+}
+
+void gecode_lin_fvars_fvar(CLSpace *space, FloatRelType rel, FloatVarArgs* x,
+                          FloatVar* y) {
+  linear(*space, *x, rel, *y);
+}
+
+void gecode_lin_fvars_dbl_reified(CLSpace *space, FloatRelType rel, FloatVarArgs* x,
+				  double c, ReifyMode mode, BoolVar* bvar) {
+  linear(*space, *x, rel, FloatNum(c), Reify(*bvar, mode));
+}
+
+void gecode_lin_fvars_fvar_reified(CLSpace *space, FloatRelType rel, FloatVarArgs* x,
+				   FloatVar* y, ReifyMode mode, BoolVar* bvar) {
+  linear(*space, *x, rel, *y, Reify(*bvar, mode));
+}
+
+void gecode_lin_fargs_fvars_dbl(CLSpace *space, FloatRelType rel, FloatArgs* a, FloatVarArgs* x,
+				double c) {
+  linear(*space, *a, *x, rel, FloatNum(c));
+}
+
+void gecode_lin_fargs_fvars_fvar(CLSpace *space, FloatRelType rel, FloatArgs* a, FloatVarArgs* x,
+				 FloatVar* y) {
+  linear(*space, *a, *x, rel, *y);
+}
+
+void gecode_lin_fargs_fvars_dbl_reified(CLSpace *space, FloatRelType rel, FloatArgs* a,
+					FloatVarArgs* x, double c,
+					ReifyMode mode, BoolVar* bvar) {
+  linear(*space, *a, *x, rel, FloatNum(c), Reify(*bvar, mode));
+}
+
+void gecode_lin_fargs_fvars_fvar_reified(CLSpace *space, FloatRelType rel, FloatArgs* a,
+					 FloatVarArgs* x, FloatVar* y,
+					 ReifyMode mode, BoolVar* bvar) {
+  linear(*space, *a, *x, rel, *y, Reify(*bvar, mode));
+}
+
+void gecode_channel_fvar_ivar(CLSpace *space, FloatVar* x0, IntVar* x1) {
+  channel(*space, *x0, *x1);
+}
+
+// Float Branchers
+void gecode_branch_fvar(CLSpace *space, FloatVar* var, FloatValBranch* valb) {
+  branch(*space, *var, *valb);
+}
+
+void gecode_branch_fvars(CLSpace *space, FloatVarArgs* vars,
+			 FloatVarBranch* varb, FloatValBranch* valb) {
+  branch(*space, *vars, *varb, *valb);
+}
+
+/* variable selectors for branchers */
+void gecode_fvar_selector_delete(FloatVarBranch* s){
+  delete s;
+}
+
+FloatVarBranch* FLOAT_VAR_NONE(void){
+  // Gecode::FLOAT_VAR_NONE();
+  return new FloatVarBranch(FloatVarBranch::SEL_NONE,NULL);
+}
+
+FloatVarBranch* FLOAT_VAR_RND(unsigned int seed){
+  // Gecode::FLOAT_VAR_RND(Rnd(seed));
+  return new FloatVarBranch(Rnd(seed));
+}
+/* TODO: check whether to insert MERIT variants */
+FloatVarBranch* FLOAT_VAR_DEGREE_MIN(void){
+  // Gecode::FLOAT_VAR_DEGREE_MIN(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_DEGREE_MIN, NULL);
+}
+FloatVarBranch* FLOAT_VAR_DEGREE_MAX(void){
+  // Gecode::FLOAT_VAR_DEGREE_MAX(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_DEGREE_MAX, NULL);
+}
+FloatVarBranch* FLOAT_VAR_AFC_MIN(void){
+  // Gecode::FLOAT_VAR_AFC_MIN(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_AFC_MIN, NULL);
+}
+FloatVarBranch* FLOAT_VAR_AFC_MAX(void){
+  // Gecode::FLOAT_VAR_AFC_MAX(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_AFC_MAX, NULL);
+}
+/* TODO: check whether to insert ACTIVITY variants */
+/*
+FloatVarBranch* FLOAT_VAR_ACTIVITY_MIN_ints
+  (CLSpace *space, FloatVarArgs* vars, double d)
+{
+  return new FLOAT_VAR_ACTIVITY_MIN(FloatActivity(*space,*v,d));
+}
+*/
+FloatVarBranch* FLOAT_VAR_MIN_MIN(void){
+  // Gecode::FLOAT_VAR_MIN_MIN(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_MIN_MIN, NULL);
+}
+FloatVarBranch* FLOAT_VAR_MIN_MAX(void){
+  // Gecode::FLOAT_VAR_MIN_MAX(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_MIN_MAX, NULL);
+}
+FloatVarBranch* FLOAT_VAR_MAX_MIN(void){
+  // Gecode::FLOAT_VAR_MAX_MIN(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_MAX_MIN, NULL);
+}
+FloatVarBranch* FLOAT_VAR_MAX_MAX(void){
+  // Gecode::FLOAT_VAR_MAX_MAX(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_MAX_MAX, NULL);
+}
+FloatVarBranch* FLOAT_VAR_SIZE_MIN(void){
+  // Gecode::FLOAT_VAR_SIZE_MIN(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_SIZE_MIN, NULL);
+}
+FloatVarBranch* FLOAT_VAR_SIZE_MAX(void){
+  // Gecode::FLOAT_VAR_SIZE_MAX(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_SIZE_MAX, NULL);
+}
+FloatVarBranch* FLOAT_VAR_SIZE_DEGREE_MIN(void){
+  // Gecode::FLOAT_VAR_SIZE_DEGREE_MIN(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_SIZE_MAX, NULL);
+}
+FloatVarBranch* FLOAT_VAR_SIZE_DEGREE_MAX(void){
+  // Gecode::FLOAT_VAR_SIZE_DEGREE_MAX(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_SIZE_DEGREE_MIN, NULL);
+}
+FloatVarBranch* FLOAT_VAR_SIZE_AFC_MIN(void){
+  // Gecode::FLOAT_VAR_SIZE_AFC_MIN(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_SIZE_AFC_MIN, NULL);
+}
+FloatVarBranch* FLOAT_VAR_SIZE_AFC_MAX(void){
+  // Gecode::FLOAT_VAR_SIZE_AFC_MAX(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_SIZE_AFC_MAX, NULL);
+}
+/* TODO: check whether to insert ACTIVITY variants */
+
+/* value selectors for branchers */
+void gecode_fval_selector_delete(FloatValBranch* s){
+  delete s;
+}
+
+FloatValBranch* FLOAT_VAL_SPLIT_MIN(void){
+  // Gecode::FLOAT_VAL_SPLIT_MIN();
+  return new FloatValBranch(FloatValBranch::SEL_SPLIT_MIN);
+}
+FloatValBranch* FLOAT_VAL_SPLIT_MAX(void){
+  // Gecode::FLOAT_VAL_SPLIT_MAX();
+  return new FloatValBranch(FloatValBranch::SEL_SPLIT_MAX);
+}
+FloatValBranch* FLOAT_VAL_SPLIT_RND(unsigned int seed){
+  // Gecode::FLOAT_VAL_SPLIT_RND(Rnd(seed));
+  return new FloatValBranch(Rnd(seed));
 }
 
 

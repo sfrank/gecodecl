@@ -16,6 +16,12 @@
 %typemap(cin) IntValBranch*  "intvalselector-type";
 %typemap(cout) IntValBranch*  "intvalselector-type";
 
+%typemap(cin) FloatVarBranch*  "floatvarselector-type";
+%typemap(cout) FloatVarBranch*  "floatvarselector-type";
+%typemap(cin) FloatValBranch*  "floatvalselector-type";
+%typemap(cout) FloatValBranch*  "floatvalselector-type";
+
+
 %typemap(cin) CLSpace* "space-type";
 %typemap(cin) DFS<CLSpace>* "search-type";
 %typemap(cin) BAB<CLSpace>* "search-type";
@@ -28,13 +34,13 @@
 %typemap(cin) IntVarArgs*  "intvarargs-type";
 %typemap(cin) IntArgs*  "intargs-type";
 %typemap(cin) BoolVarArgs*  "boolvarargs-type";
-
-// %typemap(cin) IntVarBranch  "bvar-sel";
-// %typemap(cin) IntValBranch  "bval-sel";
+%typemap(cin) FloatVarArgs*  "floatvarargs-type";
+%typemap(cin) FloatArgs*  "floatargs-type";
 
 %typemap(cin) IntRelType  "int-relation-type";
 %typemap(cin) BoolOpType  "bool-operation-type";
 %typemap(cin) IntConLevel "int-consistency-level";
+%typemap(cin) FloatRelType  "float-relation-type";
 
 // %feature("intern_function","1");
 

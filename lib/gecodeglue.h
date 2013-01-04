@@ -10,14 +10,20 @@ extern "C" {
      don't have to hand code all the conversions by hand in C.
      (Though it is slightly slower since the argument array is not
      stack allocated) */
-  CLVarArgs *gecode_varargs_create(int n);
+  CLVarArgs* gecode_varargs_create(int n);
   void gecode_varargs_set(CLVarArgs *v, int i, const IntVar* e);
   void gecode_varargs_delete(CLVarArgs *v);
 
   /* integer argument arrays */
-  CLIntArgs *gecode_intargs_create(int n);
+  CLIntArgs* gecode_intargs_create(int n);
   int *gecode_intargs_adr(CLIntArgs *v);
   void gecode_intargs_delete(CLIntArgs *v);
+
+  /* double argument arrays */
+  CLFloatArgs* gecode_floatargs_create(int n);
+  void gecode_floatargs_set(CLFloatArgs *v, int i, double e);
+  void gecode_floatargs_delete(CLFloatArgs *v);
+
 
   /* exceptions */
   void gecode_init_exceptionHandler(void (*fptr)(const char*));
@@ -27,9 +33,9 @@ extern "C" {
 
   /* space handling */
   void gecode_intClChannel(CLSpace *space, size_t x0, unsigned idx);
-  CLSpace *gecode_space_create(void);
+  CLSpace* gecode_space_create(void);
   void gecode_space_delete(CLSpace *space);
-  CLSpace *gecode_space_copy(CLSpace *space);
+  CLSpace* gecode_space_copy(CLSpace *space);
 
   /* variables */
   size_t gecode_bool_addvar(CLSpace *space);
@@ -322,6 +328,90 @@ extern "C" {
                                           IntVar* var, ReifyMode mode, 
                                           BoolVar* bvar, IntConLevel icl);
 
+
+  /* float domain specific functions */
+  void gecode_rel_fvar_fvar(CLSpace *space, FloatRelType op, FloatVar* x0, FloatVar* x1);
+  void gecode_rel_fvar_dbl(CLSpace *space, FloatRelType op, FloatVar* x0, double x1);
+  void gecode_rel_fvar_dbl_reified(CLSpace *space, FloatRelType op, FloatVar* x0, double x1,
+				   ReifyMode mode, BoolVar* bvar);
+  void gecode_rel_fvar_fvar_reified(CLSpace *space, FloatRelType op, FloatVar* x0, FloatVar* x1,
+				    ReifyMode mode, BoolVar* bvar);
+  void gecode_rel_fvars_dbl(CLSpace *space, FloatRelType op, FloatVarArgs* x0, double x1);
+  void gecode_rel_fvars_fvar(CLSpace *space, FloatRelType op, FloatVarArgs* x0, FloatVar* x1);
+  void gecode_min_fvar_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1, FloatVar* x2);
+  void gecode_min_fvars_fvar(CLSpace *space, FloatVarArgs* x, FloatVar* y);
+  void gecode_max_fvar_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1, FloatVar* x2);
+  void gecode_max_fvars_fvar(CLSpace *space, FloatVarArgs* x, FloatVar* y);
+  void gecode_abs_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+  void gecode_mult_fvar_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1, FloatVar* x2);
+  void gecode_sqr_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+  void gecode_sqrt_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+  void gecode_pow_fvar_uint_fvar(CLSpace *space, FloatVar* x0, unsigned int pow, FloatVar* x1);
+  void gecode_nroot_fvar_uint_fvar(CLSpace *space, FloatVar* x0, unsigned int pow, FloatVar* x1);
+  void gecode_div_fvar_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1, FloatVar* x2);
+  void gecode_exp_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+  void gecode_log_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+  void gecode_exp_dbl_fvar_fvar(CLSpace *space, double base, FloatVar* x0, FloatVar* x1);
+  void gecode_log_dbl_fvar_fvar(CLSpace *space, double base, FloatVar* x0, FloatVar* x1);
+  void gecode_asin_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+  void gecode_sin_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+  void gecode_acos_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+  void gecode_cos_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+  void gecode_atan_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+  void gecode_tan_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
+
+  void gecode_lin_fvars_dbl(CLSpace *space, FloatRelType rel, FloatVarArgs* x,
+			    double c);
+  void gecode_lin_fvars_fvar(CLSpace *space, FloatRelType rel, FloatVarArgs* x,
+			     FloatVar* y);
+  void gecode_lin_fvars_dbl_reified(CLSpace *space, FloatRelType rel, FloatVarArgs* x,
+				    double c, ReifyMode mode, BoolVar* bvar);
+  void gecode_lin_fvars_fvar_reified(CLSpace *space, FloatRelType rel, FloatVarArgs* x,
+				     FloatVar* y, ReifyMode mode, BoolVar* bvar);
+  void gecode_lin_fargs_fvars_dbl(CLSpace *space, FloatRelType rel, FloatArgs* a, FloatVarArgs* x,
+				  double c);
+  void gecode_lin_fargs_fvars_fvar(CLSpace *space, FloatRelType rel, FloatArgs* a, FloatVarArgs* x,
+				   FloatVar* y);
+  void gecode_lin_fargs_fvars_dbl_reified(CLSpace *space, FloatRelType rel, FloatArgs* a,
+					  FloatVarArgs* x, double c,
+					  ReifyMode mode, BoolVar* bvar);
+  void gecode_lin_fargs_fvars_fvar_reified(CLSpace *space, FloatRelType rel, FloatArgs* a,
+					   FloatVarArgs* x, FloatVar* y,
+					   ReifyMode mode, BoolVar* bvar);
+
+  void gecode_channel_fvar_ivar(CLSpace *space, FloatVar* x0, IntVar* x1);
+
+  // Float Branchers
+  void gecode_branch_fvar(CLSpace *space, FloatVar* var, FloatValBranch* valb);
+  void gecode_branch_fvars(CLSpace *space, FloatVarArgs* vars,
+			   FloatVarBranch* varb, FloatValBranch* valb);
+
+  void gecode_fvar_selector_delete(FloatVarBranch* s);
+
+  FloatVarBranch* FLOAT_VAR_NONE(void);
+  FloatVarBranch* FLOAT_VAR_RND(unsigned int seed);
+  /* TODO: check whether to insert MERIT variants */
+  FloatVarBranch* FLOAT_VAR_DEGREE_MIN(void);
+  FloatVarBranch* FLOAT_VAR_DEGREE_MAX(void);
+  FloatVarBranch* FLOAT_VAR_AFC_MIN(void);
+  FloatVarBranch* FLOAT_VAR_AFC_MAX(void);
+  /* TODO: check whether to insert ACTIVITY variants */
+  FloatVarBranch* FLOAT_VAR_MIN_MIN(void);
+  FloatVarBranch* FLOAT_VAR_MIN_MAX(void);
+  FloatVarBranch* FLOAT_VAR_MAX_MIN(void);
+  FloatVarBranch* FLOAT_VAR_MAX_MAX(void);
+  FloatVarBranch* FLOAT_VAR_SIZE_MIN(void);
+  FloatVarBranch* FLOAT_VAR_SIZE_MAX(void);
+  FloatVarBranch* FLOAT_VAR_SIZE_DEGREE_MIN(void);
+  FloatVarBranch* FLOAT_VAR_SIZE_DEGREE_MAX(void);
+  FloatVarBranch* FLOAT_VAR_SIZE_AFC_MIN(void);
+  FloatVarBranch* FLOAT_VAR_SIZE_AFC_MAX(void);
+  /* TODO: check whether to insert ACTIVITY variants */
+
+  void gecode_fval_selector_delete(FloatValBranch* s);
+  FloatValBranch* FLOAT_VAL_SPLIT_MIN(void);
+  FloatValBranch* FLOAT_VAL_SPLIT_MAX(void);
+  FloatValBranch* FLOAT_VAL_SPLIT_RND(unsigned int seed);
 
 } /* extern C */
 

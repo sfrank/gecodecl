@@ -114,3 +114,11 @@
 ;;  :sot-inter                            ; intersection
 ;;  :sot-minus                            ; difference
 ;;  )
+
+(cffi:defcenum float-relation-type
+  :frt-=
+  :frt-/=
+  :frt-<=
+  :frt-<
+  :frt->=
+  :frt->)

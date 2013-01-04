@@ -1,6 +1,7 @@
 # Overview
 
-GecodeCL is a Common Lisp interface to the Gecode constraint solving framework.
+GecodeCL is a Common Lisp interface to the Gecode constraint solver
+library.
 
 + the interface is for the upcoming Gecode 4.0 release
   (earlier versions will not work!)
@@ -11,7 +12,7 @@ GecodeCL is a Common Lisp interface to the Gecode constraint solving framework.
 
 # Roadmap
 
-The next developments step will be (in no particular order)
+The next development steps will be (in no particular order)
 
 + expand the low-level interface to cover more Gecode functionality
 + develop the modelling interface

@@ -30,6 +30,17 @@
 (cffi:defcfun ("gecode_intargs_delete" gecode_intargs_delete) :void
   (v :pointer))
 
+(cffi:defcfun ("gecode_floatargs_create" gecode_floatargs_create) :pointer
+  (n :int))
+
+(cffi:defcfun ("gecode_floatargs_set" gecode_floatargs_set) :void
+  (v :pointer)
+  (i :int)
+  (e :double))
+
+(cffi:defcfun ("gecode_floatargs_delete" gecode_floatargs_delete) :void
+  (v :pointer))
+
 (cffi:defcfun ("gecode_init_exceptionHandler" gecode_init_exceptionHandler) :void
   (fptr :pointer))
 
@@ -617,5 +628,280 @@
   (mode reify-mode)
   (bvar boolvar-type)
   (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_rel_fvar_fvar" gecode_rel_fvar_fvar) :void
+  (space space-type)
+  (op float-relation-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_rel_fvar_dbl" gecode_rel_fvar_dbl) :void
+  (space space-type)
+  (op float-relation-type)
+  (x0 floatvar-type)
+  (x1 :double))
+
+(cffi:defcfun ("gecode_rel_fvar_dbl_reified" gecode_rel_fvar_dbl_reified) :void
+  (space space-type)
+  (op float-relation-type)
+  (x0 floatvar-type)
+  (x1 :double)
+  (mode reify-mode)
+  (bvar boolvar-type))
+
+(cffi:defcfun ("gecode_rel_fvar_fvar_reified" gecode_rel_fvar_fvar_reified) :void
+  (space space-type)
+  (op float-relation-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type)
+  (mode reify-mode)
+  (bvar boolvar-type))
+
+(cffi:defcfun ("gecode_rel_fvars_dbl" gecode_rel_fvars_dbl) :void
+  (space space-type)
+  (op float-relation-type)
+  (x0 floatvarargs-type)
+  (x1 :double))
+
+(cffi:defcfun ("gecode_rel_fvars_fvar" gecode_rel_fvars_fvar) :void
+  (space space-type)
+  (op float-relation-type)
+  (x0 floatvarargs-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_min_fvar_fvar_fvar" gecode_min_fvar_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type)
+  (x2 floatvar-type))
+
+(cffi:defcfun ("gecode_min_fvars_fvar" gecode_min_fvars_fvar) :void
+  (space space-type)
+  (x floatvarargs-type)
+  (y floatvar-type))
+
+(cffi:defcfun ("gecode_max_fvar_fvar_fvar" gecode_max_fvar_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type)
+  (x2 floatvar-type))
+
+(cffi:defcfun ("gecode_max_fvars_fvar" gecode_max_fvars_fvar) :void
+  (space space-type)
+  (x floatvarargs-type)
+  (y floatvar-type))
+
+(cffi:defcfun ("gecode_abs_fvar_fvar" gecode_abs_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_mult_fvar_fvar_fvar" gecode_mult_fvar_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type)
+  (x2 floatvar-type))
+
+(cffi:defcfun ("gecode_sqr_fvar_fvar" gecode_sqr_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_sqrt_fvar_fvar" gecode_sqrt_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_pow_fvar_uint_fvar" gecode_pow_fvar_uint_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (pow :unsigned-int)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_nroot_fvar_uint_fvar" gecode_nroot_fvar_uint_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (pow :unsigned-int)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_div_fvar_fvar_fvar" gecode_div_fvar_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type)
+  (x2 floatvar-type))
+
+(cffi:defcfun ("gecode_exp_fvar_fvar" gecode_exp_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_log_fvar_fvar" gecode_log_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_exp_dbl_fvar_fvar" gecode_exp_dbl_fvar_fvar) :void
+  (space space-type)
+  (base :double)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_log_dbl_fvar_fvar" gecode_log_dbl_fvar_fvar) :void
+  (space space-type)
+  (base :double)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_asin_fvar_fvar" gecode_asin_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_sin_fvar_fvar" gecode_sin_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_acos_fvar_fvar" gecode_acos_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_cos_fvar_fvar" gecode_cos_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_atan_fvar_fvar" gecode_atan_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_tan_fvar_fvar" gecode_tan_fvar_fvar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 floatvar-type))
+
+(cffi:defcfun ("gecode_lin_fvars_dbl" gecode_lin_fvars_dbl) :void
+  (space space-type)
+  (rel float-relation-type)
+  (x floatvarargs-type)
+  (c :double))
+
+(cffi:defcfun ("gecode_lin_fvars_fvar" gecode_lin_fvars_fvar) :void
+  (space space-type)
+  (rel float-relation-type)
+  (x floatvarargs-type)
+  (y floatvar-type))
+
+(cffi:defcfun ("gecode_lin_fvars_dbl_reified" gecode_lin_fvars_dbl_reified) :void
+  (space space-type)
+  (rel float-relation-type)
+  (x floatvarargs-type)
+  (c :double)
+  (mode reify-mode)
+  (bvar boolvar-type))
+
+(cffi:defcfun ("gecode_lin_fvars_fvar_reified" gecode_lin_fvars_fvar_reified) :void
+  (space space-type)
+  (rel float-relation-type)
+  (x floatvarargs-type)
+  (y floatvar-type)
+  (mode reify-mode)
+  (bvar boolvar-type))
+
+(cffi:defcfun ("gecode_lin_fargs_fvars_dbl" gecode_lin_fargs_fvars_dbl) :void
+  (space space-type)
+  (rel float-relation-type)
+  (a floatargs-type)
+  (x floatvarargs-type)
+  (c :double))
+
+(cffi:defcfun ("gecode_lin_fargs_fvars_fvar" gecode_lin_fargs_fvars_fvar) :void
+  (space space-type)
+  (rel float-relation-type)
+  (a floatargs-type)
+  (x floatvarargs-type)
+  (y floatvar-type))
+
+(cffi:defcfun ("gecode_lin_fargs_fvars_dbl_reified" gecode_lin_fargs_fvars_dbl_reified) :void
+  (space space-type)
+  (rel float-relation-type)
+  (a floatargs-type)
+  (x floatvarargs-type)
+  (c :double)
+  (mode reify-mode)
+  (bvar boolvar-type))
+
+(cffi:defcfun ("gecode_lin_fargs_fvars_fvar_reified" gecode_lin_fargs_fvars_fvar_reified) :void
+  (space space-type)
+  (rel float-relation-type)
+  (a floatargs-type)
+  (x floatvarargs-type)
+  (y floatvar-type)
+  (mode reify-mode)
+  (bvar boolvar-type))
+
+(cffi:defcfun ("gecode_channel_fvar_ivar" gecode_channel_fvar_ivar) :void
+  (space space-type)
+  (x0 floatvar-type)
+  (x1 intvar-type))
+
+(cffi:defcfun ("gecode_branch_fvar" gecode_branch_fvar) :void
+  (space space-type)
+  (var floatvar-type)
+  (valb floatvalselector-type))
+
+(cffi:defcfun ("gecode_branch_fvars" gecode_branch_fvars) :void
+  (space space-type)
+  (vars floatvarargs-type)
+  (varb floatvarselector-type)
+  (valb floatvalselector-type))
+
+(cffi:defcfun ("gecode_fvar_selector_delete" gecode_fvar_selector_delete) :void
+  (s floatvarselector-type))
+
+(cffi:defcfun ("FLOAT_VAR_NONE" FLOAT_VAR_NONE) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_RND" FLOAT_VAR_RND) floatvarselector-type
+  (seed :unsigned-int))
+
+(cffi:defcfun ("FLOAT_VAR_DEGREE_MIN" FLOAT_VAR_DEGREE_MIN) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_DEGREE_MAX" FLOAT_VAR_DEGREE_MAX) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_AFC_MIN" FLOAT_VAR_AFC_MIN) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_AFC_MAX" FLOAT_VAR_AFC_MAX) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_MIN_MIN" FLOAT_VAR_MIN_MIN) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_MIN_MAX" FLOAT_VAR_MIN_MAX) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_MAX_MIN" FLOAT_VAR_MAX_MIN) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_MAX_MAX" FLOAT_VAR_MAX_MAX) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_SIZE_MIN" FLOAT_VAR_SIZE_MIN) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_SIZE_MAX" FLOAT_VAR_SIZE_MAX) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_SIZE_DEGREE_MIN" FLOAT_VAR_SIZE_DEGREE_MIN) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_SIZE_DEGREE_MAX" FLOAT_VAR_SIZE_DEGREE_MAX) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_SIZE_AFC_MIN" FLOAT_VAR_SIZE_AFC_MIN) floatvarselector-type)
+
+(cffi:defcfun ("FLOAT_VAR_SIZE_AFC_MAX" FLOAT_VAR_SIZE_AFC_MAX) floatvarselector-type)
+
+(cffi:defcfun ("gecode_fval_selector_delete" gecode_fval_selector_delete) :void
+  (s floatvalselector-type))
+
+(cffi:defcfun ("FLOAT_VAL_SPLIT_MIN" FLOAT_VAL_SPLIT_MIN) floatvalselector-type)
+
+(cffi:defcfun ("FLOAT_VAL_SPLIT_MAX" FLOAT_VAL_SPLIT_MAX) floatvalselector-type)
+
+(cffi:defcfun ("FLOAT_VAL_SPLIT_RND" FLOAT_VAL_SPLIT_RND) floatvalselector-type
+  (seed :unsigned-int))
 
 

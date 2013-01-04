@@ -100,6 +100,24 @@
 (defmethod expand-from-foreign (sap (type intvalselector-type))
   `(make-ival-selector ,sap))
 
+(cffi:define-foreign-type floatvarselector-type () ()
+  (:actual-type :pointer)
+  (:simple-parser floatvarselector-type))
+
+(defmethod expand-to-foreign (selector (type floatvarselector-type))
+  `(selector-sap ,selector))
+(defmethod expand-from-foreign (sap (type floatvarselector-type))
+  `(make-fvar-selector ,sap))
+
+(cffi:define-foreign-type floatvalselector-type () ()
+  (:actual-type :pointer)
+  (:simple-parser floatvalselector-type))
+
+(defmethod expand-to-foreign (selector (type floatvalselector-type))
+  `(selector-sap ,selector))
+(defmethod expand-from-foreign (sap (type floatvalselector-type))
+  `(make-fval-selector ,sap))
+
 
 ;; argument vectors of various types
 (cffi:define-foreign-type intvarargs-type () ()
@@ -159,6 +177,41 @@
      (unwind-protect 
           (progn ,@body)
        (gecode_varargs_delete ,var))))
+
+(cffi:define-foreign-type floatvarargs-type () ()
+  (:actual-type :pointer)
+  (:simple-parser floatvarargs-type))
+
+(defmethod expand-to-foreign-dyn (value var body (type floatvarargs-type))
+  `(let* ((length (length ,value))
+          (,var (gecode_varargs_create length))
+          (i -1))
+     (declare (type fixnum i length))
+     (map nil
+          (lambda (x)
+            (declare (type boolvar x))
+            (gecode_varargs_set ,var (incf i) x))
+          ,value)
+     (unwind-protect 
+          (progn ,@body)
+       (gecode_varargs_delete ,var))))
+
+(cffi:define-foreign-type floatargs-type () ()
+  (:actual-type :pointer)
+  (:simple-parser floatargs-type))
+
+(defmethod expand-to-foreign-dyn (value var body (type floatargs-type))
+  `(let* ((length (length ,value))
+          (,var (gecode_floatargs_create length)) ; the argument array class
+          (i -1))
+     (declare (type fixnum i length))
+     (map nil
+          (lambda (x)
+            (gecode_floatargs_set ,var (incf i) x))
+          ,value)
+     (unwind-protect 
+          (progn ,@body)
+       (gecode_floatargs_delete ,var))))
 
 
 ;;; foreign libraries
