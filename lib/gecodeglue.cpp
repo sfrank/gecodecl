@@ -190,30 +190,6 @@ public:
     return intVariables.size();
   }
 
-  /*   
-  STATUS inline getIntInfo(vector<IntVar>::size_type var,
-                           int *min, int *max, int *size) {
-    SpaceStatus state = status();
-    if (state==SS_FAILED) {
-      *size = 0;
-      *min = 0;
-      *max = 0;
-      return STATE_FAILED;
-    }
-
-    IntVar v = getIntVar(var);
-    *size = v.size();
-    if (*size > 1) {
-      *min = v.min();
-      *max = v.max();
-      return VAR_UNASSIGNED;
-    } else {
-      *min = v.val();
-      *max = *min;
-      return VAR_ASSIGNED;
-    }
-  }
-  */
   STATUS inline getIntInfo(IntVar *var,
                            int *min, int *max, int *size) {
     SpaceStatus state = status();
@@ -276,13 +252,17 @@ public:
     }
   }
 
-  /*
-  int addSetVariable(int low, int high) {
-    SetVar var(*this,low,high);
+  /*  
+  vector<SetVar>::size_type addSetVariable_full(int glbMin,int glbMax,
+                                                int lubMin,int lubMax,
+                                                unsigned int cardMin,
+                                                unsigned int cardMax) {
+    SetVar var(*this,glbMin, glbMax, lubMin, lubMax, cardMin, cardMax);
     setVariables.push_back(var);
     return setVariables.size() - 1;
   }
   */
+  
 };
 
 class CLVarArgs : public VarArgArray<IntVar> {
@@ -1284,6 +1264,24 @@ FloatValBranch* FLOAT_VAL_SPLIT_RND(unsigned int seed){
   return new FloatValBranch(Rnd(seed));
 }
 
+
+/* finite (integer) sets */
+
+IntSet* gecode_intset_bounds(int min, int max) {
+  return new IntSet(min, max);
+}
+
+IntSet* gecode_intset_seq(int seq[], int count) {
+  return new IntSet(seq, count);
+}
+
+IntSet* gecode_intset_ranges(int seq[][2], int count) {
+  return new IntSet(seq, count);
+}
+
+void gecode_intset_delete(IntSet* iset) {
+  delete iset;
+}
 
 } /* extern "C" */
 

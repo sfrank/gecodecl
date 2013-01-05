@@ -214,6 +214,14 @@
        (gecode_floatargs_delete ,var))))
 
 
+(cffi:define-foreign-type intset-type () ()
+  (:actual-type :pointer)
+  (:simple-parser intset-type))
+
+(defmethod expand-to-foreign (set (type intset-type))
+  `(intset-sap ,set))
+
+
 ;;; foreign libraries
 
 (cffi:define-foreign-library gecode-kernel

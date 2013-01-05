@@ -413,6 +413,12 @@ extern "C" {
   FloatValBranch* FLOAT_VAL_SPLIT_MAX(void);
   FloatValBranch* FLOAT_VAL_SPLIT_RND(unsigned int seed);
 
+  /* finite (integer) sets */
+  IntSet* gecode_intset_bounds(int min, int max);
+  IntSet* gecode_intset_seq(int seq[], int count);
+  IntSet* gecode_intset_ranges(int seq[][2], int count);
+  void gecode_intset_delete(IntSet* iset);
+
 } /* extern C */
 
 #endif /* gecodeglue.h */

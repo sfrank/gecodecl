@@ -904,4 +904,19 @@
 (cffi:defcfun ("FLOAT_VAL_SPLIT_RND" FLOAT_VAL_SPLIT_RND) floatvalselector-type
   (seed :unsigned-int))
 
+(cffi:defcfun ("gecode_intset_bounds" gecode_intset_bounds) intset-type
+  (min :int)
+  (max :int))
+
+(cffi:defcfun ("gecode_intset_seq" gecode_intset_seq) intset-type
+  (seq :pointer)
+  (count :int))
+
+(cffi:defcfun ("gecode_intset_ranges" gecode_intset_ranges) intset-type
+  (seq :pointer)
+  (count :int))
+
+(cffi:defcfun ("gecode_intset_delete" gecode_intset_delete) :void
+  (iset intset-type))
+
 

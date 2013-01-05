@@ -242,3 +242,33 @@
   (let ((selector (%make-fval-selector sap)))
     (tg:finalize selector (reclaim-fval-selector selector))
     selector))
+
+;;; sets
+
+(defstruct (intset (:constructor %make-intset (sap)))
+  (sap nil :type sb-sys:system-area-pointer :read-only t))
+
+(defun reclaim-intset (set)
+  (lambda ()
+    (gecode_intset_delete set)))
+
+(defun intset-bounds (min max)
+  (let ((set (%make-intset (gecode_intset_bounds min max))))
+    (tg:finalize set (reclaim-intset set))
+    set))
+
+(defun intset-seq (seq)
+  (let ((length (length seq))
+        (i -1))
+    (with-foreign-object (array :int length)
+      (map nil
+           (lambda (x)
+             (setf (mem-aref array :int (incf i)) x))
+           seq)
+      (let ((set (%make-intset (gecode_intset_seq array length))))
+        (tg:finalize set (reclaim-intset set))
+        set))))
+
+(defun intset-ranges (array)
+  (error "not yet implemented"))
+

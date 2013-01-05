@@ -42,6 +42,9 @@
 %typemap(cin) IntConLevel "int-consistency-level";
 %typemap(cin) FloatRelType  "float-relation-type";
 
+%typemap(cin)  IntSet*  "intset-type";
+%typemap(cout) IntSet*  "intset-type";
+
 // %feature("intern_function","1");
 
 %include "gecodeglue.h"
