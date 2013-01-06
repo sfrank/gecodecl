@@ -19,4 +19,4 @@
                  ;(:file "simplifier" :depends-on ("core" "interface"))
                  )))
   :depends-on
-  (:alexandria :cffi :trivial-garbage :waaf-cffi))
+  (:alexandria :cffi :trivial-garbage))
