@@ -71,9 +71,7 @@
   (with-open-file (s file)
     (loop for line = (read-line s nil)
           while line
-          collect (loop for i below (length line)
-                        collect (parse-integer line
-                                      :start i :end (1+ i) :junk-allowed t)))))
+          collect (map 'list #'digit-char-p line))))
 
 ;;; modelling
 
