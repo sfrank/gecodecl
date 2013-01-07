@@ -315,6 +315,69 @@
   (bvar boolvar-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_dom_ivar_int" gecode_dom_ivar_int) :void
+  (space space-type)
+  (v intvar-type)
+  (value :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_ivars_int" gecode_dom_ivars_int) :void
+  (space space-type)
+  (v intvarargs-type)
+  (value :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_ivar_int_int" gecode_dom_ivar_int_int) :void
+  (space space-type)
+  (v intvar-type)
+  (l :int)
+  (m :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_ivars_int_int" gecode_dom_ivars_int_int) :void
+  (space space-type)
+  (v intvarargs-type)
+  (l :int)
+  (m :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_ivar_iset" gecode_dom_ivar_iset) :void
+  (space space-type)
+  (v intvar-type)
+  (s intset-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_ivars_iset" gecode_dom_ivars_iset) :void
+  (space space-type)
+  (v intvarargs-type)
+  (s intset-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_ivar_int_reify" gecode_dom_ivar_int_reify) :void
+  (space space-type)
+  (v intvar-type)
+  (value :int)
+  (mode reify-mode)
+  (bvar boolvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_ivar_int_int_reify" gecode_dom_ivar_int_int_reify) :void
+  (space space-type)
+  (v intvar-type)
+  (l :int)
+  (m :int)
+  (mode reify-mode)
+  (bvar boolvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_ivar_iset_reify" gecode_dom_ivar_iset_reify) :void
+  (space space-type)
+  (v intvar-type)
+  (s intset-type)
+  (mode reify-mode)
+  (bvar boolvar-type)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_rel_ivar_int" gecode_rel_ivar_int) :void
   (space space-type)
   (op int-relation-type)

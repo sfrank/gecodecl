@@ -734,6 +734,51 @@ void gecode_clause_bvars_bvars_bvar(CLSpace *space, BoolOpType op,
 }
 
 /* finite domain integer relations */
+void gecode_dom_ivar_int(CLSpace *space,
+                         IntVar* v, int value, IntConLevel icl) {
+  dom(*space, *v, value, icl);
+}
+
+void gecode_dom_ivars_int(CLSpace *space,
+                          IntVarArgs* v, int value, IntConLevel icl) {
+  dom(*space, *v, value, icl);
+}
+
+void gecode_dom_ivar_int_int(CLSpace *space, IntVar* v,
+                             int l, int m, IntConLevel icl) {
+  dom(*space, *v, l, m, icl);
+}
+
+void gecode_dom_ivars_int_int(CLSpace *space, IntVarArgs* v,
+                             int l, int m, IntConLevel icl) {
+  dom(*space, *v, l, m, icl);
+}
+
+void gecode_dom_ivar_iset(CLSpace *space, IntVar* v, 
+                          IntSet* s, IntConLevel icl) {
+  dom(*space, *v, *s, icl);
+}
+
+void gecode_dom_ivars_iset(CLSpace *space, IntVarArgs* v, 
+                          IntSet* s, IntConLevel icl) {
+  dom(*space, *v, *s, icl);
+}
+
+void gecode_dom_ivar_int_reify(CLSpace *space, IntVar* v, int value,
+                               ReifyMode mode, BoolVar* bvar, IntConLevel icl) {
+  dom(*space, *v, value, Reify(*bvar, mode), icl);
+}
+
+void gecode_dom_ivar_int_int_reify(CLSpace *space, IntVar* v, int l, int m,
+                                   ReifyMode mode, BoolVar* bvar, IntConLevel icl) {
+    dom(*space, *v, l, m, Reify(*bvar, mode), icl);
+}
+
+void gecode_dom_ivar_iset_reify(CLSpace *space, IntVar* v, IntSet* s,
+                               ReifyMode mode, BoolVar* bvar, IntConLevel icl) {
+  dom(*space, *v, *s, Reify(*bvar, mode), icl);
+}
+
 
 void gecode_rel_ivar_int(CLSpace *space, IntRelType op,
                          IntVar* v, int value, IntConLevel icl) {

@@ -157,6 +157,28 @@ extern "C" {
 
 
   /* integer relations */
+  void gecode_dom_ivar_int(CLSpace *space, IntVar* v, int value, IntConLevel icl);
+
+  void gecode_dom_ivars_int(CLSpace *space, IntVarArgs* v, int value, IntConLevel icl);
+
+  void gecode_dom_ivar_int_int(CLSpace *space, IntVar* v, int l, int m, IntConLevel icl);
+
+  void gecode_dom_ivars_int_int(CLSpace *space, IntVarArgs* v,
+                                int l, int m, IntConLevel icl);
+
+  void gecode_dom_ivar_iset(CLSpace *space, IntVar* v,  IntSet* s, IntConLevel icl);
+
+  void gecode_dom_ivars_iset(CLSpace *space, IntVarArgs* v, IntSet* s, IntConLevel icl);
+
+  void gecode_dom_ivar_int_reify(CLSpace *space, IntVar* v, int value,
+                                 ReifyMode mode, BoolVar* bvar, IntConLevel icl);
+
+  void gecode_dom_ivar_int_int_reify(CLSpace *space, IntVar* v, int l, int m,
+                                     ReifyMode mode, BoolVar* bvar, IntConLevel icl);
+
+  void gecode_dom_ivar_iset_reify(CLSpace *space, IntVar* v, IntSet* s,
+                                  ReifyMode mode, BoolVar* bvar, IntConLevel icl);
+
   void gecode_rel_ivar_int(CLSpace *space, IntRelType op,
                            IntVar* v, int value, IntConLevel icl);
 
