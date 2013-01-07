@@ -40,6 +40,7 @@ extern "C" {
   /* variables */
   size_t gecode_bool_addvar(CLSpace *space);
   size_t gecode_int_addvar(CLSpace *space, int min, int max);
+  size_t gecode_int_addvar_set(CLSpace *space, IntSet* set);
   size_t gecode_float_addvar(CLSpace *space, double min, double max);
   BoolVar* gecode_get_boolvar_by_index(CLSpace *space, size_t index);
   IntVar* gecode_get_intvar_by_index(CLSpace *space, size_t index);

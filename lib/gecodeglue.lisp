@@ -68,6 +68,10 @@
   (min :int)
   (max :int))
 
+(cffi:defcfun ("gecode_int_addvar_set" gecode_int_addvar_set) size
+  (space space-type)
+  (set intset-type))
+
 (cffi:defcfun ("gecode_float_addvar" gecode_float_addvar) size
   (space space-type)
   (min :double)

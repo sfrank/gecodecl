@@ -87,6 +87,12 @@
 (defun add-int-variable ( &optional (min -1000000000) (max 1000000000))
   (make-intvar (gecode_int_addvar *gspace* min max)))
 
+(defun intvar-set (set)
+  (let ((iset (if (every #'integerp set)
+                  (intset-seq set)
+                  (intset-ranges set))))
+    (make-intvar (gecode_int_addvar_set *gspace* iset))))
+
 (defun integer-info (variable)
   (declare (type intvar variable))
   (with-foreign-objects ((min :int)

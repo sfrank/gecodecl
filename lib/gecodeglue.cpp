@@ -172,8 +172,8 @@ public:
 
   // integer variables
 
-  vector<IntVar>::size_type addIntVariable(int min, int max) {
-    IntVar var(*this, min, max);
+  vector<IntVar>::size_type addIntVariable(IntVar var) {
+    //IntVar var(*this, min, max);
     intVariables.push_back(var);
     return intVariables.size() - 1;
   }
@@ -385,7 +385,11 @@ size_t gecode_bool_addvar(CLSpace *space) {
   return space->addBoolVariable(); }
 
 size_t gecode_int_addvar(CLSpace *space, int min, int max) {
-  return space->addIntVariable(min, max); }
+  return space->addIntVariable(IntVar(*space, min, max)); }
+
+size_t gecode_int_addvar_set(CLSpace *space, IntSet* set) {
+  return space->addIntVariable(IntVar(*space, *set)); }
+
 
 size_t gecode_float_addvar(CLSpace *space, double min, double max) {
   return space->addFloatVariable(min, max); }
