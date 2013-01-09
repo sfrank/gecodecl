@@ -4,6 +4,9 @@
 (in-package :gecodecl)
 %}
 
+%typemap(cin) bool ":boolean";
+%typemap(cout) bool ":boolean";
+
 %typemap(cin) size_t "size";
 %typemap(cout) size_t "size";
 

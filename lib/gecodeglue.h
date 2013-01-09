@@ -215,6 +215,46 @@ extern "C" {
                                        IntVarArgs* yvars, IntVarArgs* zvars,
                                        IntConLevel icl);
 
+  /* binpacking constraint */
+  void gecode_binpacking(CLSpace *space,
+                         IntVarArgs* l, IntVarArgs *b, IntArgs* s,
+                         IntConLevel icl);
+
+  /* nooverlap constraint */
+  void gecode_nooverlap(CLSpace *space,
+                        IntVarArgs *x, IntArgs* w,
+                        IntVarArgs *y, IntArgs* h,
+                        IntConLevel icl);
+  void gecode_nooverlap_optional(CLSpace *space,
+                                 IntVarArgs *x, IntArgs* w,
+                                 IntVarArgs *y, IntArgs* h,
+                                 BoolVarArgs* o,
+                                 IntConLevel icl);
+  void gecode_nooverlap_coords(CLSpace *space,
+                               IntVarArgs *x0, IntVarArgs* w, IntVarArgs *x1,
+                               IntVarArgs *y0, IntVarArgs* h, IntVarArgs *y1,
+                               IntConLevel icl);
+  void gecode_nooverlap_coords_optional(CLSpace *space,
+                                        IntVarArgs *x0, IntVarArgs* w, IntVarArgs *x1,
+                                        IntVarArgs *y0, IntVarArgs* h, IntVarArgs *y1,
+                                        BoolVarArgs* o,
+                                        IntConLevel icl);
+
+
+  // TODO1: unary, cumulative, circuit, path
+  // TODO2: count, nvalues, sequence, DFA, extensional
+
+  /* cumulatives constraint */
+  void gecode_cumulatives_ivars(CLSpace *space,
+                                IntVarArgs* m,
+                                IntVarArgs* s,
+                                IntVarArgs* p,
+                                IntVarArgs* e,
+                                IntVarArgs* u,
+                                IntArgs* c,
+                                bool at_most,
+                                IntConLevel icl);
+
 
   /* channeling constraints */
   void gecode_channel_ivars_ivars(CLSpace *space, IntVarArgs* v1,

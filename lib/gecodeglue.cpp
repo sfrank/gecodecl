@@ -847,6 +847,68 @@ void gecode_sorted_ivars_ivars_ivars(CLSpace *space, IntVarArgs* xvars,
   EXCSTOP
 }
 
+/* binpacking constraint */
+void gecode_binpacking(CLSpace *space,
+                       IntVarArgs* l, IntVarArgs *b, IntArgs* s,
+                       IntConLevel icl) {
+  EXCSTART
+    binpacking(*space, *l, *b, *s, icl);
+  EXCSTOP
+}
+
+/* nooverlap constraint */
+void gecode_nooverlap(CLSpace *space,
+                      IntVarArgs *x, IntArgs* w,
+                      IntVarArgs *y, IntArgs* h,
+                      IntConLevel icl) {
+  EXCSTART
+    nooverlap(*space, *x, *w, *y, *h, icl);
+  EXCSTOP  
+}
+
+void gecode_nooverlap_optional(CLSpace *space,
+                               IntVarArgs *x, IntArgs* w,
+                               IntVarArgs *y, IntArgs* h,
+                               BoolVarArgs* o,
+                               IntConLevel icl) {
+  EXCSTART
+    nooverlap(*space, *x, *w, *y, *h, *o, icl);
+  EXCSTOP  
+}
+
+void gecode_nooverlap_coords(CLSpace *space,
+                             IntVarArgs *x0, IntVarArgs* w, IntVarArgs *x1,
+                             IntVarArgs *y0, IntVarArgs* h, IntVarArgs *y1,
+                             IntConLevel icl) {
+  EXCSTART
+    nooverlap(*space, *x0, *w, *x1, *y0, *h, *y1, icl);
+  EXCSTOP  
+}
+
+void gecode_nooverlap_coords_optional(CLSpace *space,
+                                      IntVarArgs *x0, IntVarArgs* w, IntVarArgs *x1,
+                                      IntVarArgs *y0, IntVarArgs* h, IntVarArgs *y1,
+                                      BoolVarArgs* o,
+                                      IntConLevel icl) {
+  EXCSTART
+    nooverlap(*space, *x0, *w, *x1, *y0, *h, *y1, *o, icl);
+  EXCSTOP  
+}
+
+
+/* cumulatives constraint */
+void gecode_cumulatives_ivars(CLSpace *space,
+                              IntVarArgs* m,
+                              IntVarArgs* s,
+                              IntVarArgs* p,
+                              IntVarArgs* e,
+                              IntVarArgs* u,
+                              IntArgs* c,
+                              bool at_most,
+                              IntConLevel icl) {
+  cumulatives(*space, *m, *s, *p, *e, *u, *c, at_most, icl);
+}
+
 
 /* channeling constraints */
 

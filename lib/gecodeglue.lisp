@@ -454,6 +454,62 @@
   (zvars intvarargs-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_binpacking" gecode_binpacking) :void
+  (space space-type)
+  (l intvarargs-type)
+  (b intvarargs-type)
+  (s intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_nooverlap" gecode_nooverlap) :void
+  (space space-type)
+  (x intvarargs-type)
+  (w intargs-type)
+  (y intvarargs-type)
+  (h intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_nooverlap_optional" gecode_nooverlap_optional) :void
+  (space space-type)
+  (x intvarargs-type)
+  (w intargs-type)
+  (y intvarargs-type)
+  (h intargs-type)
+  (o boolvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_nooverlap_coords" gecode_nooverlap_coords) :void
+  (space space-type)
+  (x0 intvarargs-type)
+  (w intvarargs-type)
+  (x1 intvarargs-type)
+  (y0 intvarargs-type)
+  (h intvarargs-type)
+  (y1 intvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_nooverlap_coords_optional" gecode_nooverlap_coords_optional) :void
+  (space space-type)
+  (x0 intvarargs-type)
+  (w intvarargs-type)
+  (x1 intvarargs-type)
+  (y0 intvarargs-type)
+  (h intvarargs-type)
+  (y1 intvarargs-type)
+  (o boolvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulatives_ivars" gecode_cumulatives_ivars) :void
+  (space space-type)
+  (m intvarargs-type)
+  (s intvarargs-type)
+  (p intvarargs-type)
+  (e intvarargs-type)
+  (u intvarargs-type)
+  (c intargs-type)
+  (at_most :boolean)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_channel_ivars_ivars" gecode_channel_ivars_ivars) :void
   (space space-type)
   (v1 intvarargs-type)
