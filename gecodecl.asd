@@ -1,5 +1,9 @@
 ;;; -*- Mode: LISP; Syntax: COMMON-LISP -*-
 
+(defpackage #:gecode-config (:export #:*base-directory*))
+(defparameter gecode-config:*base-directory* 
+  (make-pathname :name nil :type nil :defaults *load-truename*))
+
 (defpackage :gecodecl-system (:use :asdf :cl))
 (in-package :gecodecl-system)
 

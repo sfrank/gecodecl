@@ -281,8 +281,10 @@
 (cffi:use-foreign-library gecode-search)
 (cffi:use-foreign-library gecode-minimodel)
 
+(defvar *gluelib-pathname*
+  (merge-pathnames #P"lib/" gecode-config:*base-directory*))
 
-(pushnew #P"./lib/" *foreign-library-directories* :test #'equal)
+(pushnew *gluelib-pathname* cffi:*foreign-library-directories* :test #'equal)
 
 (cffi:define-foreign-library gecode-glue
   (t (:default "libgecodeglue")))
