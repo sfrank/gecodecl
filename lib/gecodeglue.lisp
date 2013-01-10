@@ -510,6 +510,49 @@
   (at_most :boolean)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_unary_ivars" gecode_unary_ivars) :void
+  (space space-type)
+  (s intvarargs-type)
+  (p intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_unary_ivars_bvars" gecode_unary_ivars_bvars) :void
+  (space space-type)
+  (s intvarargs-type)
+  (p intargs-type)
+  (b boolvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_unary_tasks_ivars" gecode_unary_tasks_ivars) :void
+  (space space-type)
+  (tasks tasktypeargs-type)
+  (flex intvarargs-type)
+  (fix intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_unary_tasks_ivars_bvars" gecode_unary_tasks_ivars_bvars) :void
+  (space space-type)
+  (tasks tasktypeargs-type)
+  (flex intvarargs-type)
+  (fix intargs-type)
+  (m boolvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_unary_ivars_ivars" gecode_unary_ivars_ivars) :void
+  (space space-type)
+  (s intvarargs-type)
+  (p intvarargs-type)
+  (e intvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_unary_ivars_ivars_bvars" gecode_unary_ivars_ivars_bvars) :void
+  (space space-type)
+  (s intvarargs-type)
+  (p intvarargs-type)
+  (e intvarargs-type)
+  (m boolvarargs-type)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_channel_ivars_ivars" gecode_channel_ivars_ivars) :void
   (space space-type)
   (v1 intvarargs-type)

@@ -98,6 +98,11 @@
   :icl-def                ; The default consistency for a constraint.
   )
 
+(cffi:defcenum task-type
+  :tt-fixp
+  :tt-fixs
+  :tt-fixe)
+
 ;;(cffi:defcenum set-rel-type
 ;;  :srt-eq                               ; equality
 ;;  :srt-nq                               ; disequality

@@ -910,6 +910,43 @@ void gecode_cumulatives_ivars(CLSpace *space,
 }
 
 
+/* unary constraint */
+void gecode_unary_ivars(CLSpace *space, IntVarArgs* s, IntArgs* p,
+                        IntConLevel icl) {
+  unary(*space, *s, *p, icl);
+}
+
+void gecode_unary_ivars_bvars(CLSpace *space, IntVarArgs* s, IntArgs* p,
+                              BoolVarArgs* b, IntConLevel icl) {
+  unary(*space, *s, *p, *b, icl);
+}
+
+void gecode_unary_tasks_ivars(CLSpace *space, TaskTypeArgs* tasks, 
+                              IntVarArgs* flex, IntArgs* fix,
+                              IntConLevel icl) {
+  unary(*space, *tasks, *flex, *fix, icl);
+}
+
+void gecode_unary_tasks_ivars_bvars(CLSpace *space, TaskTypeArgs* tasks, 
+                                    IntVarArgs* flex, IntArgs* fix,
+                                    BoolVarArgs* m, IntConLevel icl) {
+  unary(*space, *tasks, *flex, *fix, *m, icl);
+}
+
+void gecode_unary_ivars_ivars(CLSpace *space, IntVarArgs* s,
+                              IntVarArgs* p, IntVarArgs* e,
+                              IntConLevel icl) {
+  unary(*space, *s, *p, *e, icl);
+}
+
+void gecode_unary_ivars_ivars_bvars(CLSpace *space, IntVarArgs* s,
+                                    IntVarArgs* p, IntVarArgs* e,
+                                    BoolVarArgs* m, IntConLevel icl) {
+  unary(*space, *s, *p, *e, *m, icl);
+}
+
+
+
 /* channeling constraints */
 
 void gecode_channel_ivars_ivars(CLSpace *space,

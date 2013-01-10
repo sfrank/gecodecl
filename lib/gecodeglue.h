@@ -255,6 +255,29 @@ extern "C" {
                                 bool at_most,
                                 IntConLevel icl);
 
+  /* unary constraint */
+  void gecode_unary_ivars(CLSpace *space, IntVarArgs* s, IntArgs* p,
+                          IntConLevel icl);
+
+  void gecode_unary_ivars_bvars(CLSpace *space, IntVarArgs* s, IntArgs* p,
+                                BoolVarArgs* b, IntConLevel icl);
+
+  void gecode_unary_tasks_ivars(CLSpace *space, TaskTypeArgs* tasks, 
+                                IntVarArgs* flex, IntArgs* fix,
+                                IntConLevel icl);
+
+  void gecode_unary_tasks_ivars_bvars(CLSpace *space, TaskTypeArgs* tasks, 
+                                      IntVarArgs* flex, IntArgs* fix,
+                                      BoolVarArgs* m, IntConLevel icl);
+
+  void gecode_unary_ivars_ivars(CLSpace *space, IntVarArgs* s,
+                                IntVarArgs* p, IntVarArgs* e,
+                                IntConLevel icl);
+
+  void gecode_unary_ivars_ivars_bvars(CLSpace *space, IntVarArgs* s,
+                                      IntVarArgs* p, IntVarArgs* e,
+                                      BoolVarArgs* m, IntConLevel icl);
+
 
   /* channeling constraints */
   void gecode_channel_ivars_ivars(CLSpace *space, IntVarArgs* v1,

@@ -214,6 +214,27 @@
        (gecode_floatargs_delete ,var))))
 
 
+(cffi:define-foreign-type tasktypeargs-type () ()
+  (:actual-type :pointer)
+  (:simple-parser tasktypeargs-type))
+
+(defmethod expand-to-foreign-dyn (value var body (type tasktypeargs-type))
+  `(let* ((length (length ,value))
+          (,var (gecode_intargs_create length))
+          (adr (gecode_intargs_adr ,var))
+          (i -1))
+     (declare (type fixnum i length))
+     (map nil
+          (lambda (x)
+            (declare (type fixnum x))
+            (setf (mem-aref adr :int (incf i))
+                  (foreign-enum-value 'task-type x)))
+          ,value)
+     (unwind-protect 
+          (progn ,@body)
+       (gecode_intargs_delete ,var))))
+
+
 (cffi:define-foreign-type intset-type () ()
   (:actual-type :pointer)
   (:simple-parser intset-type))

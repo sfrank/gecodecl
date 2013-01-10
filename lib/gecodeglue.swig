@@ -25,6 +25,8 @@
 %typemap(cout) FloatValBranch*  "floatvalselector-type";
 
 
+%typemap(cin) TaskTypeArgs* "tasktypeargs-type";
+
 %typemap(cin) CLSpace* "space-type";
 %typemap(cin) DFS<CLSpace>* "search-type";
 %typemap(cin) BAB<CLSpace>* "search-type";

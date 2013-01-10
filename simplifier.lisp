@@ -1,5 +1,5 @@
 ;;;; -*- Mode: Lisp; Syntax: Common-Lisp -*-
-;;;; Please read the Copyright noctive below.
+;;;; Please read the Copyright notice below.
 ;;;;
 ;;;; Implements a Symbolic Simplifier for Algebraic Expressins.
 ;;;; e.g.
