@@ -553,6 +553,116 @@
   (m boolvarargs-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_cumulative_int_tasks" gecode_cumulative_int_tasks) :void
+  (space space-type)
+  (c :int)
+  (t_arg2 tasktypeargs-type)
+  (flex intvarargs-type)
+  (fix intargs-type)
+  (u intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_ivar_tasks" gecode_cumulative_ivar_tasks) :void
+  (space space-type)
+  (c intvar-type)
+  (t_arg2 tasktypeargs-type)
+  (flex intvarargs-type)
+  (fix intargs-type)
+  (u intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_int_tasks_bvars" gecode_cumulative_int_tasks_bvars) :void
+  (space space-type)
+  (c :int)
+  (t_arg2 tasktypeargs-type)
+  (flex intvarargs-type)
+  (fix intargs-type)
+  (u intargs-type)
+  (m boolvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_ivar_tasks_bvars" gecode_cumulative_ivar_tasks_bvars) :void
+  (space space-type)
+  (c intvar-type)
+  (t_arg2 tasktypeargs-type)
+  (flex intvarargs-type)
+  (fix intargs-type)
+  (u intargs-type)
+  (m boolvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_int" gecode_cumulative_int) :void
+  (space space-type)
+  (c :int)
+  (s intvarargs-type)
+  (p intargs-type)
+  (u intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_ivar" gecode_cumulative_ivar) :void
+  (space space-type)
+  (c intvar-type)
+  (s intvarargs-type)
+  (p intargs-type)
+  (u intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_int_bvars" gecode_cumulative_int_bvars) :void
+  (space space-type)
+  (c :int)
+  (s intvarargs-type)
+  (p intargs-type)
+  (u intargs-type)
+  (m boolvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_ivar_bvars" gecode_cumulative_ivar_bvars) :void
+  (space space-type)
+  (c intvar-type)
+  (s intvarargs-type)
+  (p intargs-type)
+  (u intargs-type)
+  (m boolvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_int_ivars" gecode_cumulative_int_ivars) :void
+  (space space-type)
+  (c :int)
+  (s intvarargs-type)
+  (p intvarargs-type)
+  (e intvarargs-type)
+  (u intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_ivar_ivars" gecode_cumulative_ivar_ivars) :void
+  (space space-type)
+  (c intvar-type)
+  (s intvarargs-type)
+  (p intvarargs-type)
+  (e intvarargs-type)
+  (u intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_int_ivars_bvars" gecode_cumulative_int_ivars_bvars) :void
+  (space space-type)
+  (c :int)
+  (s intvarargs-type)
+  (p intvarargs-type)
+  (e intvarargs-type)
+  (u intargs-type)
+  (m boolvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_cumulative_ivar_ivars_bvars" gecode_cumulative_ivar_ivars_bvars) :void
+  (space space-type)
+  (c intvar-type)
+  (s intvarargs-type)
+  (p intvarargs-type)
+  (e intvarargs-type)
+  (u intargs-type)
+  (m boolvarargs-type)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_channel_ivars_ivars" gecode_channel_ivars_ivars) :void
   (space space-type)
   (v1 intvarargs-type)

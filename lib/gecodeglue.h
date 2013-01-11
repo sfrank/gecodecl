@@ -241,7 +241,7 @@ extern "C" {
                                         IntConLevel icl);
 
 
-  // TODO1: unary, cumulative, circuit, path
+  // TODO1: circuit, path
   // TODO2: count, nvalues, sequence, DFA, extensional
 
   /* cumulatives constraint */
@@ -277,6 +277,60 @@ extern "C" {
   void gecode_unary_ivars_ivars_bvars(CLSpace *space, IntVarArgs* s,
                                       IntVarArgs* p, IntVarArgs* e,
                                       BoolVarArgs* m, IntConLevel icl);
+
+
+  /* cumulative constraint */
+  void gecode_cumulative_int_tasks(CLSpace *space, int c,
+                                   TaskTypeArgs* t, IntVarArgs* flex,
+                                   IntArgs* fix, IntArgs* u,
+                                   IntConLevel icl);
+
+  void gecode_cumulative_ivar_tasks(CLSpace *space, IntVar* c,
+                                    TaskTypeArgs* t, IntVarArgs* flex,
+                                    IntArgs* fix, IntArgs* u,
+                                    IntConLevel icl);
+
+  void gecode_cumulative_int_tasks_bvars(CLSpace *space, int c,
+                                         TaskTypeArgs* t, IntVarArgs* flex,
+                                         IntArgs* fix, IntArgs* u, BoolVarArgs* m,
+                                         IntConLevel icl);
+
+  void gecode_cumulative_ivar_tasks_bvars(CLSpace *space, IntVar* c,
+                                          TaskTypeArgs* t, IntVarArgs* flex,
+                                          IntArgs* fix, IntArgs* u, BoolVarArgs* m,
+                                          IntConLevel icl);
+
+  void gecode_cumulative_int(CLSpace *space, int c,
+                             IntVarArgs* s, IntArgs* p, IntArgs* u,
+                             IntConLevel icl);
+
+  void gecode_cumulative_ivar(CLSpace *space, IntVar* c,
+                              IntVarArgs* s, IntArgs* p, IntArgs* u,
+                              IntConLevel icl);
+
+  void gecode_cumulative_int_bvars(CLSpace *space, int c,
+                                   IntVarArgs* s, IntArgs* p, IntArgs* u,
+                                   BoolVarArgs* m, IntConLevel icl);
+
+  void gecode_cumulative_ivar_bvars(CLSpace *space, IntVar* c,
+                                    IntVarArgs* s, IntArgs* p, IntArgs* u,
+                                    BoolVarArgs* m, IntConLevel icl);
+
+  void gecode_cumulative_int_ivars(CLSpace *space, int c,
+                                   IntVarArgs* s, IntVarArgs* p, IntVarArgs* e,
+                                   IntArgs* u, IntConLevel icl);
+
+  void gecode_cumulative_ivar_ivars(CLSpace *space, IntVar* c,
+                                    IntVarArgs* s, IntVarArgs* p, IntVarArgs* e,
+                                    IntArgs* u, IntConLevel icl);
+
+  void gecode_cumulative_int_ivars_bvars(CLSpace *space, int c,
+                                         IntVarArgs* s, IntVarArgs* p, IntVarArgs* e,
+                                         IntArgs* u, BoolVarArgs* m, IntConLevel icl);
+
+  void gecode_cumulative_ivar_ivars_bvars(CLSpace *space, IntVar* c,
+                                          IntVarArgs* s, IntVarArgs* p, IntVarArgs* e,
+                                          IntArgs* u, BoolVarArgs* m, IntConLevel icl);
 
 
   /* channeling constraints */
