@@ -41,6 +41,17 @@
 (cffi:defcfun ("gecode_floatargs_delete" gecode_floatargs_delete) :void
   (v :pointer))
 
+(cffi:defcfun ("gecode_intsetargs_create" gecode_intsetargs_create) :pointer
+  (n :int))
+
+(cffi:defcfun ("gecode_intsetargs_set" gecode_intsetargs_set) :void
+  (v :pointer)
+  (i :int)
+  (e intset-type))
+
+(cffi:defcfun ("gecode_intsetargs_delete" gecode_intsetargs_delete) :void
+  (v :pointer))
+
 (cffi:defcfun ("gecode_init_exceptionHandler" gecode_init_exceptionHandler) :void
   (fptr :pointer))
 
@@ -452,6 +463,95 @@
   (xvars intvarargs-type)
   (yvars intvarargs-type)
   (zvars intvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_rel_ivars_int_int" gecode_count_rel_ivars_int_int) :void
+  (space space-type)
+  (x intvarargs-type)
+  (n :int)
+  (irt int-relation-type)
+  (m :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_rel_ivars_iset_int" gecode_count_rel_ivars_iset_int) :void
+  (space space-type)
+  (x intvarargs-type)
+  (y intset-type)
+  (irt int-relation-type)
+  (m :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_rel_ivars_ivar_int" gecode_count_rel_ivars_ivar_int) :void
+  (space space-type)
+  (x intvarargs-type)
+  (y intvar-type)
+  (irt int-relation-type)
+  (m :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_rel_ivars_ivars_int" gecode_count_rel_ivars_ivars_int) :void
+  (space space-type)
+  (x intvarargs-type)
+  (y intargs-type)
+  (irt int-relation-type)
+  (m :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_rel_ivars_int_ivar" gecode_count_rel_ivars_int_ivar) :void
+  (space space-type)
+  (x intvarargs-type)
+  (n :int)
+  (irt int-relation-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_rel_ivars_iset_ivar" gecode_count_rel_ivars_iset_ivar) :void
+  (space space-type)
+  (x intvarargs-type)
+  (y intset-type)
+  (irt int-relation-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_rel_ivars_ivar_ivar" gecode_count_rel_ivars_ivar_ivar) :void
+  (space space-type)
+  (x intvarargs-type)
+  (y intvar-type)
+  (irt int-relation-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_ivars_ivars" gecode_count_ivars_ivars) :void
+  (space space-type)
+  (x intvarargs-type)
+  (c intvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_ivars_isets" gecode_count_ivars_isets) :void
+  (space space-type)
+  (x intvarargs-type)
+  (c intsetargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_ivars_ivars_ints" gecode_count_ivars_ivars_ints) :void
+  (space space-type)
+  (x intvarargs-type)
+  (c intvarargs-type)
+  (v intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_ivars_isets_ints" gecode_count_ivars_isets_ints) :void
+  (space space-type)
+  (x intvarargs-type)
+  (c intsetargs-type)
+  (v intargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_count_ivars_iset_ints" gecode_count_ivars_iset_ints) :void
+  (space space-type)
+  (x intvarargs-type)
+  (c intset-type)
+  (v intargs-type)
   (icl int-consistency-level))
 
 (cffi:defcfun ("gecode_binpacking" gecode_binpacking) :void

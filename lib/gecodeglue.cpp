@@ -329,6 +329,28 @@ public:
 
 };
 
+class CLIntSetArgs : public ArgArray<IntSet> {
+public:
+  static void* operator new(size_t) {
+    return ::operator new(sizeof(CLIntSetArgs));
+  }
+
+  static void  operator delete(void* v) {
+    ::operator delete(v);
+  };
+  
+  CLIntSetArgs(int n) : ArgArray<IntSet>(n){};
+  ~CLIntSetArgs(void) {
+    if (capacity > onstack_size)
+      heap.free(a,capacity);
+  }
+
+  void set(int i, const IntSet* e) {
+    a[i] = *e;
+  }
+};
+
+
 #include "gecodeglue.h"
 
 extern "C" {
@@ -367,6 +389,16 @@ void gecode_floatargs_set(CLFloatArgs *v, int i, double e) {
   v->adr()[i] = FloatVal(e);
 }
 void gecode_floatargs_delete(CLFloatArgs *v) {
+  delete v; }
+
+
+CLIntSetArgs* gecode_intsetargs_create(int n) {
+    return new CLIntSetArgs(n); 
+}
+void gecode_intsetargs_set(CLIntSetArgs *v, int i, const IntSet* e) {
+  v->set(i, e);
+}
+void gecode_intsetargs_delete(CLIntSetArgs *v) {
   delete v; }
 
 
@@ -847,6 +879,77 @@ void gecode_sorted_ivars_ivars_ivars(CLSpace *space, IntVarArgs* xvars,
   EXCSTOP
 }
 
+
+/* count constraint */
+void gecode_count_rel_ivars_int_int(CLSpace *space, IntVarArgs* x,
+                                    int n, IntRelType irt, int m,
+                                    IntConLevel icl) {
+  count(*space, *x, n, irt, m, icl);
+}
+
+void gecode_count_rel_ivars_iset_int(CLSpace *space, IntVarArgs* x,
+                                     IntSet* y, IntRelType irt, int m,
+                                     IntConLevel icl) {
+  count(*space, *x, *y, irt, m, icl);
+}
+
+void gecode_count_rel_ivars_ivar_int(CLSpace *space, IntVarArgs* x,
+                                     IntVar* y, IntRelType irt, int m,
+                                     IntConLevel icl) {
+  count(*space, *x, *y, irt, m, icl);
+}
+
+void gecode_count_rel_ivars_ivars_int(CLSpace *space, IntVarArgs* x,
+                                      IntArgs* y, IntRelType irt, int m,
+                                      IntConLevel icl) {
+  count(*space, *x, *y, irt, m, icl);
+}
+
+void gecode_count_rel_ivars_int_ivar(CLSpace *space, IntVarArgs* x,
+                                     int n, IntRelType irt, IntVar* z,
+                                     IntConLevel icl) {
+  count(*space, *x, n, irt, *z, icl);
+}
+
+void gecode_count_rel_ivars_iset_ivar(CLSpace *space, IntVarArgs* x,
+                                      IntSet* y, IntRelType irt, IntVar* z,
+                                      IntConLevel icl) {
+  count(*space, *x, *y, irt, *z, icl);
+}
+
+void gecode_count_rel_ivars_ivar_ivar(CLSpace *space, IntVarArgs* x,
+                                      IntVar* y, IntRelType irt, IntVar* z,
+                                      IntConLevel icl) {
+  count(*space, *x, *y, irt, *z, icl);
+}
+
+void gecode_count_ivars_ivars(CLSpace *space, IntVarArgs* x,
+                              IntVarArgs* c, IntConLevel icl) {
+  count(*space, *x, *c, icl);
+}
+
+void gecode_count_ivars_isets(CLSpace *space, IntVarArgs* x,
+                              IntSetArgs* c, IntConLevel icl) {
+  count(*space, *x, *c, icl);
+}
+
+void gecode_count_ivars_ivars_ints(CLSpace *space, IntVarArgs* x,
+                                   IntVarArgs* c, IntArgs* v, IntConLevel icl) {
+  count(*space, *x, *c, *v, icl);
+}
+
+void gecode_count_ivars_isets_ints(CLSpace *space, IntVarArgs* x,
+                                   IntSetArgs* c, IntArgs* v, IntConLevel icl) {
+  count(*space, *x, *c, *v, icl);
+}
+
+void gecode_count_ivars_iset_ints(CLSpace *space, IntVarArgs* x,
+                                  IntSet* c, IntArgs* v, IntConLevel icl) {
+  count(*space, *x, *c, *v, icl);
+}
+
+
+
 /* binpacking constraint */
 void gecode_binpacking(CLSpace *space,
                        IntVarArgs* l, IntVarArgs *b, IntArgs* s,
@@ -855,6 +958,7 @@ void gecode_binpacking(CLSpace *space,
     binpacking(*space, *l, *b, *s, icl);
   EXCSTOP
 }
+
 
 /* nooverlap constraint */
 void gecode_nooverlap(CLSpace *space,

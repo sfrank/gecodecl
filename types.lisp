@@ -189,7 +189,7 @@
      (declare (type fixnum i length))
      (map nil
           (lambda (x)
-            (declare (type boolvar x))
+            (declare (type floatvar x))
             (gecode_varargs_set ,var (incf i) x))
           ,value)
      (unwind-protect 
@@ -212,6 +212,24 @@
      (unwind-protect 
           (progn ,@body)
        (gecode_floatargs_delete ,var))))
+
+(cffi:define-foreign-type intsetargs-type () ()
+  (:actual-type :pointer)
+  (:simple-parser intsetargs-type))
+
+(defmethod expand-to-foreign-dyn (value var body (type intsetargs-type))
+  `(let* ((length (length ,value))
+          (,var (gecode_intsetargs_create length))
+          (i -1))
+     (declare (type fixnum i length))
+     (map nil
+          (lambda (x)
+            (declare (type intset x))
+            (gecode_intsetargs_set ,var (incf i) x))
+          ,value)
+     (unwind-protect 
+          (progn ,@body)
+       (gecode_intsetargs_delete ,var))))
 
 
 (cffi:define-foreign-type tasktypeargs-type () ()

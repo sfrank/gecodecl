@@ -24,6 +24,10 @@ extern "C" {
   void gecode_floatargs_set(CLFloatArgs *v, int i, double e);
   void gecode_floatargs_delete(CLFloatArgs *v);
 
+  /* IntSet argument arrays */
+  CLIntSetArgs* gecode_intsetargs_create(int n);
+  void gecode_intsetargs_set(CLIntSetArgs *v, int i, const IntSet* e);
+  void gecode_intsetargs_delete(CLIntSetArgs *v);
 
   /* exceptions */
   void gecode_init_exceptionHandler(void (*fptr)(const char*));
@@ -215,6 +219,51 @@ extern "C" {
                                        IntVarArgs* yvars, IntVarArgs* zvars,
                                        IntConLevel icl);
 
+
+  /* count constraint */
+  void gecode_count_rel_ivars_int_int(CLSpace *space, IntVarArgs* x,
+                                      int n, IntRelType irt, int m,
+                                      IntConLevel icl);
+
+  void gecode_count_rel_ivars_iset_int(CLSpace *space, IntVarArgs* x,
+                                       IntSet* y, IntRelType irt, int m,
+                                       IntConLevel icl);
+
+  void gecode_count_rel_ivars_ivar_int(CLSpace *space, IntVarArgs* x,
+                                       IntVar* y, IntRelType irt, int m,
+                                       IntConLevel icl);
+
+  void gecode_count_rel_ivars_ivars_int(CLSpace *space, IntVarArgs* x,
+                                        IntArgs* y, IntRelType irt, int m,
+                                        IntConLevel icl);
+
+  void gecode_count_rel_ivars_int_ivar(CLSpace *space, IntVarArgs* x,
+                                       int n, IntRelType irt, IntVar* z,
+                                       IntConLevel icl);
+
+  void gecode_count_rel_ivars_iset_ivar(CLSpace *space, IntVarArgs* x,
+                                        IntSet* y, IntRelType irt, IntVar* z,
+                                        IntConLevel icl);
+
+  void gecode_count_rel_ivars_ivar_ivar(CLSpace *space, IntVarArgs* x,
+                                        IntVar* y, IntRelType irt, IntVar* z,
+                                        IntConLevel icl);
+
+  void gecode_count_ivars_ivars(CLSpace *space, IntVarArgs* x,
+                                IntVarArgs* c, IntConLevel icl);
+
+  void gecode_count_ivars_isets(CLSpace *space, IntVarArgs* x,
+                                IntSetArgs* c, IntConLevel icl);
+
+  void gecode_count_ivars_ivars_ints(CLSpace *space, IntVarArgs* x,
+                                     IntVarArgs* c, IntArgs* v, IntConLevel icl);
+
+  void gecode_count_ivars_isets_ints(CLSpace *space, IntVarArgs* x,
+                                     IntSetArgs* c, IntArgs* v, IntConLevel icl);
+
+  void gecode_count_ivars_iset_ints(CLSpace *space, IntVarArgs* x,
+                                    IntSet* c, IntArgs* v, IntConLevel icl);
+
   /* binpacking constraint */
   void gecode_binpacking(CLSpace *space,
                          IntVarArgs* l, IntVarArgs *b, IntArgs* s,
@@ -241,7 +290,7 @@ extern "C" {
                                         IntConLevel icl);
 
 
-  // TODO: count, nvalues, sequence, DFA, extensional
+  // TODO: nvalues, sequence, DFA, extensional
 
   /* cumulatives constraint */
   void gecode_cumulatives_ivars(CLSpace *space,
