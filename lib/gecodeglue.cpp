@@ -1024,6 +1024,30 @@ void gecode_cumulative_ivar_ivars_bvars(CLSpace *space, IntVar* c,
 }
 
 
+/* circuit constraint */
+void gecode_circuit_ivars_costs(CLSpace *space, IntArgs* c, IntVarArgs* x,
+                                IntVarArgs* y, IntVar* z, IntConLevel icl) {
+  circuit(*space, *c, *x, *y, *z, icl);
+}
+
+void gecode_circuit_ivars_costs_offset(CLSpace *space, IntArgs* c, int offset, 
+                                       IntVarArgs* x, IntVarArgs* y, IntVar* z,
+                                       IntConLevel icl) {
+  circuit(*space, *c, offset, *x, *y, *z, icl);
+}
+
+void gecode_circuit_ivars(CLSpace *space, IntArgs* c, IntVarArgs* x,
+                          IntVar* z, IntConLevel icl) {
+  circuit(*space, *c, *x, *z, icl);
+}
+
+void gecode_circuit_ivars_offset(CLSpace *space, IntArgs* c, int offset, 
+                                 IntVarArgs* x, IntVar* z, IntConLevel icl) {
+  circuit(*space, *c, offset, *x, *z, icl);
+}
+
+
+
 /* channeling constraints */
 
 void gecode_channel_ivars_ivars(CLSpace *space,

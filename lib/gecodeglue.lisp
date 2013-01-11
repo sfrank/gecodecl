@@ -663,6 +663,38 @@
   (m boolvarargs-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_circuit_ivars_costs" gecode_circuit_ivars_costs) :void
+  (space space-type)
+  (c intargs-type)
+  (x intvarargs-type)
+  (y intvarargs-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_circuit_ivars_costs_offset" gecode_circuit_ivars_costs_offset) :void
+  (space space-type)
+  (c intargs-type)
+  (offset :int)
+  (x intvarargs-type)
+  (y intvarargs-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_circuit_ivars" gecode_circuit_ivars) :void
+  (space space-type)
+  (c intargs-type)
+  (x intvarargs-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_circuit_ivars_offset" gecode_circuit_ivars_offset) :void
+  (space space-type)
+  (c intargs-type)
+  (offset :int)
+  (x intvarargs-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_channel_ivars_ivars" gecode_channel_ivars_ivars) :void
   (space space-type)
   (v1 intvarargs-type)

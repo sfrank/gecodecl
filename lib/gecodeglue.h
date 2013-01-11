@@ -241,7 +241,7 @@ extern "C" {
                                         IntConLevel icl);
 
 
-  // TODO1: circuit, path
+  // TODO1: path
   // TODO2: count, nvalues, sequence, DFA, extensional
 
   /* cumulatives constraint */
@@ -332,6 +332,21 @@ extern "C" {
                                           IntVarArgs* s, IntVarArgs* p, IntVarArgs* e,
                                           IntArgs* u, BoolVarArgs* m, IntConLevel icl);
 
+
+  /* circuit constraint */
+  void gecode_circuit_ivars_costs(CLSpace *space, IntArgs* c, IntVarArgs* x,
+                                  IntVarArgs* y, IntVar* z, IntConLevel icl);
+
+  void gecode_circuit_ivars_costs_offset(CLSpace *space, IntArgs* c, int offset, 
+                                         IntVarArgs* x, IntVarArgs* y, IntVar* z,
+                                         IntConLevel icl);
+
+  void gecode_circuit_ivars(CLSpace *space, IntArgs* c, IntVarArgs* x,
+                            IntVar* z, IntConLevel icl);
+
+  void gecode_circuit_ivars_offset(CLSpace *space, IntArgs* c, int offset, 
+                                   IntVarArgs* x, IntVar* z, IntConLevel icl);
+  
 
   /* channeling constraints */
   void gecode_channel_ivars_ivars(CLSpace *space, IntVarArgs* v1,
