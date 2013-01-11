@@ -241,8 +241,7 @@ extern "C" {
                                         IntConLevel icl);
 
 
-  // TODO1: path
-  // TODO2: count, nvalues, sequence, DFA, extensional
+  // TODO: count, nvalues, sequence, DFA, extensional
 
   /* cumulatives constraint */
   void gecode_cumulatives_ivars(CLSpace *space,
@@ -347,6 +346,30 @@ extern "C" {
   void gecode_circuit_ivars_offset(CLSpace *space, IntArgs* c, int offset, 
                                    IntVarArgs* x, IntVar* z, IntConLevel icl);
   
+
+  /* Hamiltonian path constraint */
+  void gecode_path_ivars(CLSpace *space, IntVarArgs* x,
+                         IntVar* s, IntVar* e, IntConLevel icl);
+
+  void gecode_path_ivars_offset(CLSpace *space, int offset, IntVarArgs* x,
+                                IntVar* s, IntVar* e, IntConLevel icl);
+
+  void gecode_path_ivars_edge_costs(CLSpace *space, IntArgs* c, IntVarArgs* x,
+                                    IntVar* s, IntVar* e, IntVarArgs* y,
+                                    IntVar* z, IntConLevel icl);
+
+  void gecode_path_ivars_edge_costs_offset(CLSpace *space, IntArgs* c, int offset,
+                                           IntVarArgs* x, IntVar* s, IntVar* e,
+                                           IntVarArgs* y, IntVar* z, IntConLevel icl);
+
+  void gecode_path_ivars_costs(CLSpace *space, IntArgs* c, IntVarArgs* x,
+                               IntVar* s, IntVar* e, IntVar* z,
+                               IntConLevel icl);
+
+  void gecode_path_ivars_costs_offset(CLSpace *space, IntArgs* c, int offset,
+                                      IntVarArgs* x, IntVar* s, IntVar* e,
+                                      IntVar* z, IntConLevel icl);
+
 
   /* channeling constraints */
   void gecode_channel_ivars_ivars(CLSpace *space, IntVarArgs* v1,

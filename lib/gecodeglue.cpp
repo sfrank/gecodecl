@@ -1046,6 +1046,41 @@ void gecode_circuit_ivars_offset(CLSpace *space, IntArgs* c, int offset,
   circuit(*space, *c, offset, *x, *z, icl);
 }
 
+/* Hamiltonian path constraint */
+void gecode_path_ivars(CLSpace *space, IntVarArgs* x,
+                       IntVar* s, IntVar* e, IntConLevel icl) {
+  path(*space, *x, *s, *e, icl);
+}
+
+void gecode_path_ivars_offset(CLSpace *space, int offset, IntVarArgs* x,
+                              IntVar* s, IntVar* e, IntConLevel icl) {
+  path(*space, offset, *x, *s, *e, icl);
+}
+
+void gecode_path_ivars_edge_costs(CLSpace *space, IntArgs* c, IntVarArgs* x,
+                                  IntVar* s, IntVar* e, IntVarArgs* y,
+                                  IntVar* z, IntConLevel icl) {
+  path(*space, *c, *x, *s, *e, *y, *z, icl);
+}
+
+void gecode_path_ivars_edge_costs_offset(CLSpace *space, IntArgs* c, int offset,
+                                         IntVarArgs* x, IntVar* s, IntVar* e,
+                                         IntVarArgs* y, IntVar* z, IntConLevel icl) {
+  path(*space, *c, offset, *x, *s, *e, *y, *z, icl);
+}
+
+void gecode_path_ivars_costs(CLSpace *space, IntArgs* c, IntVarArgs* x,
+                             IntVar* s, IntVar* e, IntVar* z,
+                             IntConLevel icl) {
+  path(*space, *c, *x, *s, *e, *z, icl);
+}
+
+void gecode_path_ivars_costs_offset(CLSpace *space, IntArgs* c, int offset,
+                                    IntVarArgs* x, IntVar* s, IntVar* e,
+                                    IntVar* z, IntConLevel icl) {
+  path(*space, *c, offset, *x, *s, *e, *z, icl);
+}
+
 
 
 /* channeling constraints */

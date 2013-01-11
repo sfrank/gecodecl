@@ -695,6 +695,61 @@
   (z intvar-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_path_ivars" gecode_path_ivars) :void
+  (space space-type)
+  (x intvarargs-type)
+  (s intvar-type)
+  (e intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_path_ivars_offset" gecode_path_ivars_offset) :void
+  (space space-type)
+  (offset :int)
+  (x intvarargs-type)
+  (s intvar-type)
+  (e intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_path_ivars_edge_costs" gecode_path_ivars_edge_costs) :void
+  (space space-type)
+  (c intargs-type)
+  (x intvarargs-type)
+  (s intvar-type)
+  (e intvar-type)
+  (y intvarargs-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_path_ivars_edge_costs_offset" gecode_path_ivars_edge_costs_offset) :void
+  (space space-type)
+  (c intargs-type)
+  (offset :int)
+  (x intvarargs-type)
+  (s intvar-type)
+  (e intvar-type)
+  (y intvarargs-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_path_ivars_costs" gecode_path_ivars_costs) :void
+  (space space-type)
+  (c intargs-type)
+  (x intvarargs-type)
+  (s intvar-type)
+  (e intvar-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_path_ivars_costs_offset" gecode_path_ivars_costs_offset) :void
+  (space space-type)
+  (c intargs-type)
+  (offset :int)
+  (x intvarargs-type)
+  (s intvar-type)
+  (e intvar-type)
+  (z intvar-type)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_channel_ivars_ivars" gecode_channel_ivars_ivars) :void
   (space space-type)
   (v1 intvarargs-type)
