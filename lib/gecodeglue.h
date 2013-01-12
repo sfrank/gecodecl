@@ -282,6 +282,14 @@ extern "C" {
                                  BoolVarArgs* x, IntVar* y,
                                  IntConLevel icl);
 
+  
+  /* sequence constraint */
+  void gecode_sequence_ivars(CLSpace *space, IntVarArgs* x, IntSet* s,
+                             int q, int l, int u, IntConLevel icl);
+
+  void gecode_sequence_bvars(CLSpace *space, BoolVarArgs* x, IntSet* s,
+                             int q, int l, int u, IntConLevel icl);
+
 
   /* binpacking constraint */
   void gecode_binpacking(CLSpace *space,
@@ -309,7 +317,7 @@ extern "C" {
                                         IntConLevel icl);
 
 
-  // TODO: nvalues, sequence, DFA, extensional
+  // TODO: DFA, extensional
 
   /* cumulatives constraint */
   void gecode_cumulatives_ivars(CLSpace *space,

@@ -582,6 +582,24 @@
   (y intvar-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_sequence_ivars" gecode_sequence_ivars) :void
+  (space space-type)
+  (x intvarargs-type)
+  (s intset-type)
+  (q :int)
+  (l :int)
+  (u :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_sequence_bvars" gecode_sequence_bvars) :void
+  (space space-type)
+  (x boolvarargs-type)
+  (s intset-type)
+  (q :int)
+  (l :int)
+  (u :int)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_binpacking" gecode_binpacking) :void
   (space space-type)
   (l intvarargs-type)

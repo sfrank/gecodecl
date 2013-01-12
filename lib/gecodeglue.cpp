@@ -975,6 +975,17 @@ void gecode_nvalues_bvars_ivar(CLSpace *space, IntRelType irt,
 }
 
 
+/* sequence constraint */
+void gecode_sequence_ivars(CLSpace *space, IntVarArgs* x, IntSet* s,
+                           int q, int l, int u, IntConLevel icl) {
+  sequence(*space, *x, *s, q, l, u, icl);
+}
+
+void gecode_sequence_bvars(CLSpace *space, BoolVarArgs* x, IntSet* s,
+                           int q, int l, int u, IntConLevel icl) {
+  sequence(*space, *x, *s, q, l, u, icl);
+}
+
 /* binpacking constraint */
 void gecode_binpacking(CLSpace *space,
                        IntVarArgs* l, IntVarArgs *b, IntArgs* s,
