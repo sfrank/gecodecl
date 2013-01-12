@@ -554,6 +554,34 @@
   (v intargs-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_nvalues_ivars_int" gecode_nvalues_ivars_int) :void
+  (space space-type)
+  (irt int-relation-type)
+  (x intvarargs-type)
+  (y :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_nvalues_ivars_ivar" gecode_nvalues_ivars_ivar) :void
+  (space space-type)
+  (irt int-relation-type)
+  (x intvarargs-type)
+  (y intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_nvalues_bvars_int" gecode_nvalues_bvars_int) :void
+  (space space-type)
+  (irt int-relation-type)
+  (x boolvarargs-type)
+  (y :int)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_nvalues_bvars_ivar" gecode_nvalues_bvars_ivar) :void
+  (space space-type)
+  (irt int-relation-type)
+  (x boolvarargs-type)
+  (y intvar-type)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_binpacking" gecode_binpacking) :void
   (space space-type)
   (l intvarargs-type)

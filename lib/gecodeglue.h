@@ -264,6 +264,25 @@ extern "C" {
   void gecode_count_ivars_iset_ints(CLSpace *space, IntVarArgs* x,
                                     IntSet* c, IntArgs* v, IntConLevel icl);
 
+
+  /* nvalues constraint */
+  void gecode_nvalues_ivars_int(CLSpace *space, IntRelType irt,
+                                IntVarArgs* x, int y,
+                                IntConLevel icl);
+
+  void gecode_nvalues_ivars_ivar(CLSpace *space, IntRelType irt,
+                                 IntVarArgs* x, IntVar* y,
+                                 IntConLevel icl);
+
+  void gecode_nvalues_bvars_int(CLSpace *space, IntRelType irt,
+                                BoolVarArgs* x, int y,
+                                IntConLevel icl);
+
+  void gecode_nvalues_bvars_ivar(CLSpace *space, IntRelType irt,
+                                 BoolVarArgs* x, IntVar* y,
+                                 IntConLevel icl);
+
+
   /* binpacking constraint */
   void gecode_binpacking(CLSpace *space,
                          IntVarArgs* l, IntVarArgs *b, IntArgs* s,
