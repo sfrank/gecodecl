@@ -103,6 +103,31 @@
   :tt-fixs
   :tt-fixe)
 
+;;; DFA/extensional constraint fundamentals
+
+;; This corresponds to the Transition class in int.hh, we can use this
+;; special cstruct/class equivalence because the following conditions
+;; hold:
+;;   * All data members are public and themselves POD or fundamental
+;;     types (but not reference or pointer-to-member types), or arrays
+;;     of such
+;;   * It has no user-defined constructors, assignment operators or
+;;     destructors
+;;   * It has no virtual functions
+;;   * It has no base classes
+
+(cffi:defcstruct transition
+  "Specification of a DFA transition."
+  (i_state :int)
+  (symbol :int)
+  (o_state :int))
+
+(cffi:defcenum extensional-prop-kind
+  :epk-def           ; make a default decision
+  :epk-speed         ; prefer speed over mmeory consumption
+  :epk-memory        ; prefer little memory over speed
+  )
+
 ;;(cffi:defcenum set-rel-type
 ;;  :srt-eq                               ; equality
 ;;  :srt-nq                               ; disequality
