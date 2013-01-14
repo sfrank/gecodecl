@@ -261,6 +261,11 @@
   `(intset-sap ,set))
 
 
+(cffi:define-foreign-type dfa-type () ()
+  (:actual-type :pointer)
+  (:simple-parser dfa-type))
+
+
 ;;; foreign libraries
 
 (cffi:define-foreign-library gecode-kernel

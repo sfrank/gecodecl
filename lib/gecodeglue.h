@@ -318,6 +318,10 @@ extern "C" {
 
 
   // TODO: DFA, extensional
+  /* DFA / extensional constraint */
+  DFA* gecode_DFA_create(int s, DFA::Transition* trns, int* f);
+  void gecode_DFA_delete(DFA* d);
+
 
   /* cumulatives constraint */
   void gecode_cumulatives_ivars(CLSpace *space,

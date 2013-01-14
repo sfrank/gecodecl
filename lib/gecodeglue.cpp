@@ -1222,6 +1222,13 @@ void gecode_path_ivars_costs_offset(CLSpace *space, IntArgs* c, int offset,
 }
 
 
+/* DFA / extensional constraint */
+DFA* gecode_DFA_create(int s, DFA::Transition* trns, int* f) {
+  return new DFA(s, trns, f, true);
+}
+void gecode_DFA_delete(DFA* d) { delete d; }
+
+
 
 /* channeling constraints */
 

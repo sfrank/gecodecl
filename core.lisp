@@ -278,3 +278,35 @@
 (defun intset-ranges (array)
   (error "not yet implemented"))
 
+
+;;; DFA
+
+(defstruct (dfa (:constructor %make-dfa (sap)))
+  (sap nil :type sb-sys:system-area-pointer :read-only t))
+
+(defun DFA (start transitions finals)
+  (let ((index -1))
+    (declare (type fixnum index))
+    (with-foreign-objects ((f :int (1+ (length finals)))
+                           (trns '(:struct transition)
+                                 (1+ (length transitions))))
+      (map nil (lambda (x)
+                 (declare (type fixnum x))
+                 (setf (mem-aref f :int (incf index)) x))
+           finals)
+      (setf (mem-aref f :int (1+ index)) -1
+            index 0)
+      (map nil (lambda (x) 
+                 (destructuring-bind (i s o) x
+                   (declare (type fixnum i s o))
+                   (with-foreign-slots ((i_state symbol o_state)
+                                        (mem-aref trns '(:struct transition) (incf index))
+                                        (:struct transition))
+                     (setf i_state i
+                           symbol s
+                           o_state o))))
+           (append transitions '((-1 0 0))))
+      (let ((dfa (%make-dfa (gecode_DFA_create start trns f))))
+        (tg:finalize dfa (lambda ()
+                           (gecode_DFA_delete (dfa-sap dfa))))
+        dfa))))

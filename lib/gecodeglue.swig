@@ -51,6 +51,11 @@
 %typemap(cin)  IntSet*  "intset-type";
 %typemap(cout) IntSet*  "intset-type";
 
+%typemap(cin)  DFA::Transition*  "(:pointer (:struct transition))";
+%typemap(cin)  DFA*  "dfa-type";
+%typemap(cout) DFA*  "dfa-type";
+
+
 // %feature("intern_function","1");
 
 %include "gecodeglue.h"
