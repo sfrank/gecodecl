@@ -310,3 +310,22 @@
         (tg:finalize dfa (lambda ()
                            (gecode_DFA_delete (dfa-sap dfa))))
         dfa))))
+
+
+;;; Tuple-Set
+(defstruct (tupleset (:constructor %make-tupleset (sap)))
+  (sap nil :type sb-sys:system-area-pointer :read-only t))
+
+(defun make-tupleset ()
+  (let ((set (%make-tupleset (gecode_TupleSet_create))))
+    (tg:finalize set (gecode_TupleSet_delete set))
+    set))
+
+(defun tupleset-add (set seq)
+  (let ((length (length seq)))
+    (declare (type (integer 0 #.most-positive-fixnum) length))
+    (unless (zerop length)
+      (gecode_TupleSet_add set seq))))
+
+(defun tupleset-count (set)
+  (gecode_TupleSet_count set))

@@ -665,6 +665,32 @@
   (d dfa-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_TupleSet_create" gecode_TupleSet_create) tupleset-type)
+
+(cffi:defcfun ("gecode_TupleSet_delete" gecode_TupleSet_delete) :void
+  (d tupleset-type))
+
+(cffi:defcfun ("gecode_TupleSet_add" gecode_TupleSet_add) :void
+  (d tupleset-type)
+  (i intargs-type))
+
+(cffi:defcfun ("gecode_TupleSet_count" gecode_TupleSet_count) :int
+  (d tupleset-type))
+
+(cffi:defcfun ("gecode_extensional_ivars_tset" gecode_extensional_ivars_tset) :void
+  (space space-type)
+  (x intvarargs-type)
+  (d tupleset-type)
+  (epk extensional-prop-kind)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_extensional_bvars_tset" gecode_extensional_bvars_tset) :void
+  (space space-type)
+  (x boolvarargs-type)
+  (d tupleset-type)
+  (epk extensional-prop-kind)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_cumulatives_ivars" gecode_cumulatives_ivars) :void
   (space space-type)
   (m intvarargs-type)

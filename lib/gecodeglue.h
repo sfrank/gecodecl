@@ -317,7 +317,6 @@ extern "C" {
                                         IntConLevel icl);
 
 
-  // TODO: extensional with TupleSets
   /* DFA / extensional constraint */
   DFA* gecode_DFA_create(int s, DFA::Transition* trns, int* f);
   void gecode_DFA_delete(DFA* d);
@@ -327,6 +326,19 @@ extern "C" {
 
   void gecode_extensional_bvars_dfa(CLSpace* space, BoolVarArgs* x, DFA* d,
                                     IntConLevel icl);
+
+  TupleSet* gecode_TupleSet_create(void);
+  void gecode_TupleSet_delete(TupleSet* d);
+
+  void gecode_TupleSet_add(TupleSet* d, IntArgs* i);
+
+  int gecode_TupleSet_count(TupleSet* d);
+
+  void gecode_extensional_ivars_tset(CLSpace* space, IntVarArgs* x, TupleSet* d,
+                                     ExtensionalPropKind epk, IntConLevel icl);
+
+  void gecode_extensional_bvars_tset(CLSpace* space, BoolVarArgs* x, TupleSet* d,
+                                     ExtensionalPropKind epk, IntConLevel icl);
 
 
   /* cumulatives constraint */

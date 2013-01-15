@@ -1239,6 +1239,33 @@ void gecode_extensional_bvars_dfa(CLSpace* space, BoolVarArgs* x, DFA* d,
   extensional(*space, *x, *d, icl);
 }
 
+TupleSet* gecode_TupleSet_create(void) {
+  return new TupleSet();
+}
+void gecode_TupleSet_delete(TupleSet* d) { delete d; }
+
+void gecode_TupleSet_add(TupleSet* d, IntArgs* i) {
+  EXCSTART
+  d->add(*i);
+  EXCSTOP
+}
+
+int gecode_TupleSet_count(TupleSet* d) {
+  d->finalize();
+  return d->tuples();
+}
+
+void gecode_extensional_ivars_tset(CLSpace* space, IntVarArgs* x, TupleSet* d,
+                                   ExtensionalPropKind epk, IntConLevel icl) {
+  extensional(*space, *x, *d, epk, icl);
+}
+
+void gecode_extensional_bvars_tset(CLSpace* space, BoolVarArgs* x, TupleSet* d,
+                                   ExtensionalPropKind epk, IntConLevel icl) {
+  extensional(*space, *x, *d, epk, icl);
+}
+
+
 
 /* channeling constraints */
 
