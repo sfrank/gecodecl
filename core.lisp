@@ -318,7 +318,8 @@
 
 (defun make-tupleset ()
   (let ((set (%make-tupleset (gecode_TupleSet_create))))
-    (tg:finalize set (gecode_TupleSet_delete set))
+    (tg:finalize set (lambda ()
+                       (gecode_TupleSet_delete set)))
     set))
 
 (defun tupleset-add (set seq)

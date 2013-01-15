@@ -665,7 +665,7 @@
   (d dfa-type)
   (icl int-consistency-level))
 
-(cffi:defcfun ("gecode_TupleSet_create" gecode_TupleSet_create) tupleset-type)
+(cffi:defcfun ("gecode_TupleSet_create" gecode_TupleSet_create) :pointer)
 
 (cffi:defcfun ("gecode_TupleSet_delete" gecode_TupleSet_delete) :void
   (d tupleset-type))

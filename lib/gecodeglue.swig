@@ -56,7 +56,6 @@
 %typemap(cout) DFA*  "dfa-type";
 %typemap(cin)  ExtensionalPropKind  "extensional-prop-kind";
 %typemap(cin)  TupleSet*  "tupleset-type";
-%typemap(cout) TupleSet*  "tupleset-type";
 
 // %feature("intern_function","1");
 
