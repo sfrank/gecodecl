@@ -986,6 +986,7 @@ void gecode_sequence_bvars(CLSpace *space, BoolVarArgs* x, IntSet* s,
   sequence(*space, *x, *s, q, l, u, icl);
 }
 
+
 /* binpacking constraint */
 void gecode_binpacking(CLSpace *space,
                        IntVarArgs* l, IntVarArgs *b, IntArgs* s,
@@ -1228,6 +1229,15 @@ DFA* gecode_DFA_create(int s, DFA::Transition* trns, int* f) {
 }
 void gecode_DFA_delete(DFA* d) { delete d; }
 
+void gecode_extensional_ivars_dfa(CLSpace* space, IntVarArgs* x, DFA* d,
+                                  IntConLevel icl) {
+  extensional(*space, *x, *d, icl);
+}
+
+void gecode_extensional_bvars_dfa(CLSpace* space, BoolVarArgs* x, DFA* d,
+                                  IntConLevel icl) {
+  extensional(*space, *x, *d, icl);
+}
 
 
 /* channeling constraints */

@@ -653,6 +653,18 @@
 (cffi:defcfun ("gecode_DFA_delete" gecode_DFA_delete) :void
   (d dfa-type))
 
+(cffi:defcfun ("gecode_extensional_ivars_dfa" gecode_extensional_ivars_dfa) :void
+  (space space-type)
+  (x intvarargs-type)
+  (d dfa-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_extensional_bvars_dfa" gecode_extensional_bvars_dfa) :void
+  (space space-type)
+  (x boolvarargs-type)
+  (d dfa-type)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_cumulatives_ivars" gecode_cumulatives_ivars) :void
   (space space-type)
   (m intvarargs-type)
