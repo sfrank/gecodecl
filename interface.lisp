@@ -191,3 +191,29 @@
   (if (intvar-p (elt seq 0))
       (gecode_extensional_ivars_tset *gspace* seq tuples epk clevel)
       (gecode_extensional_bvars_tset *gspace* seq tuples epk clevel)))
+
+;;; translation/channeling
+
+(defgeneric channel-g (x y &key clevel))
+
+(defmethod channel-g ((x intvar) (y boolvar) &key (clevel :icl-def))
+  (gecode_channel_ivar_bvar *gspace* x y clevel))
+
+(defmethod channel-g ((x boolvar) (y intvar) &key (clevel :icl-def))
+  (gecode_channel_bvar_ivar *gspace* x y clevel))
+
+(defmethod channel-g ((x floatvar) (y intvar) &key (clevel :icl-def))
+  (declare (ignore clevel))
+  (gecode_channel_fvar_ivar *gspace* x y))
+
+(defmethod channel-g ((x intvar) (y floatvar) &key (clevel :icl-def))
+  (declare (ignore clevel))
+  (gecode_channel_fvar_ivar *gspace* y x))
+
+(defun channels-offset-g (x y &key (xoffset 0) (yoffset 0) (clevel :icl-def))
+  (if (= 0 xoffset yoffset)
+      (gecode_channel_ivars_ivars *gspace* x y clevel)
+      (gecode_channel_ivars_int_ivars_int *gspace* x xoffset y yoffset clevel)))
+
+(defun channel-bools-g (seq integer &key (offset 0) (clevel :icl-def))
+  (gecode_channel_bvars_ivar_int *gspace* seq integer offset clevel))
