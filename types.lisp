@@ -125,21 +125,23 @@
   (:simple-parser intvarargs-type))
 
 (defmethod expand-to-foreign-dyn (value var body (type intvarargs-type))
-  `(let* ((length (length ,value))
-          (,var (gecode_varargs_create length)) ; the argument array class
-          (i -1))
-     (declare (type fixnum i length))
-     (map nil
-          (lambda (x)
-            (let ((x (if (integerp x) ; if there is an integer coerce to variable
-                         (add-int-variable x x)
-                         x)))
-              (declare (type intvar x))
-              (gecode_varargs_set ,var (incf i) x)))
-          ,value)
-     (unwind-protect 
-          (progn ,@body)
-       (gecode_varargs_delete ,var))))
+  (let ((length (gensym))
+        (i (gensym)))
+    `(let* ((,length (length ,value))
+            (,var (gecode_varargs_create ,length)) ; the argument array class
+            (,i -1))
+       (declare (type fixnum ,i ,length))
+       (map nil
+            (lambda (x)
+              (let ((x (if (integerp x) ; if there is an integer coerce to variable
+                           (add-int-variable x x)
+                           x)))
+                (declare (type intvar x))
+                (gecode_varargs_set ,var (incf ,i) x)))
+            ,value)
+       (unwind-protect 
+            (progn ,@body)
+         (gecode_varargs_delete ,var)))))
 
 (cffi:define-foreign-type intargs-type () ()
   (:actual-type :pointer)
@@ -168,71 +170,79 @@
   (:simple-parser boolvarargs-type))
 
 (defmethod expand-to-foreign-dyn (value var body (type boolvarargs-type))
-  `(let* ((length (length ,value))
-          (,var (gecode_varargs_create length))
-          (i -1))
-     (declare (type fixnum i length))
-     (map nil
-          (lambda (x)
-            (declare (type boolvar x))
-            (gecode_varargs_set ,var (incf i) x))
-          ,value)
-     (unwind-protect 
-          (progn ,@body)
-       (gecode_varargs_delete ,var))))
+  (let ((length (gensym))
+        (i (gensym)))
+    `(let* ((,length (length ,value))
+            (,var (gecode_varargs_create ,length))
+            (,i -1))
+       (declare (type fixnum ,i ,length))
+       (map nil
+            (lambda (x)
+              (declare (type boolvar x))
+              (gecode_varargs_set ,var (incf ,i) x))
+            ,value)
+       (unwind-protect 
+            (progn ,@body)
+         (gecode_varargs_delete ,var)))))
 
 (cffi:define-foreign-type floatvarargs-type () ()
   (:actual-type :pointer)
   (:simple-parser floatvarargs-type))
 
 (defmethod expand-to-foreign-dyn (value var body (type floatvarargs-type))
-  `(let* ((length (length ,value))
-          (,var (gecode_varargs_create length))
-          (i -1))
-     (declare (type fixnum i length))
-     (map nil
-          (lambda (x)
-            (declare (type floatvar x))
-            (gecode_varargs_set ,var (incf i) x))
-          ,value)
-     (unwind-protect 
-          (progn ,@body)
-       (gecode_varargs_delete ,var))))
+  (let ((length (gensym))
+        (i (gensym)))
+    `(let* ((,length (length ,value))
+            (,var (gecode_varargs_create ,length))
+            (,i -1))
+       (declare (type fixnum ,i ,length))
+       (map nil
+            (lambda (x)
+              (declare (type floatvar x))
+              (gecode_varargs_set ,var (incf ,i) x))
+            ,value)
+       (unwind-protect 
+            (progn ,@body)
+         (gecode_varargs_delete ,var)))))
 
 (cffi:define-foreign-type floatargs-type () ()
   (:actual-type :pointer)
   (:simple-parser floatargs-type))
 
 (defmethod expand-to-foreign-dyn (value var body (type floatargs-type))
-  `(let* ((length (length ,value))
-          (,var (gecode_floatargs_create length)) ; the argument array class
-          (i -1))
-     (declare (type fixnum i length))
-     (map nil
-          (lambda (x)
-            (gecode_floatargs_set ,var (incf i) x))
-          ,value)
-     (unwind-protect 
-          (progn ,@body)
-       (gecode_floatargs_delete ,var))))
+  (let ((length (gensym))
+        (i (gensym)))
+    `(let* ((,length (length ,value))
+            (,var (gecode_floatargs_create ,length)) ; the argument array class
+            (,i -1))
+       (declare (type fixnum ,i ,length))
+       (map nil
+            (lambda (x)
+              (gecode_floatargs_set ,var (incf ,i) x))
+            ,value)
+       (unwind-protect 
+            (progn ,@body)
+         (gecode_floatargs_delete ,var)))))
 
 (cffi:define-foreign-type intsetargs-type () ()
   (:actual-type :pointer)
   (:simple-parser intsetargs-type))
 
 (defmethod expand-to-foreign-dyn (value var body (type intsetargs-type))
-  `(let* ((length (length ,value))
-          (,var (gecode_intsetargs_create length))
-          (i -1))
-     (declare (type fixnum i length))
-     (map nil
-          (lambda (x)
-            (declare (type intset x))
-            (gecode_intsetargs_set ,var (incf i) x))
-          ,value)
-     (unwind-protect 
-          (progn ,@body)
-       (gecode_intsetargs_delete ,var))))
+  (let ((length (gensym))
+        (i (gensym)))
+    `(let* ((,length (length ,value))
+            (,var (gecode_intsetargs_create ,length))
+            (,i -1))
+       (declare (type fixnum ,i ,length))
+       (map nil
+            (lambda (x)
+              (declare (type intset x))
+              (gecode_intsetargs_set ,var (incf ,i) x))
+            ,value)
+       (unwind-protect 
+            (progn ,@body)
+         (gecode_intsetargs_delete ,var)))))
 
 
 (cffi:define-foreign-type tasktypeargs-type () ()
@@ -240,20 +250,23 @@
   (:simple-parser tasktypeargs-type))
 
 (defmethod expand-to-foreign-dyn (value var body (type tasktypeargs-type))
-  `(let* ((length (length ,value))
-          (,var (gecode_intargs_create length))
-          (adr (gecode_intargs_adr ,var))
-          (i -1))
-     (declare (type fixnum i length))
-     (map nil
-          (lambda (x)
-            (declare (type fixnum x))
-            (setf (mem-aref adr :int (incf i))
-                  (foreign-enum-value 'task-type x)))
-          ,value)
-     (unwind-protect 
-          (progn ,@body)
-       (gecode_intargs_delete ,var))))
+  (let ((length (gensym))
+        (adr (gensym))
+        (i (gensym)))
+    `(let* ((,length (length ,value))
+            (,var (gecode_intargs_create ,length))
+            (,adr (gecode_intargs_adr ,var))
+            (,i -1))
+       (declare (type fixnum ,i ,length))
+       (map nil
+            (lambda (x)
+              (declare (type fixnum x))
+              (setf (mem-aref ,adr :int (incf ,i))
+                    (foreign-enum-value 'task-type x)))
+            ,value)
+       (unwind-protect 
+            (progn ,@body)
+         (gecode_intargs_delete ,var)))))
 
 
 (cffi:define-foreign-type intset-type () ()
