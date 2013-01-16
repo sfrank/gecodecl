@@ -167,3 +167,27 @@
           (gecode_sorted_ivars_ivars_ivars *gspace* xseq yseq permseq clevel)))))
 
 
+;;; sequence
+(defun sequence-g (seq set q l u &key (clevel :icl-def))
+  (if (intvar-p (elt seq 0))
+      (gecode_sequence_ivars *gspace* seq set q l u clevel)
+      (gecode_sequence_bvars *gspace* seq set q l u clevel)))
+
+
+;;; binpacking
+
+(defun binpacking-g (loads bins sizes &key (clevel :icl-def))
+  (gecode_binpacking *gspace* loads bins sizes clevel))
+
+
+;;; extensional constraint
+
+(defun extensional-g (seq dfa &key (clevel :icl-def))
+  (if (intvar-p (elt seq 0))
+      (gecode_extensional_ivars_dfa *gspace* seq dfa clevel)
+      (gecode_extensional_bvars_dfa *gspace* seq dfa clevel)))
+
+(defun extensional-tupleset-g (seq tuples &key (epk :epk-def) (clevel :icl-def))
+  (if (intvar-p (elt seq 0))
+      (gecode_extensional_ivars_tset *gspace* seq tuples epk clevel)
+      (gecode_extensional_bvars_tset *gspace* seq tuples epk clevel)))
