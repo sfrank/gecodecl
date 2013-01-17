@@ -88,6 +88,22 @@
   (min :double)
   (max :double))
 
+(cffi:defcfun ("gecode_set_addvar_plain" gecode_set_addvar_plain) size
+  (space space-type)
+  (glbMin :int)
+  (glbMax :int)
+  (lubMin :int)
+  (lubMax :int)
+  (cardMin :unsigned-int)
+  (cardMax :unsigned-int))
+
+(cffi:defcfun ("gecode_set_addvar_sets" gecode_set_addvar_sets) size
+  (space space-type)
+  (glbD intset-type)
+  (lubD intset-type)
+  (cardMin :unsigned-int)
+  (cardMax :unsigned-int))
+
 (cffi:defcfun ("gecode_get_boolvar_by_index" gecode_get_boolvar_by_index) :pointer
   (space space-type)
   (index size))
@@ -97,6 +113,10 @@
   (index size))
 
 (cffi:defcfun ("gecode_get_floatvar_by_index" gecode_get_floatvar_by_index) :pointer
+  (space space-type)
+  (index size))
+
+(cffi:defcfun ("gecode_get_setvar_by_index" gecode_get_setvar_by_index) :pointer
   (space space-type)
   (index size))
 
@@ -118,6 +138,16 @@
   (min :pointer)
   (max :pointer)
   (median :pointer))
+
+(cffi:defcfun ("gecode_get_set_info" gecode_get_set_info) variable-status
+  (space space-type)
+  (var :pointer)
+  (lubMin :pointer)
+  (lubMax :pointer)
+  (glbMin :pointer)
+  (glbMax :pointer)
+  (cardMin :pointer)
+  (cardMax :pointer))
 
 (cffi:defcfun ("gecode_branch_ivar" gecode_branch_ivar) :void
   (space space-type)

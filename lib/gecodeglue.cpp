@@ -252,7 +252,9 @@ public:
     }
   }
 
-  /*  
+
+  // integer set variables
+  
   vector<SetVar>::size_type addSetVariable_full(int glbMin,int glbMax,
                                                 int lubMin,int lubMax,
                                                 unsigned int cardMin,
@@ -261,7 +263,49 @@ public:
     setVariables.push_back(var);
     return setVariables.size() - 1;
   }
-  */
+
+  vector<SetVar>::size_type addSetVariable_sets(IntSet& glbD,
+                                                IntSet& lubD,
+                                                unsigned int cardMin,
+                                                unsigned int cardMax) {
+    SetVar var(*this,glbD, lubD, cardMin, cardMax);
+    setVariables.push_back(var);
+    return setVariables.size() - 1;
+  }
+
+  SetVar* getSetVarp(vector<SetVar>::size_type var) {
+    return &(setVariables[var]);
+  }
+
+  STATUS inline getSetInfo(SetVar* var,
+                           int* lubMin, int* lubMax,
+                           int* glbMin, int* glbMax,
+                           int* cardMin, int* cardMax) {
+    SpaceStatus state = status();
+    if (state==SS_FAILED) {
+      *lubMin = 0;
+      *lubMax = 0;
+      *glbMin = 0;
+      *glbMax = 0;
+      *cardMin = 0;
+      *cardMax = 0;
+      return STATE_FAILED;
+    }
+
+    *lubMin = var->lubMin();
+    *lubMax = var->lubMax();
+    *glbMin = var->glbMin();
+    *glbMax = var->glbMax();
+    *cardMin = var->cardMin();
+    *cardMax = var->cardMax();
+    if (*cardMin == *cardMax) {
+      return VAR_ASSIGNED;
+    }
+    else {
+      return VAR_UNASSIGNED;
+    }
+  }
+
   
 };
 
@@ -426,6 +470,20 @@ size_t gecode_int_addvar_set(CLSpace *space, IntSet* set) {
 size_t gecode_float_addvar(CLSpace *space, double min, double max) {
   return space->addFloatVariable(min, max); }
 
+size_t gecode_set_addvar_plain(CLSpace *space,
+                               int glbMin,int glbMax,
+                               int lubMin,int lubMax,
+                               unsigned int cardMin,
+                               unsigned int cardMax) {
+  return space->addSetVariable_full(glbMin, glbMax, lubMin, lubMax, cardMin, cardMax); 
+}
+
+size_t gecode_set_addvar_sets(CLSpace *space,
+                              IntSet* glbD, IntSet* lubD,
+                              unsigned int cardMin,
+                              unsigned int cardMax) {
+  return space->addSetVariable_sets(*glbD, *lubD, cardMin, cardMax); 
+}
 
 BoolVar* gecode_get_boolvar_by_index(CLSpace *space, size_t index) {
   return space->getBoolVarp(index);
@@ -439,6 +497,10 @@ FloatVar* gecode_get_floatvar_by_index(CLSpace *space, size_t index) {
   return space->getFloatVarp(index);
 }
 
+SetVar* gecode_get_setvar_by_index(CLSpace *space, size_t index) {
+  return space->getSetVarp(index);
+}
+
 
 STATUS gecode_get_bool_info(CLSpace *space, BoolVar* var, int *value) {
   return space->getBoolInfo(var, value); }
@@ -450,6 +512,15 @@ STATUS gecode_get_int_info(CLSpace *space, IntVar* var,
 STATUS gecode_get_float_info(CLSpace *space, FloatVar* var,
                            double *min, double *max, double *median) {
   return space->getFloatInfo(var, min, max, median); }
+
+STATUS gecode_get_set_info(CLSpace *space,
+                           SetVar* var,
+                           int* lubMin, int* lubMax,
+                           int* glbMin, int* glbMax,
+                           int* cardMin, int* cardMax) {
+  return space->getSetInfo(var, lubMin, lubMax, glbMin, glbMax,
+                           cardMin, cardMax);
+}
 
 
 // Branchers

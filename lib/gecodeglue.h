@@ -46,14 +46,29 @@ extern "C" {
   size_t gecode_int_addvar(CLSpace *space, int min, int max);
   size_t gecode_int_addvar_set(CLSpace *space, IntSet* set);
   size_t gecode_float_addvar(CLSpace *space, double min, double max);
+  size_t gecode_set_addvar_plain(CLSpace *space,
+                                 int glbMin,int glbMax,
+                                 int lubMin,int lubMax,
+                                 unsigned int cardMin,
+                                 unsigned int cardMax);
+  size_t gecode_set_addvar_sets(CLSpace *space,
+                                IntSet* glbD, IntSet* lubD,
+                                unsigned int cardMin,
+                                unsigned int cardMax);
   BoolVar* gecode_get_boolvar_by_index(CLSpace *space, size_t index);
   IntVar* gecode_get_intvar_by_index(CLSpace *space, size_t index);
   FloatVar* gecode_get_floatvar_by_index(CLSpace *space, size_t index);
+  SetVar* gecode_get_setvar_by_index(CLSpace *space, size_t index);
   STATUS gecode_get_bool_info(CLSpace *space, BoolVar* var, int *value);
   STATUS gecode_get_int_info(CLSpace *space, IntVar* var, 
 			     int *min, int *max, int *size);
   STATUS gecode_get_float_info(CLSpace *space, FloatVar* var,
 			       double *min, double *max, double *median);
+  STATUS gecode_get_set_info(CLSpace *space,
+                             SetVar* var,
+                             int* lubMin, int* lubMax,
+                             int* glbMin, int* glbMax,
+                             int* cardMin, int* cardMax);
 
   /* branchers */
   void gecode_branch_ivar(CLSpace *space, IntVar* var, IntValBranch* valb);

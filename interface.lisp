@@ -192,7 +192,7 @@
       (gecode_extensional_ivars_tset *gspace* seq tuples epk clevel)
       (gecode_extensional_bvars_tset *gspace* seq tuples epk clevel)))
 
-;;; translation/channeling
+;;; translation/channelling
 
 (defgeneric channel-g (x y &key clevel))
 
