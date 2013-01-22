@@ -1822,42 +1822,175 @@ void gecode_intset_delete(IntSet* iset) {
   delete iset;
 }
 
-} /* extern "C" */
 
-
-
-/*
-#include <stdio.h>
-
-int main(void) {
-  CLSpace *space = gecode_space_create();
-  STATUS status;
-
-  Search::Options options = Search::Options();
-
-  unsigned x = gecode_int_addvar(space, 1, 3);
-  unsigned y = gecode_int_addvar(space, 3, 3);
-  int min, max, size;
-
-  gecode_intClChannel(space, x, 3);
-  DFS<CLSpace> *dfs = new DFS<CLSpace>(space, options);
-  status = gecode_get_int_info(space, x, &min, &max, &size);
-
-  
-  printf("status 1 of x; (status, min, max, size): %d, %d, %d, %d\n", status, min, max, size);
-  status = gecode_get_int_info(space, y, &min, &max, &size);
-  printf("status 1 of y; (status, min, max, size): %d, %d, %d, %d\n", status, min, max, size);
-
-  printf("space failed before < post: %d\n", space->failed());
-  gecode_int_rel(space, IRT_LE, x, y);
-  printf("space failed after < post: %d\n", space->failed());
-  status = gecode_get_int_info(space, x, &min, &max, &size);
-  printf("status 2 of x; (status, min, max, size): %d, %d, %d, %d\n", status, min, max, size);
-  status = gecode_get_int_info(space, y, &min, &max, &size);
-  printf("status 2 of y; (status, min, max, size): %d, %d, %d, %d\n", status, min, max, size);
-  
-
-  return 0;
+/* set domain constraints */
+void gecode_dom_svar_int(CLSpace *space, SetRelType r, SetVar* x, int i) {
+  dom(*space, *x, r, i);
 }
-*/
 
+void gecode_dom_svar_int_int(CLSpace *space, SetRelType r, SetVar* x,
+                             int i, int j) {
+  dom(*space, *x, r, i, j);
+}
+
+void gecode_dom_svar_iset(CLSpace *space, SetRelType r, SetVar* x, IntSet* i) {
+  dom(*space, *x, r, *i);
+}
+
+void gecode_dom_svar_int_reified(CLSpace *space, SetRelType r, SetVar* x,
+                                 int i, ReifyMode mode, BoolVar* b) {
+  dom(*space, *x, r, i, Reify(*b, mode));
+}
+
+void gecode_dom_svar_int_int_reified(CLSpace *space, SetRelType r, SetVar* x,
+                             int i, int j, ReifyMode mode, BoolVar* b) {
+  dom(*space, *x, r, i, j, Reify(*b, mode));
+}
+
+void gecode_dom_svar_iset_reified(CLSpace *space, SetRelType r, SetVar* x,
+                                  IntSet* i, ReifyMode mode, BoolVar* b) {
+  dom(*space, *x, r, *i, Reify(*b, mode));
+}
+
+void gecode_cardinality_svar_uint_uint(CLSpace *space, SetVar* x,
+                                       unsigned int i, unsigned int j) {
+  cardinality(*space, *x, i, j);
+}
+
+void gecode_cardinality_svar_ivar(CLSpace *space, SetVar* x, IntVar* i) {
+  cardinality(*space, *x, *i);
+}
+
+
+// TODO: rel
+
+/* convex hull constraint */
+void gecode_convex_svar(CLSpace *space, SetVar* x) {
+  convex(*space, *x);
+}
+
+void gecode_convex_svar_svar(CLSpace *space, SetVar* x, SetVar* y) {
+  convex(*space, *x, *y);
+}
+
+/* sequence constraint */
+void gecode_sequence_svars(CLSpace *space, SetVarArgs* x) {
+  sequence(*space, *x);
+}
+
+void gecode_sequence_svars_svar(CLSpace *space, SetVarArgs* y, SetVar* x) {
+  sequence(*space, *y, *x);
+}
+
+/* distinctness constraint*/
+void gecode_atmostOne_svars(CLSpace *space, SetVarArgs* x, unsigned int c) {
+  atmostOne(*space, *x , c);
+}
+
+/* connection constraints */
+void gecode_min_svar_ivar(CLSpace *space, SetVar* x, IntVar* i) {
+  min(*space, *x, *i);
+}
+
+void gecode_notMin_svar_ivar(CLSpace *space, SetVar* x, IntVar* i) {
+  notMin(*space, *x, *i);
+}
+
+void gecode_min_svar_ivar_reified(CLSpace *space, SetVar* x, IntVar* i,
+                                  ReifyMode mode, BoolVar* b) {
+  min(*space, *x, *i, Reify(*b, mode));
+}
+
+void gecode_max_svar_ivar(CLSpace *space, SetVar* x, IntVar* i) {
+  max(*space, *x, *i);
+}
+
+void gecode_notMax_svar_ivar(CLSpace *space, SetVar* x, IntVar* i) {
+  notMax(*space, *x, *i);
+}
+
+void gecode_max_svar_ivar_reified(CLSpace *space, SetVar* x, IntVar* i,
+                                  ReifyMode mode, BoolVar* b) {
+  max(*space, *x, *i, Reify(*b, mode));
+}
+
+void gecode_weights_ints_ints_svar_ivar(CLSpace *space, IntArgs* elements,
+                                        IntArgs* weights, SetVar* x, IntVar* y) {
+  Gecode::weights(*space, *elements, *weights, *x, *y);
+}
+
+/* channel constraint */
+void gecode_channel_ivars_svars(CLSpace *space, IntVarArgs* x, SetVarArgs* y) {
+  channel(*space, *x, *y);
+}
+
+void gecode_channel_bvars_svar(CLSpace *space, BoolVarArgs* x, SetVar* y) {
+  channel(*space, *x, *y);
+}
+
+void gecode_channel_svars_svars(CLSpace *space, SetVarArgs* x, SetVarArgs* y) {
+  channel(*space, *x, *y);
+}
+
+void gecode_channelSorted_ivars_svar(CLSpace *space, IntVarArgs* x, SetVar* y) {
+  channelSorted(*space, *x, *y);
+}
+
+/* precede constraint */
+void gecode_precede_svars_int_int(CLSpace *space, SetVarArgs* x, int s, int t) {
+  precede(*space, *x, s, t);
+}
+
+void gecode_precede_svars_ints(CLSpace *space, SetVarArgs* x, IntArgs* c) {
+  precede(*space, *x, *c);
+}
+
+/* element constraint */
+void gecode_element_svars_svar_svar(CLSpace *space, SetOpType op, SetVarArgs* x,
+                                    SetVar* y, SetVar* z) {
+  element(*space, op, *x, *y, *z);
+}
+                                 
+void gecode_element_ivars_svar_svar(CLSpace *space, SetOpType op, IntVarArgs* x,
+                                    SetVar* y, SetVar* z) {
+  element(*space, op, *x, *y, *z);
+}
+
+void gecode_element_isets_svar_svar(CLSpace *space, SetOpType op, IntSetArgs* x,
+                                    SetVar* y, SetVar* z) {
+  element(*space, op, *x, *y, *z);
+}
+
+void gecode_element_ints_svar_svar(CLSpace *space, SetOpType op, IntArgs* x,
+                                   SetVar* y, SetVar* z) {
+  element(*space, op, *x, *y, *z);
+}
+
+
+void gecode_element_svars_ivar_svar(CLSpace *space,
+                                    SetVarArgs* x, IntVar* y, SetVar* z) {
+  element(*space, *x, *y, *z);
+}
+
+void gecode_element_isets_ivar_svar(CLSpace *space,
+                                    IntSetArgs* x, IntVar* y, SetVar* z) {
+  element(*space, *x, *y, *z);
+}
+
+void gecode_element_isets_ivar_int_ivar_int_svar(CLSpace *space, IntSetArgs* a, 
+                                                 IntVar* x, int w,
+                                                 IntVar* y, int h,
+                                                 SetVar* z) {
+  element(*space, *a, *x, w, *y, h, *z);
+}
+
+void gecode_element_svars_ivar_int_ivar_int_svar(CLSpace *space, SetVarArgs* a, 
+                                                 IntVar* x, int w,
+                                                 IntVar* y, int h,
+                                                 SetVar* z) {
+  element(*space, *a, *x, w, *y, h, *z);
+}
+
+
+
+} /* extern "C" */

@@ -1504,4 +1504,212 @@
 (cffi:defcfun ("gecode_intset_delete" gecode_intset_delete) :void
   (iset intset-type))
 
+(cffi:defcfun ("gecode_dom_svar_int" gecode_dom_svar_int) :void
+  (space space-type)
+  (r set-rel-type)
+  (x :pointer)
+  (i :int))
+
+(cffi:defcfun ("gecode_dom_svar_int_int" gecode_dom_svar_int_int) :void
+  (space space-type)
+  (r set-rel-type)
+  (x :pointer)
+  (i :int)
+  (j :int))
+
+(cffi:defcfun ("gecode_dom_svar_iset" gecode_dom_svar_iset) :void
+  (space space-type)
+  (r set-rel-type)
+  (x :pointer)
+  (i intset-type))
+
+(cffi:defcfun ("gecode_dom_svar_int_reified" gecode_dom_svar_int_reified) :void
+  (space space-type)
+  (r set-rel-type)
+  (x :pointer)
+  (i :int)
+  (mode reify-mode)
+  (b boolvar-type))
+
+(cffi:defcfun ("gecode_dom_svar_int_int_reified" gecode_dom_svar_int_int_reified) :void
+  (space space-type)
+  (r set-rel-type)
+  (x :pointer)
+  (i :int)
+  (j :int)
+  (mode reify-mode)
+  (b boolvar-type))
+
+(cffi:defcfun ("gecode_dom_svar_iset_reified" gecode_dom_svar_iset_reified) :void
+  (space space-type)
+  (r set-rel-type)
+  (x :pointer)
+  (i intset-type)
+  (mode reify-mode)
+  (b boolvar-type))
+
+(cffi:defcfun ("gecode_cardinality_svar_uint_uint" gecode_cardinality_svar_uint_uint) :void
+  (space space-type)
+  (x :pointer)
+  (i :unsigned-int)
+  (j :unsigned-int))
+
+(cffi:defcfun ("gecode_cardinality_svar_ivar" gecode_cardinality_svar_ivar) :void
+  (space space-type)
+  (x :pointer)
+  (i intvar-type))
+
+(cffi:defcfun ("gecode_convex_svar" gecode_convex_svar) :void
+  (space space-type)
+  (x :pointer))
+
+(cffi:defcfun ("gecode_convex_svar_svar" gecode_convex_svar_svar) :void
+  (space space-type)
+  (x :pointer)
+  (y :pointer))
+
+(cffi:defcfun ("gecode_sequence_svars" gecode_sequence_svars) :void
+  (space space-type)
+  (x :pointer))
+
+(cffi:defcfun ("gecode_sequence_svars_svar" gecode_sequence_svars_svar) :void
+  (space space-type)
+  (y :pointer)
+  (x :pointer))
+
+(cffi:defcfun ("gecode_atmostOne_svars" gecode_atmostOne_svars) :void
+  (space space-type)
+  (x :pointer)
+  (c :unsigned-int))
+
+(cffi:defcfun ("gecode_min_svar_ivar" gecode_min_svar_ivar) :void
+  (space space-type)
+  (x :pointer)
+  (i intvar-type))
+
+(cffi:defcfun ("gecode_notMin_svar_ivar" gecode_notMin_svar_ivar) :void
+  (space space-type)
+  (x :pointer)
+  (i intvar-type))
+
+(cffi:defcfun ("gecode_min_svar_ivar_reified" gecode_min_svar_ivar_reified) :void
+  (space space-type)
+  (x :pointer)
+  (i intvar-type)
+  (mode reify-mode)
+  (b boolvar-type))
+
+(cffi:defcfun ("gecode_max_svar_ivar" gecode_max_svar_ivar) :void
+  (space space-type)
+  (x :pointer)
+  (i intvar-type))
+
+(cffi:defcfun ("gecode_notMax_svar_ivar" gecode_notMax_svar_ivar) :void
+  (space space-type)
+  (x :pointer)
+  (i intvar-type))
+
+(cffi:defcfun ("gecode_max_svar_ivar_reified" gecode_max_svar_ivar_reified) :void
+  (space space-type)
+  (x :pointer)
+  (i intvar-type)
+  (mode reify-mode)
+  (b boolvar-type))
+
+(cffi:defcfun ("gecode_weights_ints_ints_svar_ivar" gecode_weights_ints_ints_svar_ivar) :void
+  (space space-type)
+  (elements intargs-type)
+  (weights intargs-type)
+  (x :pointer)
+  (y intvar-type))
+
+(cffi:defcfun ("gecode_channel_ivars_svars" gecode_channel_ivars_svars) :void
+  (space space-type)
+  (x intvarargs-type)
+  (y :pointer))
+
+(cffi:defcfun ("gecode_channel_bvars_svar" gecode_channel_bvars_svar) :void
+  (space space-type)
+  (x boolvarargs-type)
+  (y :pointer))
+
+(cffi:defcfun ("gecode_channel_svars_svars" gecode_channel_svars_svars) :void
+  (space space-type)
+  (x :pointer)
+  (y :pointer))
+
+(cffi:defcfun ("gecode_channelSorted_ivars_svar" gecode_channelSorted_ivars_svar) :void
+  (space space-type)
+  (x intvarargs-type)
+  (y :pointer))
+
+(cffi:defcfun ("gecode_precede_svars_int_int" gecode_precede_svars_int_int) :void
+  (space space-type)
+  (x :pointer)
+  (s :int)
+  (t_arg3 :int))
+
+(cffi:defcfun ("gecode_precede_svars_ints" gecode_precede_svars_ints) :void
+  (space space-type)
+  (x :pointer)
+  (c intargs-type))
+
+(cffi:defcfun ("gecode_element_svars_svar_svar" gecode_element_svars_svar_svar) :void
+  (space space-type)
+  (op set-op-type)
+  (x :pointer)
+  (y :pointer)
+  (z :pointer))
+
+(cffi:defcfun ("gecode_element_ivars_svar_svar" gecode_element_ivars_svar_svar) :void
+  (space space-type)
+  (op set-op-type)
+  (x intvarargs-type)
+  (y :pointer)
+  (z :pointer))
+
+(cffi:defcfun ("gecode_element_isets_svar_svar" gecode_element_isets_svar_svar) :void
+  (space space-type)
+  (op set-op-type)
+  (x intsetargs-type)
+  (y :pointer)
+  (z :pointer))
+
+(cffi:defcfun ("gecode_element_ints_svar_svar" gecode_element_ints_svar_svar) :void
+  (space space-type)
+  (op set-op-type)
+  (x intargs-type)
+  (y :pointer)
+  (z :pointer))
+
+(cffi:defcfun ("gecode_element_svars_ivar_svar" gecode_element_svars_ivar_svar) :void
+  (space space-type)
+  (x :pointer)
+  (y intvar-type)
+  (z :pointer))
+
+(cffi:defcfun ("gecode_element_isets_ivar_svar" gecode_element_isets_ivar_svar) :void
+  (space space-type)
+  (x intsetargs-type)
+  (y intvar-type)
+  (z :pointer))
+
+(cffi:defcfun ("gecode_element_isets_ivar_int_ivar_int_svar" gecode_element_isets_ivar_int_ivar_int_svar) :void
+  (space space-type)
+  (a intsetargs-type)
+  (x intvar-type)
+  (w :int)
+  (y intvar-type)
+  (h :int)
+  (z :pointer))
+
+(cffi:defcfun ("gecode_element_svars_ivar_int_ivar_int_svar" gecode_element_svars_ivar_int_ivar_int_svar) :void
+  (space space-type)
+  (a :pointer)
+  (x intvar-type)
+  (w :int)
+  (y intvar-type)
+  (h :int)
+  (z :pointer))
+
 

@@ -29,49 +29,9 @@
   (:var-assigned 0))
 
 (cffi:defcenum reify-mode
-  (:<=> 0) ; b=1 <=> C
-  (:<== 1) ; b=1 <== C
-  (:==> 2)); b=1 ==> C
-
-
-;;; brancher types
-#+(or)
-(cffi:defcenum bvar-sel
-  :bvar-none
-  :bvar-rnd
-  :bvar-degree-min
-  :bvar-degree-max
-  :bvar-afc-min
-  :bvar-afc-max
-  :bvar-min-min
-  :bvar-min-max
-  :bvar-max-min
-  :bvar-max-max
-  :bvar-size-min
-  :bvar-size-max
-  :bvar-size-degree-min
-  :bvar-size-degree-max
-  :bvar-size-afc-min
-  :bvar-size-afc-max
-  :bvar-regret-min-min
-  :bvar-regret-min-max
-  :bvar-regret-max-min
-  :bvar-regret-max-max
-  )
-
-#+(or)
-(cffi:defcenum bval-sel
-  :bval-min
-  :bval-med
-  :bval-max
-  :bval-rnd
-  :bval-split-min
-  :bval-split-max
-  :bval-range-min
-  :bval-range-max
-  :bval-values-min
-  :bval-values-max
-  )
+  (:<=> 0)   ; b=1 <=> C
+  (:<== 1)   ; b=1 <== C
+  (:==> 2))  ; b=1 ==> C
 
 
 ;;; propagator and operation types
@@ -107,7 +67,7 @@
 
 ;; This corresponds to the Transition class in int.hh, we can use this
 ;; special cstruct/class equivalence because the following conditions
-;; hold:
+;; hold which make the class structure POD (plain old data):
 ;;   * All data members are public and themselves POD or fundamental
 ;;     types (but not reference or pointer-to-member types), or arrays
 ;;     of such
@@ -128,22 +88,31 @@
   :epk-memory        ; prefer little memory over speed
   )
 
-;;(cffi:defcenum set-rel-type
-;;  :srt-eq                               ; equality
-;;  :srt-nq                               ; disequality
-;;  :srt-sub                              ; subset
-;;  :srt-sup                              ; superset
-;;  :srt-disj                             ; disjoint
-;;  :srt-cmpl                             ; complement
-;;  )
+
+;; set variable relations
+
+(cffi:defcenum set-rel-type
+  :srt-=         ; equality
+  :srt-/=        ; disequality
+  :srt-sub       ; subset
+  :srt-sup       ; superset
+  :srt-disj      ; disjoint
+  :srt-cmpl      ; complement
+  :srt-<=        ; less or equal
+  :srt-<         ; less
+  :srt->=        ; greater or equal
+  :srt->         ; greater  
+  )
+
+(cffi:defcenum set-op-type
+  :sot-union               ; union
+  :sot-dunion              ; disjoint union
+  :sot-inter               ; intersection
+  :sot-minus               ; difference
+  )
 
 
-;;(cffi:defcenum set-op-type
-;;  :sot-union                            ; union
-;;  :sot-dunion                           ; disjoint union
-;;  :sot-inter                            ; intersection
-;;  :sot-minus                            ; difference
-;;  )
+;; float variable relations
 
 (cffi:defcenum float-relation-type
   :frt-=
@@ -151,4 +120,5 @@
   :frt-<=
   :frt-<
   :frt->=
-  :frt->)
+  :frt->
+  )

@@ -47,6 +47,8 @@
 %typemap(cin) BoolOpType  "bool-operation-type";
 %typemap(cin) IntConLevel "int-consistency-level";
 %typemap(cin) FloatRelType  "float-relation-type";
+%typemap(cin) SetRelType  "set-rel-type";
+%typemap(cin) SetOpType  "set-op-type";
 
 %typemap(cin)  IntSet*  "intset-type";
 %typemap(cout) IntSet*  "intset-type";
