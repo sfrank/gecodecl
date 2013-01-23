@@ -7,7 +7,7 @@
 #include "gecode/float.hh"
 #include "gecode/set.hh"
 #include "gecode/search.hh"
-#include "gecode/minimodel.hh"
+//#include "gecode/minimodel.hh"
 
 #define EXCSTART try {
 #define EXCSTOP  }                                 \
@@ -430,7 +430,7 @@ CLFloatArgs* gecode_floatargs_create(int n) {
     return new CLFloatArgs(n); 
 }
 void gecode_floatargs_set(CLFloatArgs *v, int i, double e) {
-  v->adr()[i] = FloatVal(e);
+  v->adr()[i] = FloatNum(e);
 }
 void gecode_floatargs_delete(CLFloatArgs *v) {
   delete v; }
@@ -1543,12 +1543,12 @@ void gecode_rel_fvar_fvar(CLSpace *space, FloatRelType op, FloatVar* x0, FloatVa
 }
 
 void gecode_rel_fvar_dbl(CLSpace *space, FloatRelType op, FloatVar* x0, double x1) {
-  rel(*space, *x0, op, FloatVal(x1)); 
+  rel(*space, *x0, op, FloatNum(x1)); 
 }
 
 void gecode_rel_fvar_dbl_reified(CLSpace *space, FloatRelType op, FloatVar* x0, double x1,
 				 ReifyMode mode, BoolVar* bvar) {
-  rel(*space, *x0, op, FloatVal(x1), Reify(*bvar, mode)); 
+  rel(*space, *x0, op, FloatNum(x1), Reify(*bvar, mode)); 
 }
 
 void gecode_rel_fvar_fvar_reified(CLSpace *space, FloatRelType op, FloatVar* x0, FloatVar* x1,
@@ -1557,7 +1557,7 @@ void gecode_rel_fvar_fvar_reified(CLSpace *space, FloatRelType op, FloatVar* x0,
 }
 
 void gecode_rel_fvars_dbl(CLSpace *space, FloatRelType op, FloatVarArgs* x0, double x1) {
-  rel(*space, *x0, op, FloatVal(x1)); 
+  rel(*space, *x0, op, FloatNum(x1)); 
 }
 
 void gecode_rel_fvars_fvar(CLSpace *space, FloatRelType op, FloatVarArgs* x0, FloatVar* x1) {
@@ -1862,7 +1862,93 @@ void gecode_cardinality_svar_ivar(CLSpace *space, SetVar* x, IntVar* i) {
 }
 
 
-// TODO: rel
+/* set relations */
+void gecode_srel_svar_svar(CLSpace *space, SetVar* x, SetRelType r, SetVar* y) {
+  rel(*space, *x, r, *y);
+}
+
+void gecode_srel_svar_svar_reified(CLSpace *space, SetVar* x, SetRelType r, SetVar* y,
+                                   ReifyMode mode, BoolVar* b) {
+  rel(*space, *x, r, *y, Reify(*b, mode));
+}
+
+void gecode_srel_svar_ivar(CLSpace *space, SetVar* x, SetRelType r, IntVar* y) {
+  rel(*space, *x, r, *y);
+}
+
+void gecode_srel_ivar_svar(CLSpace *space, IntVar* x, SetRelType r, SetVar* y) {
+  rel(*space, *x, r, *y);
+}
+
+void gecode_srel_svar_ivar_reified(CLSpace *space, SetVar* x, SetRelType r, IntVar* y,
+                                   ReifyMode mode, BoolVar* b) {
+  rel(*space, *x, r, *y, Reify(*b, mode));
+}
+
+void gecode_srel_ivar_svar_reified(CLSpace *space, IntVar* x, SetRelType r, SetVar* y,
+                                   ReifyMode mode, BoolVar* b) {
+  rel(*space, *x, r, *y, Reify(*b, mode));
+}
+
+void gecode_irel_svar_ivar(CLSpace *space, SetVar* x, IntRelType r, IntVar* y) {
+  rel(*space, *x, r, *y);
+}
+
+void gecode_irel_ivar_svar(CLSpace *space, IntVar* x, IntRelType r, SetVar* y) {
+  rel(*space, *x, r, *y);
+}
+
+/* set operations */
+void gecode_sop_svar_svar_srel_svar(CLSpace *space, SetVar* x, SetOpType op, SetVar* y,
+                                    SetRelType r, SetVar* z) {
+  rel(*space, *x, op, *y, r, *z);
+}
+
+void gecode_sop_svars_eql_svar(CLSpace *space, SetOpType op, SetVarArgs* x,
+                               SetVar* y) {
+  rel(*space, op, *x, *y);
+}
+
+void gecode_sop_svars_iset_eql_svar(CLSpace *space, SetOpType op, SetVarArgs* x,
+                                    IntSet* z, SetVar* y) {
+  rel(*space, op, *x, *z, *y);
+}
+
+void gecode_sop_ivars_iset_eql_svar(CLSpace *space, SetOpType op, IntVarArgs* x,
+                                    IntSet* z, SetVar* y) {
+  rel(*space, op, *x, *z, *y);
+}
+
+void gecode_sop_ivars_eql_svar(CLSpace *space, SetOpType op, IntVarArgs* x,
+                               SetVar* y) {
+  rel(*space, op, *x, *y);
+}
+
+void gecode_sop_iset_svar_srel_svar(CLSpace *space, IntSet* x, SetOpType op, SetVar* y,
+                                    SetRelType r, SetVar* z) {
+  rel(*space, *x, op, *y, r, *z);
+}
+
+void gecode_sop_svar_iset_srel_svar(CLSpace *space, SetVar* x, SetOpType op, IntSet* y,
+                                    SetRelType r, SetVar* z) {
+  rel(*space, *x, op, *y, r, *z);
+}
+
+void gecode_sop_svar_svar_srel_iset(CLSpace *space, SetVar* x, SetOpType op, SetVar* y,
+                                    SetRelType r, IntSet* z) {
+  rel(*space, *x, op, *y, r, *z);
+}
+
+void gecode_sop_iset_svar_srel_iset(CLSpace *space, IntSet* x, SetOpType op, SetVar* y,
+                                    SetRelType r, IntSet* z) {
+  rel(*space, *x, op, *y, r, *z);
+}
+
+void gecode_sop_svar_iset_srel_iset(CLSpace *space, SetVar* x, SetOpType op, IntSet* y,
+                                    SetRelType r, IntSet* z) {
+  rel(*space, *x, op, *y, r, *z);
+}
+
 
 /* convex hull constraint */
 void gecode_convex_svar(CLSpace *space, SetVar* x) {

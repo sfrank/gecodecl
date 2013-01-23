@@ -723,7 +723,39 @@ extern "C" {
   void gecode_cardinality_svar_uint_uint(CLSpace *space, SetVar* x,
                                          unsigned int i, unsigned int j);
   void gecode_cardinality_svar_ivar(CLSpace *space, SetVar* x, IntVar* i);
-  // TODO: rel
+  /* set relations */
+  void gecode_srel_svar_svar(CLSpace *space, SetVar* x, SetRelType r, SetVar* y);
+  void gecode_srel_svar_svar_reified(CLSpace *space, SetVar* x, SetRelType r, SetVar* y,
+                                     ReifyMode mode, BoolVar* b);
+  void gecode_srel_svar_ivar(CLSpace *space, SetVar* x, SetRelType r, IntVar* y);
+  void gecode_srel_ivar_svar(CLSpace *space, IntVar* x, SetRelType r, SetVar* y);
+  void gecode_srel_svar_ivar_reified(CLSpace *space, SetVar* x, SetRelType r, IntVar* y,
+                                     ReifyMode mode, BoolVar* b);
+  void gecode_srel_ivar_svar_reified(CLSpace *space, IntVar* x, SetRelType r, SetVar* y,
+                                     ReifyMode mode, BoolVar* b);
+  void gecode_irel_svar_ivar(CLSpace *space, SetVar* x, IntRelType r, IntVar* y);
+  void gecode_irel_ivar_svar(CLSpace *space, IntVar* x, IntRelType r, SetVar* y);
+  /* set operations */
+  void gecode_sop_svar_svar_srel_svar(CLSpace *space, SetVar* x, SetOpType op, SetVar* y,
+                                      SetRelType r, SetVar* z);
+  void gecode_sop_svars_eql_svar(CLSpace *space, SetOpType op, SetVarArgs* x,
+                                 SetVar* y);
+  void gecode_sop_svars_iset_eql_svar(CLSpace *space, SetOpType op, SetVarArgs* x,
+                                      IntSet* z, SetVar* y);
+  void gecode_sop_ivars_iset_eql_svar(CLSpace *space, SetOpType op, IntVarArgs* x,
+                                      IntSet* z, SetVar* y);
+  void gecode_sop_ivars_eql_svar(CLSpace *space, SetOpType op, IntVarArgs* x,
+                                 SetVar* y);
+  void gecode_sop_iset_svar_srel_svar(CLSpace *space, IntSet* x, SetOpType op, SetVar* y,
+                                      SetRelType r, SetVar* z);
+  void gecode_sop_svar_iset_srel_svar(CLSpace *space, SetVar* x, SetOpType op, IntSet* y,
+                                      SetRelType r, SetVar* z);
+  void gecode_sop_svar_svar_srel_iset(CLSpace *space, SetVar* x, SetOpType op, SetVar* y,
+                                      SetRelType r, IntSet* z);
+  void gecode_sop_iset_svar_srel_iset(CLSpace *space, IntSet* x, SetOpType op, SetVar* y,
+                                      SetRelType r, IntSet* z);
+  void gecode_sop_svar_iset_srel_iset(CLSpace *space, SetVar* x, SetOpType op, IntSet* y,
+                                      SetRelType r, IntSet* z);
   /* convex hull constraint */
   void gecode_convex_svar(CLSpace *space, SetVar* x);
   void gecode_convex_svar_svar(CLSpace *space, SetVar* x, SetVar* y);
