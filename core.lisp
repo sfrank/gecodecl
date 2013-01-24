@@ -54,6 +54,9 @@
 (defstruct (floatvar (:include gvariable)
                      (:constructor make-floatvar (index))))
 
+(defstruct (setvar (:include gvariable)
+                   (:constructor make-setvar (index))))
+
 (defstruct (gspace (:constructor %make-space)
                    (:constructor %make-space-boa (sap int-notifiers))
                    (:copier %copy-space))
@@ -62,7 +65,7 @@
 
 (defun reclaim-space (space)
   (lambda ()
-    (format t "Space GCed...~%")
+    ;(format t "Space GCed...~%")
     (gecode_space_delete space)))
 
 (defun make-gspace ()
@@ -151,6 +154,43 @@
         (car values)
         (error "Value requested on unassigned variable ~A" variable))))
 
+
+;;; SetVars
+(defun set-variable-plain (glbMin glbMax
+                           lubMin lubMax
+                           &optional (card-min 0)
+                                     (card-max most-positive-fixnum))
+  (make-setvar (gecode_set_addvar_plain *gspace* glbMin glbMax lubMin lubMax
+                                        card-min card-max)))
+
+(defun set-variable-sets (glbD lubD &optional (card-min 0)
+                                              (card-max most-positive-fixnum))
+  (make-setvar (gecode_set_addvar_sets *gspace* glbD lubD card-min card-max)))
+
+(defun set-info (variable)
+  (declare (type setvar variable))
+  (with-foreign-objects ((lubMin :int)
+                         (lubMax :int)
+                         (glbMin :int)
+                         (glbMax :int)
+                         (cardMin :int)
+                         (cardMax :int))
+    (values (gecode_get_set_info *gspace* variable lubMin LubMax
+                                 glbMin glbMax cardMin cardMax)
+            (list (mem-ref lubMin :int)
+                  (mem-ref lubMax :int)
+                  (mem-ref glbMin :int)
+                  (mem-ref glbMax :int)
+                  (mem-ref cardMin :int)
+                  (mem-ref cardMax :int)))))
+
+(defun set-value (variable)
+  (multiple-value-bind (result values)
+      (set-info variable)
+    (if (eq result :var-assigned)
+        ;; return min and max of set and the set cardinality
+        (list (first values) (second values) (fifth values))
+        (error "Value requested on unassigned variable ~A" variable))))
 
 ;;;; search engine interface and abstraction
 

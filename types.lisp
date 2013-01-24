@@ -81,6 +81,13 @@
 (defmethod expand-to-foreign (floatvar (type floatvar-type))
   `(gecode_get_floatvar_by_index *gspace* (floatvar-index ,floatvar)))
 
+(cffi:define-foreign-type setvar-type () ()
+  (:actual-type :pointer)
+  (:simple-parser setvar-type))
+
+(defmethod expand-to-foreign (setvar (type setvar-type))
+  `(gecode_get_setvar_by_index *gspace* (setvar-index ,setvar)))
+
 ;; branchers
 (cffi:define-foreign-type intvarselector-type () ()
   (:actual-type :pointer)

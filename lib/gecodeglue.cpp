@@ -298,7 +298,7 @@ public:
     *glbMax = var->glbMax();
     *cardMin = var->cardMin();
     *cardMax = var->cardMax();
-    if (*cardMin == *cardMax) {
+    if (var->unknownSize() == 0) {
       return VAR_ASSIGNED;
     }
     else {

@@ -13,6 +13,7 @@
 %typemap(cin) BoolVar* "boolvar-type";
 %typemap(cin) IntVar* "intvar-type";
 %typemap(cin) FloatVar* "floatvar-type";
+%typemap(cin) SetVar* "setvar-type";
 
 %typemap(cin) IntVarBranch*  "intvarselector-type";
 %typemap(cout) IntVarBranch*  "intvarselector-type";
