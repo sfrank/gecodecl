@@ -637,8 +637,8 @@ extern "C" {
   void gecode_mult_fvar_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1, FloatVar* x2);
   void gecode_sqr_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
   void gecode_sqrt_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
-  void gecode_pow_fvar_uint_fvar(CLSpace *space, FloatVar* x0, unsigned int pow, FloatVar* x1);
-  void gecode_nroot_fvar_uint_fvar(CLSpace *space, FloatVar* x0, unsigned int pow, FloatVar* x1);
+  void gecode_pow_fvar_uint_fvar(CLSpace *space, FloatVar* x0, int pow, FloatVar* x1);
+  void gecode_nroot_fvar_uint_fvar(CLSpace *space, FloatVar* x0, int pow, FloatVar* x1);
   void gecode_div_fvar_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1, FloatVar* x2);
   void gecode_exp_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
   void gecode_log_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1);
@@ -659,14 +659,14 @@ extern "C" {
 				    double c, ReifyMode mode, BoolVar* bvar);
   void gecode_lin_fvars_fvar_reified(CLSpace *space, FloatRelType rel, FloatVarArgs* x,
 				     FloatVar* y, ReifyMode mode, BoolVar* bvar);
-  void gecode_lin_fargs_fvars_dbl(CLSpace *space, FloatRelType rel, FloatArgs* a, FloatVarArgs* x,
+  void gecode_lin_fargs_fvars_dbl(CLSpace *space, FloatRelType rel, FloatValArgs* a, FloatVarArgs* x,
 				  double c);
-  void gecode_lin_fargs_fvars_fvar(CLSpace *space, FloatRelType rel, FloatArgs* a, FloatVarArgs* x,
+  void gecode_lin_fargs_fvars_fvar(CLSpace *space, FloatRelType rel, FloatValArgs* a, FloatVarArgs* x,
 				   FloatVar* y);
-  void gecode_lin_fargs_fvars_dbl_reified(CLSpace *space, FloatRelType rel, FloatArgs* a,
+  void gecode_lin_fargs_fvars_dbl_reified(CLSpace *space, FloatRelType rel, FloatValArgs* a,
 					  FloatVarArgs* x, double c,
 					  ReifyMode mode, BoolVar* bvar);
-  void gecode_lin_fargs_fvars_fvar_reified(CLSpace *space, FloatRelType rel, FloatArgs* a,
+  void gecode_lin_fargs_fvars_fvar_reified(CLSpace *space, FloatRelType rel, FloatValArgs* a,
 					   FloatVarArgs* x, FloatVar* y,
 					   ReifyMode mode, BoolVar* bvar);
 

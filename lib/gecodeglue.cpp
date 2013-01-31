@@ -351,7 +351,7 @@ public:
   }
 };
 
-class CLFloatArgs : public FloatArgs {
+class CLFloatArgs : public FloatValArgs {
 public:
   static void* operator new(size_t) {
     return ::operator new(sizeof(CLFloatArgs));
@@ -361,7 +361,7 @@ public:
     ::operator delete(v);
   }
 
-  CLFloatArgs(int n) : FloatArgs(n){};
+  CLFloatArgs(int n) : FloatValArgs(n){};
   ~CLFloatArgs(void) {
     if (capacity > onstack_size)
       heap.free(a,capacity);
@@ -1596,11 +1596,11 @@ void gecode_sqrt_fvar_fvar(CLSpace *space, FloatVar* x0, FloatVar* x1) {
   sqrt(*space, *x0, *x1); 
 }
 
-void gecode_pow_fvar_uint_fvar(CLSpace *space, FloatVar* x0, unsigned int pow, FloatVar* x1) {
+void gecode_pow_fvar_uint_fvar(CLSpace *space, FloatVar* x0, int pow, FloatVar* x1) {
   Gecode::pow(*space, *x0, pow, *x1); 
 }
 
-void gecode_nroot_fvar_uint_fvar(CLSpace *space, FloatVar* x0, unsigned int pow, FloatVar* x1) {
+void gecode_nroot_fvar_uint_fvar(CLSpace *space, FloatVar* x0, int pow, FloatVar* x1) {
   nroot(*space, *x0, pow, *x1); 
 }
 
@@ -1668,23 +1668,23 @@ void gecode_lin_fvars_fvar_reified(CLSpace *space, FloatRelType rel, FloatVarArg
   linear(*space, *x, rel, *y, Reify(*bvar, mode));
 }
 
-void gecode_lin_fargs_fvars_dbl(CLSpace *space, FloatRelType rel, FloatArgs* a, FloatVarArgs* x,
+void gecode_lin_fargs_fvars_dbl(CLSpace *space, FloatRelType rel, FloatValArgs* a, FloatVarArgs* x,
 				double c) {
   linear(*space, *a, *x, rel, FloatNum(c));
 }
 
-void gecode_lin_fargs_fvars_fvar(CLSpace *space, FloatRelType rel, FloatArgs* a, FloatVarArgs* x,
+void gecode_lin_fargs_fvars_fvar(CLSpace *space, FloatRelType rel, FloatValArgs* a, FloatVarArgs* x,
 				 FloatVar* y) {
   linear(*space, *a, *x, rel, *y);
 }
 
-void gecode_lin_fargs_fvars_dbl_reified(CLSpace *space, FloatRelType rel, FloatArgs* a,
+void gecode_lin_fargs_fvars_dbl_reified(CLSpace *space, FloatRelType rel, FloatValArgs* a,
 					FloatVarArgs* x, double c,
 					ReifyMode mode, BoolVar* bvar) {
   linear(*space, *a, *x, rel, FloatNum(c), Reify(*bvar, mode));
 }
 
-void gecode_lin_fargs_fvars_fvar_reified(CLSpace *space, FloatRelType rel, FloatArgs* a,
+void gecode_lin_fargs_fvars_fvar_reified(CLSpace *space, FloatRelType rel, FloatValArgs* a,
 					 FloatVarArgs* x, FloatVar* y,
 					 ReifyMode mode, BoolVar* bvar) {
   linear(*space, *a, *x, rel, *y, Reify(*bvar, mode));

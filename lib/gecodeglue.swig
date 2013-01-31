@@ -41,7 +41,7 @@
 %typemap(cin) IntArgs*  "intargs-type";
 %typemap(cin) BoolVarArgs*  "boolvarargs-type";
 %typemap(cin) FloatVarArgs*  "floatvarargs-type";
-%typemap(cin) FloatArgs*  "floatargs-type";
+%typemap(cin) FloatValArgs*  "floatargs-type";
 %typemap(cin) IntSetArgs*  "intsetargs-type";
 
 %typemap(cin) IntRelType  "int-relation-type";

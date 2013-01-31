@@ -1300,13 +1300,13 @@
 (cffi:defcfun ("gecode_pow_fvar_uint_fvar" gecode_pow_fvar_uint_fvar) :void
   (space space-type)
   (x0 floatvar-type)
-  (pow :unsigned-int)
+  (pow :int)
   (x1 floatvar-type))
 
 (cffi:defcfun ("gecode_nroot_fvar_uint_fvar" gecode_nroot_fvar_uint_fvar) :void
   (space space-type)
   (x0 floatvar-type)
-  (pow :unsigned-int)
+  (pow :int)
   (x1 floatvar-type))
 
 (cffi:defcfun ("gecode_div_fvar_fvar_fvar" gecode_div_fvar_fvar_fvar) :void
