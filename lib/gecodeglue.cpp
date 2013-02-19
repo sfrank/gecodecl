@@ -605,21 +605,21 @@ IntVarBranch* INT_VAR_SIZE_MAX(void){
   // Gecode::INT_VAR_SIZE_MAX(NULL);
   return new IntVarBranch(IntVarBranch::SEL_SIZE_MAX, NULL);
 }
-IntVarBranch* INT_VAR_SIZE_DEGREE_MIN(void){
-  // Gecode::INT_VAR_SIZE_DEGREE_MIN(NULL);
+IntVarBranch* INT_VAR_DEGREE_SIZE_MIN(void){
+  // Gecode::INT_VAR_DEGREE_SIZE_MIN(NULL);
   return new IntVarBranch(IntVarBranch::SEL_SIZE_MAX, NULL);
 }
-IntVarBranch* INT_VAR_SIZE_DEGREE_MAX(void){
-  // Gecode::INT_VAR_SIZE_DEGREE_MAX(NULL);
-  return new IntVarBranch(IntVarBranch::SEL_SIZE_DEGREE_MIN, NULL);
+IntVarBranch* INT_VAR_DEGREE_SIZE_MAX(void){
+  // Gecode::INT_VAR_DEGREE_SIZE_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_DEGREE_SIZE_MIN, NULL);
 }
-IntVarBranch* INT_VAR_SIZE_AFC_MIN(void){
-  // Gecode::INT_VAR_SIZE_AFC_MIN(NULL);
-  return new IntVarBranch(IntVarBranch::SEL_SIZE_AFC_MIN, NULL);
+IntVarBranch* INT_VAR_AFC_SIZE_MIN(void){
+  // Gecode::INT_VAR_AFC_SIZE_MIN(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_AFC_SIZE_MIN, NULL);
 }
-IntVarBranch* INT_VAR_SIZE_AFC_MAX(void){
-  // Gecode::INT_VAR_SIZE_AFC_MAX(NULL);
-  return new IntVarBranch(IntVarBranch::SEL_SIZE_AFC_MAX, NULL);
+IntVarBranch* INT_VAR_AFC_SIZE_MAX(void){
+  // Gecode::INT_VAR_AFC_SIZE_MAX(NULL);
+  return new IntVarBranch(IntVarBranch::SEL_AFC_SIZE_MAX, NULL);
 }
 /* TODO: check whether to insert ACTIVITY variants */
 IntVarBranch* INT_VAR_REGRET_MIN_MIN(void){
@@ -1767,21 +1767,21 @@ FloatVarBranch* FLOAT_VAR_SIZE_MAX(void){
   // Gecode::FLOAT_VAR_SIZE_MAX(NULL);
   return new FloatVarBranch(FloatVarBranch::SEL_SIZE_MAX, NULL);
 }
-FloatVarBranch* FLOAT_VAR_SIZE_DEGREE_MIN(void){
-  // Gecode::FLOAT_VAR_SIZE_DEGREE_MIN(NULL);
+FloatVarBranch* FLOAT_VAR_DEGREE_SIZE_MIN(void){
+  // Gecode::FLOAT_VAR_DEGREE_SIZE_MIN(NULL);
   return new FloatVarBranch(FloatVarBranch::SEL_SIZE_MAX, NULL);
 }
-FloatVarBranch* FLOAT_VAR_SIZE_DEGREE_MAX(void){
-  // Gecode::FLOAT_VAR_SIZE_DEGREE_MAX(NULL);
-  return new FloatVarBranch(FloatVarBranch::SEL_SIZE_DEGREE_MIN, NULL);
+FloatVarBranch* FLOAT_VAR_DEGREE_SIZE_MAX(void){
+  // Gecode::FLOAT_VAR_DEGREE_SIZE_MAX(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_DEGREE_SIZE_MIN, NULL);
 }
-FloatVarBranch* FLOAT_VAR_SIZE_AFC_MIN(void){
-  // Gecode::FLOAT_VAR_SIZE_AFC_MIN(NULL);
-  return new FloatVarBranch(FloatVarBranch::SEL_SIZE_AFC_MIN, NULL);
+FloatVarBranch* FLOAT_VAR_AFC_SIZE_MIN(void){
+  // Gecode::FLOAT_VAR_AFC_SIZE_MIN(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_AFC_SIZE_MIN, NULL);
 }
-FloatVarBranch* FLOAT_VAR_SIZE_AFC_MAX(void){
-  // Gecode::FLOAT_VAR_SIZE_AFC_MAX(NULL);
-  return new FloatVarBranch(FloatVarBranch::SEL_SIZE_AFC_MAX, NULL);
+FloatVarBranch* FLOAT_VAR_AFC_SIZE_MAX(void){
+  // Gecode::FLOAT_VAR_AFC_SIZE_MAX(NULL);
+  return new FloatVarBranch(FloatVarBranch::SEL_AFC_SIZE_MAX, NULL);
 }
 /* TODO: check whether to insert ACTIVITY variants */
 

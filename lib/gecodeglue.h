@@ -95,8 +95,8 @@ extern "C" {
   IntVarBranch* INT_VAR_MAX_MAX(void);
   IntVarBranch* INT_VAR_SIZE_MIN(void);
   IntVarBranch* INT_VAR_SIZE_MAX(void);
-  IntVarBranch* INT_VAR_SIZE_DEGREE_MIN(void);
-  IntVarBranch* INT_VAR_SIZE_DEGREE_MAX(void);
+  IntVarBranch* INT_VAR_DEGREE_SIZE_MIN(void);
+  IntVarBranch* INT_VAR_DEGREE_SIZE_MAX(void);
   IntVarBranch* INT_VAR_SIZE_AFC_MIN(void);
   IntVarBranch* INT_VAR_SIZE_AFC_MAX(void);
   /* TODO: check whether to insert ACTIVITY variants */
@@ -693,10 +693,10 @@ extern "C" {
   FloatVarBranch* FLOAT_VAR_MAX_MAX(void);
   FloatVarBranch* FLOAT_VAR_SIZE_MIN(void);
   FloatVarBranch* FLOAT_VAR_SIZE_MAX(void);
-  FloatVarBranch* FLOAT_VAR_SIZE_DEGREE_MIN(void);
-  FloatVarBranch* FLOAT_VAR_SIZE_DEGREE_MAX(void);
-  FloatVarBranch* FLOAT_VAR_SIZE_AFC_MIN(void);
-  FloatVarBranch* FLOAT_VAR_SIZE_AFC_MAX(void);
+  FloatVarBranch* FLOAT_VAR_DEGREE_SIZE_MIN(void);
+  FloatVarBranch* FLOAT_VAR_DEGREE_SIZE_MAX(void);
+  FloatVarBranch* FLOAT_VAR_AFC_SIZE_MIN(void);
+  FloatVarBranch* FLOAT_VAR_AFC_SIZE_MAX(void);
   /* TODO: check whether to insert ACTIVITY variants */
 
   void gecode_fval_selector_delete(FloatValBranch* s);

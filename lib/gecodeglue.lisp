@@ -199,9 +199,9 @@
 
 (cffi:defcfun ("INT_VAR_SIZE_MAX" INT_VAR_SIZE_MAX) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_SIZE_DEGREE_MIN" INT_VAR_SIZE_DEGREE_MIN) intvarselector-type)
+(cffi:defcfun ("INT_VAR_DEGREE_SIZE_MIN" INT_VAR_DEGREE_SIZE_MIN) intvarselector-type)
 
-(cffi:defcfun ("INT_VAR_SIZE_DEGREE_MAX" INT_VAR_SIZE_DEGREE_MAX) intvarselector-type)
+(cffi:defcfun ("INT_VAR_DEGREE_SIZE_MAX" INT_VAR_DEGREE_SIZE_MAX) intvarselector-type)
 
 (cffi:defcfun ("INT_VAR_SIZE_AFC_MIN" INT_VAR_SIZE_AFC_MIN) intvarselector-type)
 
@@ -1471,13 +1471,13 @@
 
 (cffi:defcfun ("FLOAT_VAR_SIZE_MAX" FLOAT_VAR_SIZE_MAX) floatvarselector-type)
 
-(cffi:defcfun ("FLOAT_VAR_SIZE_DEGREE_MIN" FLOAT_VAR_SIZE_DEGREE_MIN) floatvarselector-type)
+(cffi:defcfun ("FLOAT_VAR_DEGREE_SIZE_MIN" FLOAT_VAR_DEGREE_SIZE_MIN) floatvarselector-type)
 
-(cffi:defcfun ("FLOAT_VAR_SIZE_DEGREE_MAX" FLOAT_VAR_SIZE_DEGREE_MAX) floatvarselector-type)
+(cffi:defcfun ("FLOAT_VAR_DEGREE_SIZE_MAX" FLOAT_VAR_DEGREE_SIZE_MAX) floatvarselector-type)
 
-(cffi:defcfun ("FLOAT_VAR_SIZE_AFC_MIN" FLOAT_VAR_SIZE_AFC_MIN) floatvarselector-type)
+(cffi:defcfun ("FLOAT_VAR_AFC_SIZE_MIN" FLOAT_VAR_AFC_SIZE_MIN) floatvarselector-type)
 
-(cffi:defcfun ("FLOAT_VAR_SIZE_AFC_MAX" FLOAT_VAR_SIZE_AFC_MAX) floatvarselector-type)
+(cffi:defcfun ("FLOAT_VAR_AFC_SIZE_MAX" FLOAT_VAR_AFC_SIZE_MAX) floatvarselector-type)
 
 (cffi:defcfun ("gecode_fval_selector_delete" gecode_fval_selector_delete) :void
   (s floatvalselector-type))
