@@ -419,6 +419,30 @@
   (bvar boolvar-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_dom_ivar_ivar" gecode_dom_ivar_ivar) :void
+  (space space-type)
+  (v intvar-type)
+  (b intvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_bvar_bvar" gecode_dom_bvar_bvar) :void
+  (space space-type)
+  (v boolvar-type)
+  (b boolvar-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_ivars_ivars" gecode_dom_ivars_ivars) :void
+  (space space-type)
+  (v intvarargs-type)
+  (b intvarargs-type)
+  (icl int-consistency-level))
+
+(cffi:defcfun ("gecode_dom_bvars_bvars" gecode_dom_bvars_bvars) :void
+  (space space-type)
+  (v boolvarargs-type)
+  (b boolvarargs-type)
+  (icl int-consistency-level))
+
 (cffi:defcfun ("gecode_rel_ivar_int" gecode_rel_ivar_int) :void
   (space space-type)
   (op int-relation-type)

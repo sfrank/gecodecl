@@ -882,6 +882,26 @@ void gecode_dom_ivar_iset_reify(CLSpace *space, IntVar* v, IntSet* s,
   dom(*space, *v, *s, Reify(*bvar, mode), icl);
 }
 
+void gecode_dom_ivar_ivar(CLSpace *space,
+                          IntVar* v, IntVar* b, IntConLevel icl) {
+  dom(*space, *v, *b, icl);
+}
+
+void gecode_dom_bvar_bvar(CLSpace *space,
+                          BoolVar* v, BoolVar* b, IntConLevel icl) {
+  dom(*space, *v, *b, icl);
+}
+
+void gecode_dom_ivars_ivars(CLSpace *space,
+                            IntVarArgs* v, IntVarArgs* b, IntConLevel icl) {
+  dom(*space, *v, *b, icl);
+}
+
+void gecode_dom_bvars_bvars(CLSpace *space,
+                            BoolVarArgs* v, BoolVarArgs* b, IntConLevel icl) {
+  dom(*space, *v, *b, icl);
+}
+
 
 void gecode_rel_ivar_int(CLSpace *space, IntRelType op,
                          IntVar* v, int value, IntConLevel icl) {

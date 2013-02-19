@@ -198,6 +198,16 @@ extern "C" {
   void gecode_dom_ivar_iset_reify(CLSpace *space, IntVar* v, IntSet* s,
                                   ReifyMode mode, BoolVar* bvar, IntConLevel icl);
 
+  void gecode_dom_ivar_ivar(CLSpace *space, IntVar* v, IntVar* b, IntConLevel icl);
+
+  void gecode_dom_bvar_bvar(CLSpace *space, BoolVar* v, BoolVar* b, IntConLevel icl);
+
+  void gecode_dom_ivars_ivars(CLSpace *space, IntVarArgs* v, IntVarArgs* b,
+                              IntConLevel icl);
+
+  void gecode_dom_bvars_bvars(CLSpace *space, BoolVarArgs* v, BoolVarArgs* b,
+                              IntConLevel icl);
+
   void gecode_rel_ivar_int(CLSpace *space, IntRelType op,
                            IntVar* v, int value, IntConLevel icl);
 
