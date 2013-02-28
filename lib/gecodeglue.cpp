@@ -1848,13 +1848,41 @@ void gecode_dom_svar_int(CLSpace *space, SetRelType r, SetVar* x, int i) {
   dom(*space, *x, r, i);
 }
 
+void gecode_dom_svars_int(CLSpace *space, SetRelType r, SetVarArgs* x, int i) {
+  dom(*space, *x, r, i);
+}
+
 void gecode_dom_svar_int_int(CLSpace *space, SetRelType r, SetVar* x,
                              int i, int j) {
   dom(*space, *x, r, i, j);
 }
 
-void gecode_dom_svar_iset(CLSpace *space, SetRelType r, SetVar* x, IntSet* i) {
-  dom(*space, *x, r, *i);
+void gecode_dom_svars_int_int(CLSpace *space, SetRelType r, SetVarArgs* x,
+                              int i, int j) {
+  dom(*space, *x, r, i, j);
+}
+
+
+void gecode_dom_svar_iset(CLSpace *space, SetRelType r, SetVar* x, IntSet* s) {
+  dom(*space, *x, r, *s);
+}
+
+void gecode_dom_svars_iset(CLSpace *space, SetRelType r, SetVarArgs* x, IntSet* s) {
+  dom(*space, *x, r, *s);
+}
+
+void gecode_cardinality_svar_uint_uint(CLSpace *space, SetVar* x,
+                                       unsigned int i, unsigned int j) {
+  cardinality(*space, *x, i, j);
+}
+
+void gecode_cardinality_svars_uint_uint(CLSpace *space, SetVarArgs* x,
+                                        unsigned int i, unsigned int j) {
+  cardinality(*space, *x, i, j);
+}
+
+void gecode_cardinality_svar_ivar(CLSpace *space, SetVar* x, IntVar* i) {
+  cardinality(*space, *x, *i);
 }
 
 void gecode_dom_svar_int_reified(CLSpace *space, SetRelType r, SetVar* x,
@@ -1870,15 +1898,6 @@ void gecode_dom_svar_int_int_reified(CLSpace *space, SetRelType r, SetVar* x,
 void gecode_dom_svar_iset_reified(CLSpace *space, SetRelType r, SetVar* x,
                                   IntSet* i, ReifyMode mode, BoolVar* b) {
   dom(*space, *x, r, *i, Reify(*b, mode));
-}
-
-void gecode_cardinality_svar_uint_uint(CLSpace *space, SetVar* x,
-                                       unsigned int i, unsigned int j) {
-  cardinality(*space, *x, i, j);
-}
-
-void gecode_cardinality_svar_ivar(CLSpace *space, SetVar* x, IntVar* i) {
-  cardinality(*space, *x, *i);
 }
 
 

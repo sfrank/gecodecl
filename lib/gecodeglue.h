@@ -721,18 +721,26 @@ extern "C" {
   void gecode_intset_delete(IntSet* iset);
   /* set domain constraints */
   void gecode_dom_svar_int(CLSpace *space, SetRelType r, SetVar* x, int i);
+  void gecode_dom_svars_int(CLSpace *space, SetRelType r, SetVarArgs* x, int i);
   void gecode_dom_svar_int_int(CLSpace *space, SetRelType r, SetVar* x,
                                int i, int j);
-  void gecode_dom_svar_iset(CLSpace *space, SetRelType r, SetVar* x, IntSet* i);
+  void gecode_dom_svars_int_int(CLSpace *space, SetRelType r, SetVarArgs* x,
+                                int i, int j);
+  void gecode_dom_svar_iset(CLSpace *space, SetRelType r, SetVar* x, IntSet* s);
+  void gecode_dom_svars_iset(CLSpace *space, SetRelType r, SetVarArgs* x, IntSet* s);
+
+  void gecode_cardinality_svar_uint_uint(CLSpace *space, SetVar* x,
+                                         unsigned int i, unsigned int j);
+  void gecode_cardinality_svars_uint_uint(CLSpace *space, SetVarArgs* x,
+                                          unsigned int i, unsigned int j);
+  void gecode_cardinality_svar_ivar(CLSpace *space, SetVar* x, IntVar* i);
+
   void gecode_dom_svar_int_reified(CLSpace *space, SetRelType r, SetVar* x,
                                    int i, ReifyMode mode, BoolVar* b);
   void gecode_dom_svar_int_int_reified(CLSpace *space, SetRelType r, SetVar* x,
                                        int i, int j, ReifyMode mode, BoolVar* b);
   void gecode_dom_svar_iset_reified(CLSpace *space, SetRelType r, SetVar* x,
                                     IntSet* i, ReifyMode mode, BoolVar* b);
-  void gecode_cardinality_svar_uint_uint(CLSpace *space, SetVar* x,
-                                         unsigned int i, unsigned int j);
-  void gecode_cardinality_svar_ivar(CLSpace *space, SetVar* x, IntVar* i);
   /* set relations */
   void gecode_srel_svar_svar(CLSpace *space, SetVar* x, SetRelType r, SetVar* y);
   void gecode_srel_svar_svar_reified(CLSpace *space, SetVar* x, SetRelType r, SetVar* y,
