@@ -631,6 +631,19 @@ extern "C" {
 
 
   /* float domain specific functions */
+  void gecode_dom_fvar_dbl(CLSpace *space, FloatVar* x, double n);
+  void gecode_dom_fvars_dbl(CLSpace *space, FloatVarArgs* x, double n);
+  void gecode_dom_fvar_dbl_dbl(CLSpace *space, FloatVar* x, double l, double m);
+  void gecode_dom_fvars_dbl_dbl(CLSpace *space, FloatVarArgs* x,
+                                double l, double u);
+  void gecode_dom_fvar_dbl_reified(CLSpace *space, FloatVar* x, double n,
+                                   ReifyMode mode, BoolVar* bvar);
+  void gecode_dom_fvar_dbl_dbl_reified(CLSpace *space, FloatVar* x,
+                                       double l, double m,
+                                       ReifyMode mode, BoolVar* bvar);
+  void gecode_dom_fvar_fvar(CLSpace *space, FloatVar* x, FloatVar* d);
+  void gecode_dom_fvars_fvars(CLSpace *space, FloatVarArgs* x, FloatVarArgs* d);
+
   void gecode_rel_fvar_fvar(CLSpace *space, FloatRelType op, FloatVar* x0, FloatVar* x1);
   void gecode_rel_fvar_dbl(CLSpace *space, FloatRelType op, FloatVar* x0, double x1);
   void gecode_rel_fvar_dbl_reified(CLSpace *space, FloatRelType op, FloatVar* x0, double x1,

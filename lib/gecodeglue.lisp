@@ -1238,6 +1238,53 @@
   (bvar boolvar-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_dom_fvar_dbl" gecode_dom_fvar_dbl) :void
+  (space space-type)
+  (x floatvar-type)
+  (n :double))
+
+(cffi:defcfun ("gecode_dom_fvars_dbl" gecode_dom_fvars_dbl) :void
+  (space space-type)
+  (x floatvarargs-type)
+  (n :double))
+
+(cffi:defcfun ("gecode_dom_fvar_dbl_dbl" gecode_dom_fvar_dbl_dbl) :void
+  (space space-type)
+  (x floatvar-type)
+  (l :double)
+  (m :double))
+
+(cffi:defcfun ("gecode_dom_fvars_dbl_dbl" gecode_dom_fvars_dbl_dbl) :void
+  (space space-type)
+  (x floatvarargs-type)
+  (l :double)
+  (u :double))
+
+(cffi:defcfun ("gecode_dom_fvar_dbl_reified" gecode_dom_fvar_dbl_reified) :void
+  (space space-type)
+  (x floatvar-type)
+  (n :double)
+  (mode reify-mode)
+  (bvar boolvar-type))
+
+(cffi:defcfun ("gecode_dom_fvar_dbl_dbl_reified" gecode_dom_fvar_dbl_dbl_reified) :void
+  (space space-type)
+  (x floatvar-type)
+  (l :double)
+  (m :double)
+  (mode reify-mode)
+  (bvar boolvar-type))
+
+(cffi:defcfun ("gecode_dom_fvar_fvar" gecode_dom_fvar_fvar) :void
+  (space space-type)
+  (x floatvar-type)
+  (d floatvar-type))
+
+(cffi:defcfun ("gecode_dom_fvars_fvars" gecode_dom_fvars_fvars) :void
+  (space space-type)
+  (x floatvarargs-type)
+  (d floatvarargs-type))
+
 (cffi:defcfun ("gecode_rel_fvar_fvar" gecode_rel_fvar_fvar) :void
   (space space-type)
   (op float-relation-type)
