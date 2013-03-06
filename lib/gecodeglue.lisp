@@ -1608,6 +1608,16 @@
   (mode reify-mode)
   (b boolvar-type))
 
+(cffi:defcfun ("gecode_dom_svar_svar" gecode_dom_svar_svar) :void
+  (space space-type)
+  (x setvar-type)
+  (d setvar-type))
+
+(cffi:defcfun ("gecode_dom_svars_svars" gecode_dom_svars_svars) :void
+  (space space-type)
+  (x :pointer)
+  (d :pointer))
+
 (cffi:defcfun ("gecode_srel_svar_svar" gecode_srel_svar_svar) :void
   (space space-type)
   (x setvar-type)

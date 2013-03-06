@@ -1900,6 +1900,14 @@ void gecode_dom_svar_iset_reified(CLSpace *space, SetRelType r, SetVar* x,
   dom(*space, *x, r, *i, Reify(*b, mode));
 }
 
+void gecode_dom_svar_svar(CLSpace *space, SetVar* x, SetVar* d) {
+  dom(*space, *x, *d);
+}
+
+void gecode_dom_svars_svars(CLSpace *space, SetVarArgs* x, SetVarArgs* d) {
+  dom(*space, *x, *d);
+}
+
 
 /* set relations */
 void gecode_srel_svar_svar(CLSpace *space, SetVar* x, SetRelType r, SetVar* y) {

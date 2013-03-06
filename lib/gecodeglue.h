@@ -741,6 +741,10 @@ extern "C" {
                                        int i, int j, ReifyMode mode, BoolVar* b);
   void gecode_dom_svar_iset_reified(CLSpace *space, SetRelType r, SetVar* x,
                                     IntSet* i, ReifyMode mode, BoolVar* b);
+
+  void gecode_dom_svar_svar(CLSpace *space, SetVar* x, SetVar* d);
+  void gecode_dom_svars_svars(CLSpace *space, SetVarArgs* x, SetVarArgs* d);
+
   /* set relations */
   void gecode_srel_svar_svar(CLSpace *space, SetVar* x, SetRelType r, SetVar* y);
   void gecode_srel_svar_svar_reified(CLSpace *space, SetVar* x, SetRelType r, SetVar* y,
