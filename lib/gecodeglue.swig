@@ -34,7 +34,7 @@
 %typemap(cin) CLSpace* "space-type";
 %typemap(cin) DFS<CLSpace>* "search-type";
 %typemap(cin) BAB<CLSpace>* "search-type";
-//%typemap(cin) RBS<CLSpace>* "search-type";
+%typemap(cin) RBS<CLSpace>* "search-type";
 
 %typemap(cout) STATUS  "variable-status";
 

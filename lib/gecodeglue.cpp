@@ -793,6 +793,27 @@ CLSpace *gecode_bab_engine_next(BAB<CLSpace> *bab){
 }
 
 
+RBS<CLSpace> *gecode_rbs_engine_create(CLSpace *space){
+  EXCSTART
+    Search::Options options = Search::Options();
+    
+    // check whether there are any branchers defined at all
+    checkBranchers(space);
+    return (new RBS<CLSpace>(space, options));
+  EXCSTOP
+  return NULL;
+}
+
+void gecode_rbs_engine_delete(RBS<CLSpace> *rbs){ delete rbs;}
+
+CLSpace *gecode_rbs_engine_next(RBS<CLSpace> *rbs){
+  EXCSTART
+    return rbs->next();
+  EXCSTOP
+    return NULL;
+}
+
+
 // Propagator interfaces 
 
 /* simple relation constraints */

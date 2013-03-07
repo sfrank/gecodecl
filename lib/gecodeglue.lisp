@@ -283,6 +283,15 @@
 (cffi:defcfun ("gecode_bab_engine_next" gecode_bab_engine_next) :pointer
   (bab search-type))
 
+(cffi:defcfun ("gecode_rbs_engine_create" gecode_rbs_engine_create) :pointer
+  (space space-type))
+
+(cffi:defcfun ("gecode_rbs_engine_delete" gecode_rbs_engine_delete) :void
+  (rbs search-type))
+
+(cffi:defcfun ("gecode_rbs_engine_next" gecode_rbs_engine_next) :pointer
+  (rbs search-type))
+
 (cffi:defcfun ("gecode_rel_bvar_int" gecode_rel_bvar_int) :void
   (space space-type)
   (op int-relation-type)

@@ -135,7 +135,10 @@ extern "C" {
   BAB<CLSpace> *gecode_bab_engine_create(CLSpace *space, size_t minVar);
   void gecode_bab_engine_delete(BAB<CLSpace> *bab);
   CLSpace *gecode_bab_engine_next(BAB<CLSpace> *bab);
-  
+  RBS<CLSpace> *gecode_rbs_engine_create(CLSpace *space);
+  void gecode_rbs_engine_delete(RBS<CLSpace> *rbs);
+  CLSpace *gecode_rbs_engine_next(RBS<CLSpace> *rbs);
+
 
   /* ### propagator interfaces ### */
 

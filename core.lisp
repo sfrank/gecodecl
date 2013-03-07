@@ -205,29 +205,36 @@
 (defstruct (bab (:constructor %make-bab-boa (sap))
                 (:include engine)))
 
-;;; depth first search (DFS)
-(defun reclaim-dfs (engine)
-  (lambda ()
-    (gecode_dfs_engine_delete engine)))
+(defstruct (rbs (:constructor %make-rbs-boa (sap))
+                (:include engine)))
 
+;;; depth first search (DFS)
 (defun make-dfs (space)
   (declare (type gspace space))
   (let ((dfs (%make-dfs-boa (gecode_dfs_engine_create space))))
-    (tg:finalize dfs (reclaim-dfs dfs))
+    (tg:finalize dfs (lambda ()
+                       (gecode_dfs_engine_delete dfs)))
     dfs))
 
 ;;; branch and bound (BAB)
-(defun reclaim-bab (engine)
-  (lambda ()
-    (gecode_bab_engine_delete engine)))
-
 (defun make-bab (space min-var)
   (declare (type gspace space)
            (type intvar min-var))
-  (let ((bab (%make-bab-boa (gecode_bab_engine_create space
-                                                      (gvariable-index min-var)))))
-    (tg:finalize bab (reclaim-bab bab))
+  (let ((bab (%make-bab-boa 
+              (gecode_bab_engine_create space
+                                        (gvariable-index min-var)))))
+    (tg:finalize bab (lambda ()
+                       (gecode_bab_engine_delete bab)))
     bab))
+
+;;; depth-first restart best solution search (RBS)
+(defun make-rbs (space)
+  (declare (type gspace space))
+  (let ((rbs (%make-rbs-boa (gecode_rbs_engine_create space))))
+    (tg:finalize rbs (lambda ()
+                       (gecode_rbs_engine_delete rbs)))
+    rbs))
+
 
 ;;; solution search for both engine types
 (defun search-next (engine)
@@ -236,6 +243,9 @@
            (unless (null-pointer-p space)
              (make-gspace-from-ref space))))
     (bab (let ((space (gecode_bab_engine_next engine)))
+           (unless (null-pointer-p space)
+             (make-gspace-from-ref space))))
+    (rbs (let ((space (gecode_rbs_engine_next engine)))
            (unless (null-pointer-p space)
              (make-gspace-from-ref space))))))
 
