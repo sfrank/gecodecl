@@ -117,6 +117,10 @@ extern "C" {
   IntValBranch* INT_VAL_RANGE_MAX(void);
   IntValBranch* INT_VALUES_MIN(void);
   IntValBranch* INT_VALUES_MAX(void);
+  IntValBranch* INT_VAL_NEAR_MIN(IntArgs *n);
+  IntValBranch* INT_VAL_NEAR_MAX(IntArgs *n);
+  IntValBranch* INT_VAL_NEAR_INC(IntArgs *n);
+  IntValBranch* INT_VAL_NEAR_DEC(IntArgs *n);
 
   /* search engines */
   DFS<CLSpace> *gecode_dfs_engine_create(CLSpace *space);

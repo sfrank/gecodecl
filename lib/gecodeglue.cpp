@@ -683,6 +683,22 @@ IntValBranch* INT_VALUES_MAX(void){
   // Gecode::INT_VALUES_MAX();
   return new IntValBranch(IntValBranch::SEL_VALUES_MAX);
 }
+IntValBranch* INT_VAL_NEAR_MIN(IntArgs *n){
+  // Gecode::INT_VAL_NEAR_MIN(IntSharedArray n);
+  return new IntValBranch(IntValBranch::SEL_NEAR_MIN, *n);
+}
+IntValBranch* INT_VAL_NEAR_MAX(IntArgs *n){
+  // Gecode::INT_VAL_NEAR_MAX(IntSharedArray n);
+  return new IntValBranch(IntValBranch::SEL_NEAR_MAX, *n);
+}
+IntValBranch* INT_VAL_NEAR_INC(IntArgs *n){
+  // Gecode::INT_VAL_NEAR_INC(IntSharedArray n);
+  return new IntValBranch(IntValBranch::SEL_NEAR_INC, *n);
+}
+IntValBranch* INT_VAL_NEAR_DEC(IntArgs *n){
+  // Gecode::INT_VAL_NEAR_DEC(IntSharedArray n);
+  return new IntValBranch(IntValBranch::SEL_NEAR_DEC, *n);
+}
 
 
 // Search engines

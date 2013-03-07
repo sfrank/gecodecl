@@ -239,6 +239,18 @@
 
 (cffi:defcfun ("INT_VALUES_MAX" INT_VALUES_MAX) intvalselector-type)
 
+(cffi:defcfun ("INT_VAL_NEAR_MIN" INT_VAL_NEAR_MIN) intvalselector-type
+  (n intargs-type))
+
+(cffi:defcfun ("INT_VAL_NEAR_MAX" INT_VAL_NEAR_MAX) intvalselector-type
+  (n intargs-type))
+
+(cffi:defcfun ("INT_VAL_NEAR_INC" INT_VAL_NEAR_INC) intvalselector-type
+  (n intargs-type))
+
+(cffi:defcfun ("INT_VAL_NEAR_DEC" INT_VAL_NEAR_DEC) intvalselector-type
+  (n intargs-type))
+
 (cffi:defcfun ("gecode_dfs_engine_create" gecode_dfs_engine_create) :pointer
   (space space-type))
 
