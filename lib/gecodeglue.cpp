@@ -11,9 +11,6 @@
 
 #define EXCSTART try {
 #define EXCSTOP  }                                 \
-                 catch (Exception &e) {            \
-                   exceptionHandlerCL(e.what());   \
-                 }                                 \
                  catch (exception &e) {            \
                    exceptionHandlerCL(e.what());   \
                  }
