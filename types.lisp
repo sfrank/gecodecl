@@ -88,6 +88,17 @@
 (defmethod expand-to-foreign (setvar (type setvar-type))
   `(gecode_get_setvar_by_index *gspace* (setvar-index ,setvar)))
 
+;; brancher handles
+(cffi:define-foreign-type brancherhandle-type () ()
+  (:actual-type :pointer)
+  (:simple-parser brancherhandle-type))
+
+(defmethod expand-to-foreign (handle (type brancherhandle-type))
+  `(brancher-handle-sap ,handle))
+(defmethod expand-from-foreign (sap (type brancherhandle-type))
+  `(make-brancher-handle ,sap))
+
+
 ;; branchers
 (cffi:define-foreign-type intvarselector-type () ()
   (:actual-type :pointer)

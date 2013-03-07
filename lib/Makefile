@@ -8,7 +8,7 @@ all: libgecodeglue.so gecodeglue.lisp
 libgecodeglue.so: gecodeglue.h gecodeglue.cpp
 	g++ $(OPTIONS) -W -Wall -Wextra -fPIC -shared $(LIBS) -o libgecodeglue.so gecodeglue.cpp
 
-gecodeglue.lisp: gecodeglue.swig gecodeglue.h
+gecodeglue.lisp: gecodeglue.swig gecodeglue.h libgecodeglue.so
 	swig -cffi -noswig-lisp gecodeglue.swig
 
 test: test.o

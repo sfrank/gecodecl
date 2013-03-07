@@ -15,6 +15,9 @@
 %typemap(cin) FloatVar* "floatvar-type";
 %typemap(cin) SetVar* "setvar-type";
 
+%typemap(cin) BrancherHandle*  "brancherhandle-type";
+%typemap(cout) BrancherHandle*  "brancherhandle-type";
+
 %typemap(cin) IntVarBranch*  "intvarselector-type";
 %typemap(cout) IntVarBranch*  "intvarselector-type";
 %typemap(cin) IntValBranch*  "intvalselector-type";

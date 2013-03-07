@@ -40,6 +40,8 @@ extern "C" {
   CLSpace* gecode_space_create(void);
   void gecode_space_delete(CLSpace *space);
   CLSpace* gecode_space_copy(CLSpace *space);
+  unsigned int gecode_space_propagators_count(CLSpace* Space);
+  unsigned int gecode_space_branchers_count(CLSpace* Space);
 
   /* variables */
   size_t gecode_bool_addvar(CLSpace *space);
@@ -70,14 +72,18 @@ extern "C" {
                              int* glbMin, int* glbMax,
                              int* cardMin, int* cardMax);
 
-  /* branchers */
-  void gecode_branch_ivar(CLSpace *space, IntVar* var, IntValBranch* valb);
-  void gecode_branch_ivars(CLSpace *space, IntVarArgs* vars,
-                           IntVarBranch* varb, IntValBranch* valb);
+  /* brancher handles */
+  void gecode_brancherhandle_delete(BrancherHandle* bh);
+  void gecode_brancherhandle_kill(BrancherHandle* bh, CLSpace* space);
 
-  void gecode_branch_bvar(CLSpace *space, BoolVar* var, IntValBranch* valb);
-  void gecode_branch_bvars(CLSpace *space, BoolVarArgs* vars,
-                           IntVarBranch* varb, IntValBranch* valb);
+
+  /* branchers */
+  BrancherHandle* gecode_branch_ivar(CLSpace *space, IntVar* var, IntValBranch* valb);
+  BrancherHandle* gecode_branch_ivars(CLSpace *space, IntVarArgs* vars,
+                                      IntVarBranch* varb, IntValBranch* valb);
+  BrancherHandle* gecode_branch_bvar(CLSpace *space, BoolVar* var, IntValBranch* valb);
+  BrancherHandle* gecode_branch_bvars(CLSpace *space, BoolVarArgs* vars,
+                                      IntVarBranch* varb, IntValBranch* valb);
 
   /* variable selectors for branchers */
   void gecode_ivar_selector_delete(IntVarBranch* s);

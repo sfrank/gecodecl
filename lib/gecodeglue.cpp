@@ -454,6 +454,14 @@ void gecode_space_delete(CLSpace *space) { delete space; }
 CLSpace* gecode_space_copy(CLSpace *space) {
   return (CLSpace *) space->clone(false); }
 
+unsigned int gecode_space_propagators_count(CLSpace* space) {
+  return space->propagators();
+}
+
+unsigned int gecode_space_branchers_count(CLSpace* space) {
+  return space->branchers();
+}
+
 SpaceStatus gecode_space_status(CLSpace *space){
   return space->status(); }
 
@@ -523,23 +531,32 @@ STATUS gecode_get_set_info(CLSpace *space,
 }
 
 
+// BrancherHandles
+void gecode_brancherhandle_delete(BrancherHandle* bh) {
+  delete bh;
+}
+void gecode_brancherhandle_kill(BrancherHandle* bh, CLSpace* space) {
+  bh->kill(*space);
+}
+
+
 // Branchers
-void gecode_branch_ivar(CLSpace *space, IntVar* var, IntValBranch* valb) {
-  branch(*space, *var, *valb);
+BrancherHandle* gecode_branch_ivar(CLSpace *space, IntVar* var, IntValBranch* valb) {
+  return new BrancherHandle(branch(*space, *var, *valb));
 }
 
-void gecode_branch_int_vars(CLSpace *space, IntVarArgs* vars,
-                            IntVarBranch* varb, IntValBranch* valb) {
-  branch(*space, *vars, *varb, *valb);
+BrancherHandle* gecode_branch_ivars(CLSpace *space, IntVarArgs* vars,
+                                    IntVarBranch* varb, IntValBranch* valb) {
+  return new BrancherHandle(branch(*space, *vars, *varb, *valb));
 }
 
-void gecode_branch_bvar(CLSpace *space, BoolVar* var, IntValBranch* valb) {
-  branch(*space, *var, *valb);
+BrancherHandle* gecode_branch_bvar(CLSpace *space, BoolVar* var, IntValBranch* valb) {
+  return new BrancherHandle(branch(*space, *var, *valb));
 }
 
-void gecode_branch_bool_vars(CLSpace *space, BoolVarArgs* vars,
-                            IntVarBranch* varb, IntValBranch* valb) {
-  branch(*space, *vars, *varb, *valb);
+BrancherHandle* gecode_branch_bool_vars(CLSpace *space, BoolVarArgs* vars,
+                                        IntVarBranch* varb, IntValBranch* valb) {
+  return new BrancherHandle(branch(*space, *vars, *varb, *valb));
 }
 
 /* variable selectors for branchers */
@@ -549,9 +566,8 @@ void gecode_ivar_selector_delete(IntVarBranch* s){
 
 IntVarBranch* INT_VAR_NONE(void){
   // Gecode::INT_VAR_NONE();
-  return new IntVarBranch(IntVarBranch::SEL_NONE,NULL);
+  return new IntVarBranch(IntVarBranch::SEL_NONE, NULL);
 }
-
 IntVarBranch* INT_VAR_RND(unsigned int seed){
   // Gecode::INT_VAR_RND(Rnd(seed));
   return new IntVarBranch(Rnd(seed));

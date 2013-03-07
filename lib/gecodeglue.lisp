@@ -71,6 +71,12 @@
 (cffi:defcfun ("gecode_space_copy" gecode_space_copy) :pointer
   (space space-type))
 
+(cffi:defcfun ("gecode_space_propagators_count" gecode_space_propagators_count) :unsigned-int
+  (Space space-type))
+
+(cffi:defcfun ("gecode_space_branchers_count" gecode_space_branchers_count) :unsigned-int
+  (Space space-type))
+
 (cffi:defcfun ("gecode_bool_addvar" gecode_bool_addvar) size
   (space space-type))
 
@@ -149,23 +155,30 @@
   (cardMin :pointer)
   (cardMax :pointer))
 
-(cffi:defcfun ("gecode_branch_ivar" gecode_branch_ivar) :void
+(cffi:defcfun ("gecode_brancherhandle_delete" gecode_brancherhandle_delete) :void
+  (bh brancherhandle-type))
+
+(cffi:defcfun ("gecode_brancherhandle_kill" gecode_brancherhandle_kill) :void
+  (bh brancherhandle-type)
+  (space space-type))
+
+(cffi:defcfun ("gecode_branch_ivar" gecode_branch_ivar) brancherhandle-type
   (space space-type)
   (var intvar-type)
   (valb intvalselector-type))
 
-(cffi:defcfun ("gecode_branch_ivars" gecode_branch_ivars) :void
+(cffi:defcfun ("gecode_branch_ivars" gecode_branch_ivars) brancherhandle-type
   (space space-type)
   (vars intvarargs-type)
   (varb intvarselector-type)
   (valb intvalselector-type))
 
-(cffi:defcfun ("gecode_branch_bvar" gecode_branch_bvar) :void
+(cffi:defcfun ("gecode_branch_bvar" gecode_branch_bvar) brancherhandle-type
   (space space-type)
   (var boolvar-type)
   (valb intvalselector-type))
 
-(cffi:defcfun ("gecode_branch_bvars" gecode_branch_bvars) :void
+(cffi:defcfun ("gecode_branch_bvars" gecode_branch_bvars) brancherhandle-type
   (space space-type)
   (vars boolvarargs-type)
   (varb intvarselector-type)

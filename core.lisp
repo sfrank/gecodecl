@@ -289,6 +289,15 @@
     (tg:finalize selector (reclaim-fval-selector selector))
     selector))
 
+(defstruct (brancher-handle (:constructor %make-brancher-handle (sap))
+                            (:include selector)))
+(defun make-brancher-handle (sap)
+  (declare (type sb-sys:system-area-pointer sap))
+  (let ((handle (%make-brancher-handle sap)))
+    (tg:finalize handle (lambda ()
+                          (gecode_brancherhandle_delete handle)))
+    handle))
+
 ;;; sets
 
 (defstruct (intset (:constructor %make-intset (sap)))
