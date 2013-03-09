@@ -135,10 +135,11 @@ extern "C" {
   BAB<CLSpace> *gecode_bab_engine_create(CLSpace *space, size_t minVar);
   void gecode_bab_engine_delete(BAB<CLSpace> *bab);
   CLSpace *gecode_bab_engine_next(BAB<CLSpace> *bab);
+  /*
   RBS<CLSpace> *gecode_rbs_engine_create(CLSpace *space);
   void gecode_rbs_engine_delete(RBS<CLSpace> *rbs);
   CLSpace *gecode_rbs_engine_next(RBS<CLSpace> *rbs);
-
+  */
 
   /* ### propagator interfaces ### */
 
@@ -709,9 +710,9 @@ extern "C" {
   void gecode_channel_fvar_ivar(CLSpace *space, FloatVar* x0, IntVar* x1);
 
   // Float Branchers
-  void gecode_branch_fvar(CLSpace *space, FloatVar* var, FloatValBranch* valb);
-  void gecode_branch_fvars(CLSpace *space, FloatVarArgs* vars,
-			   FloatVarBranch* varb, FloatValBranch* valb);
+  BrancherHandle* gecode_branch_fvar(CLSpace *space, FloatVar* var, FloatValBranch* valb);
+  BrancherHandle* gecode_branch_fvars(CLSpace *space, FloatVarArgs* vars,
+                                      FloatVarBranch* varb, FloatValBranch* valb);
 
   void gecode_fvar_selector_delete(FloatVarBranch* s);
 
@@ -852,6 +853,57 @@ extern "C" {
                                                    IntVar* x, int w,
                                                    IntVar* y, int h,
                                                    SetVar* z);
+
+  // set branchers
+  BrancherHandle* gecode_branch_svar(CLSpace *space, SetVar* var, SetValBranch* valb);
+  BrancherHandle* gecode_branch_svars(CLSpace *space, SetVarArgs* vars,
+                                      SetVarBranch* varb, SetValBranch* valb);
+
+  void gecode_svar_selector_delete(SetVarBranch* s);
+  void gecode_sval_selector_delete(SetValBranch* s);
+
+  /* variable selectors for set branchers */
+  SetVarBranch* SET_VAR_NONE(void);
+  SetVarBranch* SET_VAR_RND(unsigned int seed);
+  // TODO: SetVarBranch SET_VAR_MERIT_MIN(SetBranchMerit bm, BranchTbl tbl=NULL);
+  // TODO: SetVarBranch SET_VAR_MERIT_MAX(SetBranchMerit bm, BranchTbl tbl=NULL);
+  SetVarBranch* SET_VAR_DEGREE_MIN(void);
+  SetVarBranch* SET_VAR_DEGREE_MAX(void);
+  SetVarBranch* SET_VAR_AFC_MIN(double d);
+  // TODO: SetVarBranch SET_VAR_AFC_MIN(SetAFC a, BranchTbl tbl=NULL);
+  SetVarBranch* SET_VAR_AFC_MAX(double d);
+  // TODO: SetVarBranch SET_VAR_AFC_MAX(SetAFC a, BranchTbl tbl=NULL);
+  SetVarBranch* SET_VAR_ACTIVITY_MIN(double d);
+  // TODO: SetVarBranch SET_VAR_ACTIVITY_MIN(SetActivity a, BranchTbl tbl=NULL);
+  SetVarBranch* SET_VAR_ACTIVITY_MAX(double d);
+  // TODO: SetVarBranch SET_VAR_ACTIVITY_MAX(SetActivity a, BranchTbl tbl=NULL);     
+  SetVarBranch* SET_VAR_MIN_MIN(void);
+  SetVarBranch* SET_VAR_MIN_MAX(void);
+  SetVarBranch* SET_VAR_MAX_MIN(void);
+  SetVarBranch* SET_VAR_MAX_MAX(void);
+  SetVarBranch* SET_VAR_SIZE_MIN(void);
+  SetVarBranch* SET_VAR_SIZE_MAX(void);
+  SetVarBranch* SET_VAR_DEGREE_SIZE_MIN(void);
+  SetVarBranch* SET_VAR_DEGREE_SIZE_MAX(void);
+  SetVarBranch* SET_VAR_AFC_SIZE_MIN(double d);
+  // TODO: SetVarBranch SET_VAR_AFC_SIZE_MIN(SetAFC a, BranchTbl tbl=NULL);
+  SetVarBranch* SET_VAR_AFC_SIZE_MAX(double d);
+  // TODO: SetVarBranch SET_VAR_AFC_SIZE_MAX(SetAFC a, BranchTbl tbl=NULL);
+  SetVarBranch* SET_VAR_ACTIVITY_SIZE_MIN(double d);
+  // TODO: SetVarBranch SET_VAR_ACTIVITY_SIZE_MIN(SetActivity a, BranchTbl tbl=NULL);
+  SetVarBranch* SET_VAR_ACTIVITY_SIZE_MAX(double d);
+  // TODO: SetVarBranch SET_VAR_ACTIVITY_SIZE_MAX(SetActivity a, BranchTbl tbl=NULL);     
+
+  /* value selectors for set branchers */
+  SetValBranch* SET_VAL_MIN_INC(void);
+  SetValBranch* SET_VAL_MIN_EXC(void);
+  SetValBranch* SET_VAL_MED_INC(void);
+  SetValBranch* SET_VAL_MED_EXC(void);
+  SetValBranch* SET_VAL_MAX_INC(void);
+  SetValBranch* SET_VAL_MAX_EXC(void);
+  SetValBranch* SET_VAL_RND_INC(unsigned int seed);
+  SetValBranch* SET_VAL_RND_EXC(unsigned int seed);
+
 
 } /* extern C */
 

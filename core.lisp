@@ -228,12 +228,12 @@
     bab))
 
 ;;; depth-first restart best solution search (RBS)
-(defun make-rbs (space)
-  (declare (type gspace space))
-  (let ((rbs (%make-rbs-boa (gecode_rbs_engine_create space))))
-    (tg:finalize rbs (lambda ()
-                       (gecode_rbs_engine_delete rbs)))
-    rbs))
+;;(defun make-rbs (space)
+;;  (declare (type gspace space))
+;;  (let ((rbs (%make-rbs-boa (gecode_rbs_engine_create space))))
+;;    (tg:finalize rbs (lambda ()
+;;                       (gecode_rbs_engine_delete rbs)))
+;;    rbs))
 
 
 ;;; solution search for both engine types
@@ -245,9 +245,10 @@
     (bab (let ((space (gecode_bab_engine_next engine)))
            (unless (null-pointer-p space)
              (make-gspace-from-ref space))))
-    (rbs (let ((space (gecode_rbs_engine_next engine)))
-           (unless (null-pointer-p space)
-             (make-gspace-from-ref space))))))
+;;    (rbs (let ((space (gecode_rbs_engine_next engine)))
+;;           (unless (null-pointer-p space)
+;;             (make-gspace-from-ref space))))
+    ))
 
 
 ;;; branching selectors
@@ -261,43 +262,55 @@
                 (:include selector)))
 (defstruct (fval-selector (:constructor %make-fval-selector (sap))
                 (:include selector)))
+(defstruct (svar-selector (:constructor %make-svar-selector (sap))
+                (:include selector)))
+(defstruct (sval-selector (:constructor %make-sval-selector (sap))
+                (:include selector)))
 
-
-(defun reclaim-ivar-selector (selector)
-  (lambda ()
-    (gecode_ivar_selector_delete selector)))
-(defun reclaim-ival-selector (selector)
-  (lambda ()
-    (gecode_ival_selector_delete selector)))
 
 (defun make-ivar-selector (sap)
   (declare (type sb-sys:system-area-pointer sap))
   (let ((selector (%make-ivar-selector sap)))
-    (tg:finalize selector (reclaim-ivar-selector selector))
+    (tg:finalize selector 
+                 (lambda ()
+                   (gecode_ivar_selector_delete selector)))
     selector))
 (defun make-ival-selector (sap)
   (declare (type sb-sys:system-area-pointer sap))
   (let ((selector (%make-ival-selector sap)))
-    (tg:finalize selector (reclaim-ival-selector selector))
+    (tg:finalize selector
+                 (lambda ()
+                   (gecode_ival_selector_delete selector)))
     selector))
-
-(defun reclaim-fvar-selector (selector)
-  (lambda ()
-    (gecode_fvar_selector_delete selector)))
-(defun reclaim-fval-selector (selector)
-  (lambda ()
-    (gecode_fval_selector_delete selector)))
 
 (defun make-fvar-selector (sap)
   (declare (type sb-sys:system-area-pointer sap))
   (let ((selector (%make-fvar-selector sap)))
-    (tg:finalize selector (reclaim-fvar-selector selector))
+    (tg:finalize selector
+                 (lambda ()
+                   (gecode_fvar_selector_delete selector)))
     selector))
 (defun make-fval-selector (sap)
   (declare (type sb-sys:system-area-pointer sap))
   (let ((selector (%make-fval-selector sap)))
-    (tg:finalize selector (reclaim-fval-selector selector))
+    (tg:finalize selector
+                 (lambda ()
+                   (gecode_fval_selector_delete selector)))
     selector))
+
+(defun make-svar-selector (sap)
+  (declare (type sb-sys:system-area-pointer sap))
+  (let ((selector (%make-svar-selector sap)))
+    (tg:finalize selector (lambda ()
+                            (gecode_svar_selector_delete selector)))
+    selector))
+(defun make-sval-selector (sap)
+  (declare (type sb-sys:system-area-pointer sap))
+  (let ((selector (%make-sval-selector sap)))
+    (tg:finalize selector (lambda ()
+                            (gecode_sval_selector_delete selector)))
+    selector))
+
 
 (defstruct (brancher-handle (:constructor %make-brancher-handle (sap))
                             (:include selector)))

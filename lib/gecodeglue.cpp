@@ -789,7 +789,7 @@ CLSpace *gecode_bab_engine_next(BAB<CLSpace> *bab){
     return NULL;
 }
 
-
+/*
 RBS<CLSpace> *gecode_rbs_engine_create(CLSpace *space){
   EXCSTART
     Search::Options options = Search::Options();
@@ -809,7 +809,7 @@ CLSpace *gecode_rbs_engine_next(RBS<CLSpace> *rbs){
   EXCSTOP
     return NULL;
 }
-
+*/
 
 // Propagator interfaces 
 
@@ -1799,13 +1799,13 @@ void gecode_channel_fvar_ivar(CLSpace *space, FloatVar* x0, IntVar* x1) {
 }
 
 // Float Branchers
-void gecode_branch_fvar(CLSpace *space, FloatVar* var, FloatValBranch* valb) {
-  branch(*space, *var, *valb);
+BrancherHandle* gecode_branch_fvar(CLSpace *space, FloatVar* var, FloatValBranch* valb) {
+  return new BrancherHandle(branch(*space, *var, *valb));
 }
 
-void gecode_branch_fvars(CLSpace *space, FloatVarArgs* vars,
-			 FloatVarBranch* varb, FloatValBranch* valb) {
-  branch(*space, *vars, *varb, *valb);
+BrancherHandle* gecode_branch_fvars(CLSpace *space, FloatVarArgs* vars,
+                                    FloatVarBranch* varb, FloatValBranch* valb) {
+  return new BrancherHandle(branch(*space, *vars, *varb, *valb));
 }
 
 /* variable selectors for branchers */
@@ -1817,7 +1817,6 @@ FloatVarBranch* FLOAT_VAR_NONE(void){
   // Gecode::FLOAT_VAR_NONE();
   return new FloatVarBranch(FloatVarBranch::SEL_NONE,NULL);
 }
-
 FloatVarBranch* FLOAT_VAR_RND(unsigned int seed){
   // Gecode::FLOAT_VAR_RND(Rnd(seed));
   return new FloatVarBranch(Rnd(seed));
@@ -2206,6 +2205,131 @@ void gecode_element_svars_ivar_int_ivar_int_svar(CLSpace *space, SetVarArgs* a,
                                                  IntVar* y, int h,
                                                  SetVar* z) {
   element(*space, *a, *x, w, *y, h, *z);
+}
+
+
+/* set branchers */
+void gecode_svar_selector_delete(SetVarBranch* s){
+  delete s;
+}
+void gecode_sval_selector_delete(SetValBranch* s){
+  delete s;
+}
+
+BrancherHandle* gecode_branch_svar(CLSpace *space, SetVar* var, SetValBranch* valb) {
+  return new BrancherHandle(branch(*space, *var, *valb));
+}
+
+BrancherHandle* gecode_branch_svars(CLSpace *space, SetVarArgs* vars,
+                                    SetVarBranch* varb, SetValBranch* valb) {
+  return new BrancherHandle(branch(*space, *vars, *varb, *valb));
+}
+
+
+SetVarBranch* SET_VAR_NONE(void){
+  // Gecode::SET_VAR_NONE();
+  return new SetVarBranch(SetVarBranch::SEL_NONE, NULL);
+}
+SetVarBranch* SET_VAR_RND(unsigned int seed){
+  // Gecode::SET_VAR_RND(Rnd(seed));
+  return new SetVarBranch(Rnd(seed));
+}
+// SetVarBranch SET_VAR_MERIT_MIN(SetBranchMerit bm, BranchTbl tbl=NULL);
+// SetVarBranch SET_VAR_MERIT_MAX(SetBranchMerit bm, BranchTbl tbl=NULL);
+SetVarBranch* SET_VAR_DEGREE_MIN(void){
+  return new SetVarBranch(SetVarBranch::SEL_DEGREE_MIN, NULL);
+}
+SetVarBranch* SET_VAR_DEGREE_MAX(void){
+  return new SetVarBranch(SetVarBranch::SEL_DEGREE_MAX, NULL);
+}
+SetVarBranch* SET_VAR_AFC_MIN(double d){
+  return new SetVarBranch(SetVarBranch::SEL_AFC_MIN, d, NULL);
+}
+// SetVarBranch SET_VAR_AFC_MIN(SetAFC a, BranchTbl tbl=NULL);
+SetVarBranch* SET_VAR_AFC_MAX(double d){
+  return new SetVarBranch(SetVarBranch::SEL_AFC_MIN, d, NULL);
+}
+// SetVarBranch SET_VAR_AFC_MAX(SetAFC a, BranchTbl tbl=NULL);
+SetVarBranch* SET_VAR_ACTIVITY_MIN(double d){
+  return new SetVarBranch(SetVarBranch::SEL_ACTIVITY_MIN, d, NULL);
+}
+// SetVarBranch SET_VAR_ACTIVITY_MIN(SetActivity a, BranchTbl tbl=NULL);
+SetVarBranch* SET_VAR_ACTIVITY_MAX(double d){
+  return new SetVarBranch(SetVarBranch::SEL_ACTIVITY_MAX, d, NULL);
+}
+// SetVarBranch SET_VAR_ACTIVITY_MAX(SetActivity a, BranchTbl tbl=NULL);     
+SetVarBranch* SET_VAR_MIN_MIN(void){
+  return new SetVarBranch(SetVarBranch::SEL_MIN_MIN, NULL);
+}
+SetVarBranch* SET_VAR_MIN_MAX(void){
+  return new SetVarBranch(SetVarBranch::SEL_MIN_MAX, NULL);
+}
+SetVarBranch* SET_VAR_MAX_MIN(void){
+  return new SetVarBranch(SetVarBranch::SEL_MAX_MIN, NULL);
+}
+SetVarBranch* SET_VAR_MAX_MAX(void){
+  return new SetVarBranch(SetVarBranch::SEL_MAX_MAX, NULL);
+}
+SetVarBranch* SET_VAR_SIZE_MIN(void){
+  return new SetVarBranch(SetVarBranch::SEL_SIZE_MIN, NULL);
+}
+SetVarBranch* SET_VAR_SIZE_MAX(void){
+  return new SetVarBranch(SetVarBranch::SEL_SIZE_MAX, NULL);
+}
+SetVarBranch* SET_VAR_DEGREE_SIZE_MIN(void){
+  return new SetVarBranch(SetVarBranch::SEL_DEGREE_SIZE_MIN, NULL);
+}
+SetVarBranch* SET_VAR_DEGREE_SIZE_MAX(void){
+  return new SetVarBranch(SetVarBranch::SEL_DEGREE_SIZE_MAX, NULL);
+}
+SetVarBranch* SET_VAR_AFC_SIZE_MIN(double d){
+  return new SetVarBranch(SetVarBranch::SEL_AFC_SIZE_MIN, d, NULL);
+}
+// SetVarBranch SET_VAR_AFC_SIZE_MIN(SetAFC a, BranchTbl tbl=NULL);
+SetVarBranch* SET_VAR_AFC_SIZE_MAX(double d){
+  return new SetVarBranch(SetVarBranch::SEL_AFC_SIZE_MIN, d, NULL);
+}
+// SetVarBranch SET_VAR_AFC_SIZE_MAX(SetAFC a, BranchTbl tbl=NULL);
+SetVarBranch* SET_VAR_ACTIVITY_SIZE_MIN(double d){
+  return new SetVarBranch(SetVarBranch::SEL_ACTIVITY_SIZE_MIN, d, NULL);
+}
+// SetVarBranch SET_VAR_ACTIVITY_SIZE_MIN(SetActivity a, BranchTbl tbl=NULL);
+SetVarBranch* SET_VAR_ACTIVITY_SIZE_MAX(double d){
+  return new SetVarBranch(SetVarBranch::SEL_ACTIVITY_SIZE_MAX, d, NULL);
+}
+// SetVarBranch SET_VAR_ACTIVITY_SIZE_MAX(SetActivity a, BranchTbl tbl=NULL);     
+
+SetValBranch* SET_VAL_MIN_INC(void){
+  // Gecode::SET_VAL_MIN_INC();
+  return new SetValBranch(SetValBranch::SEL_MIN_INC);
+}
+SetValBranch* SET_VAL_MIN_EXC(void){
+  // Gecode::SET_VAL_MIN_EXC();
+  return new SetValBranch(SetValBranch::SEL_MIN_EXC);
+}
+SetValBranch* SET_VAL_MED_INC(void){
+  // Gecode::SET_VAL_MED_INC();
+  return new SetValBranch(SetValBranch::SEL_MED_INC);
+}
+SetValBranch* SET_VAL_MED_EXC(void){
+  // Gecode::SET_VAL_MED_EXC();
+  return new SetValBranch(SetValBranch::SEL_MED_EXC);
+}
+SetValBranch* SET_VAL_MAX_INC(void){
+  // Gecode::SET_VAL_MAX_INC();
+  return new SetValBranch(SetValBranch::SEL_MAX_INC);
+}
+SetValBranch* SET_VAL_MAX_EXC(void){
+  // Gecode::SET_VAL_MAX_EXC();
+  return new SetValBranch(SetValBranch::SEL_MAX_EXC);
+}
+SetValBranch* SET_VAL_RND_INC(unsigned int seed){
+  // Gecode::SET_VAL_RND_INC();
+  return new SetValBranch(SetValBranch::SEL_RND_INC, Rnd(seed));
+}
+SetValBranch* SET_VAL_RND_EXC(unsigned int seed){
+  // Gecode::SET_VAL_RND_EXC();
+  return new SetValBranch(SetValBranch::SEL_RND_EXC, Rnd(seed));
 }
 
 

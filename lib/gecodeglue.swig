@@ -28,6 +28,11 @@
 %typemap(cin) FloatValBranch*  "floatvalselector-type";
 %typemap(cout) FloatValBranch*  "floatvalselector-type";
 
+%typemap(cin) SetVarBranch*  "setvarselector-type";
+%typemap(cout) SetVarBranch*  "setvarselector-type";
+%typemap(cin) SetValBranch*  "setvalselector-type";
+%typemap(cout) SetValBranch*  "setvalselector-type";
+
 
 %typemap(cin) TaskTypeArgs* "tasktypeargs-type";
 

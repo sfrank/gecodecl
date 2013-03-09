@@ -283,15 +283,6 @@
 (cffi:defcfun ("gecode_bab_engine_next" gecode_bab_engine_next) :pointer
   (bab search-type))
 
-(cffi:defcfun ("gecode_rbs_engine_create" gecode_rbs_engine_create) :pointer
-  (space space-type))
-
-(cffi:defcfun ("gecode_rbs_engine_delete" gecode_rbs_engine_delete) :void
-  (rbs search-type))
-
-(cffi:defcfun ("gecode_rbs_engine_next" gecode_rbs_engine_next) :pointer
-  (rbs search-type))
-
 (cffi:defcfun ("gecode_rel_bvar_int" gecode_rel_bvar_int) :void
   (space space-type)
   (op int-relation-type)
@@ -1537,12 +1528,12 @@
   (x0 floatvar-type)
   (x1 intvar-type))
 
-(cffi:defcfun ("gecode_branch_fvar" gecode_branch_fvar) :void
+(cffi:defcfun ("gecode_branch_fvar" gecode_branch_fvar) brancherhandle-type
   (space space-type)
   (var floatvar-type)
   (valb floatvalselector-type))
 
-(cffi:defcfun ("gecode_branch_fvars" gecode_branch_fvars) :void
+(cffi:defcfun ("gecode_branch_fvars" gecode_branch_fvars) brancherhandle-type
   (space space-type)
   (vars floatvarargs-type)
   (varb floatvarselector-type)
@@ -1979,5 +1970,89 @@
   (y intvar-type)
   (h :int)
   (z setvar-type))
+
+(cffi:defcfun ("gecode_branch_svar" gecode_branch_svar) brancherhandle-type
+  (space space-type)
+  (var setvar-type)
+  (valb setvalselector-type))
+
+(cffi:defcfun ("gecode_branch_svars" gecode_branch_svars) brancherhandle-type
+  (space space-type)
+  (vars :pointer)
+  (varb setvarselector-type)
+  (valb setvalselector-type))
+
+(cffi:defcfun ("gecode_svar_selector_delete" gecode_svar_selector_delete) :void
+  (s setvarselector-type))
+
+(cffi:defcfun ("gecode_sval_selector_delete" gecode_sval_selector_delete) :void
+  (s setvalselector-type))
+
+(cffi:defcfun ("SET_VAR_NONE" SET_VAR_NONE) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_RND" SET_VAR_RND) setvarselector-type
+  (seed :unsigned-int))
+
+(cffi:defcfun ("SET_VAR_DEGREE_MIN" SET_VAR_DEGREE_MIN) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_DEGREE_MAX" SET_VAR_DEGREE_MAX) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_AFC_MIN" SET_VAR_AFC_MIN) setvarselector-type
+  (d :double))
+
+(cffi:defcfun ("SET_VAR_AFC_MAX" SET_VAR_AFC_MAX) setvarselector-type
+  (d :double))
+
+(cffi:defcfun ("SET_VAR_ACTIVITY_MIN" SET_VAR_ACTIVITY_MIN) setvarselector-type
+  (d :double))
+
+(cffi:defcfun ("SET_VAR_ACTIVITY_MAX" SET_VAR_ACTIVITY_MAX) setvarselector-type
+  (d :double))
+
+(cffi:defcfun ("SET_VAR_MIN_MIN" SET_VAR_MIN_MIN) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_MIN_MAX" SET_VAR_MIN_MAX) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_MAX_MIN" SET_VAR_MAX_MIN) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_MAX_MAX" SET_VAR_MAX_MAX) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_SIZE_MIN" SET_VAR_SIZE_MIN) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_SIZE_MAX" SET_VAR_SIZE_MAX) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_DEGREE_SIZE_MIN" SET_VAR_DEGREE_SIZE_MIN) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_DEGREE_SIZE_MAX" SET_VAR_DEGREE_SIZE_MAX) setvarselector-type)
+
+(cffi:defcfun ("SET_VAR_AFC_SIZE_MIN" SET_VAR_AFC_SIZE_MIN) setvarselector-type
+  (d :double))
+
+(cffi:defcfun ("SET_VAR_AFC_SIZE_MAX" SET_VAR_AFC_SIZE_MAX) setvarselector-type
+  (d :double))
+
+(cffi:defcfun ("SET_VAR_ACTIVITY_SIZE_MIN" SET_VAR_ACTIVITY_SIZE_MIN) setvarselector-type
+  (d :double))
+
+(cffi:defcfun ("SET_VAR_ACTIVITY_SIZE_MAX" SET_VAR_ACTIVITY_SIZE_MAX) setvarselector-type
+  (d :double))
+
+(cffi:defcfun ("SET_VAL_MIN_INC" SET_VAL_MIN_INC) setvalselector-type)
+
+(cffi:defcfun ("SET_VAL_MIN_EXC" SET_VAL_MIN_EXC) setvalselector-type)
+
+(cffi:defcfun ("SET_VAL_MED_INC" SET_VAL_MED_INC) setvalselector-type)
+
+(cffi:defcfun ("SET_VAL_MED_EXC" SET_VAL_MED_EXC) setvalselector-type)
+
+(cffi:defcfun ("SET_VAL_MAX_INC" SET_VAL_MAX_INC) setvalselector-type)
+
+(cffi:defcfun ("SET_VAL_MAX_EXC" SET_VAL_MAX_EXC) setvalselector-type)
+
+(cffi:defcfun ("SET_VAL_RND_INC" SET_VAL_RND_INC) setvalselector-type
+  (seed :unsigned-int))
+
+(cffi:defcfun ("SET_VAL_RND_EXC" SET_VAL_RND_EXC) setvalselector-type
+  (seed :unsigned-int))
 
 

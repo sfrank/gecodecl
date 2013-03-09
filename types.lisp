@@ -136,6 +136,24 @@
 (defmethod expand-from-foreign (sap (type floatvalselector-type))
   `(make-fval-selector ,sap))
 
+(cffi:define-foreign-type setvarselector-type () ()
+  (:actual-type :pointer)
+  (:simple-parser setvarselector-type))
+
+(defmethod expand-to-foreign (selector (type setvarselector-type))
+  `(selector-sap ,selector))
+(defmethod expand-from-foreign (sap (type setvarselector-type))
+  `(make-ivar-selector ,sap))
+
+(cffi:define-foreign-type setvalselector-type () ()
+  (:actual-type :pointer)
+  (:simple-parser setvalselector-type))
+
+(defmethod expand-to-foreign (selector (type setvalselector-type))
+  `(selector-sap ,selector))
+(defmethod expand-from-foreign (sap (type setvalselector-type))
+  `(make-ival-selector ,sap))
+
 
 ;; argument vectors of various types
 (cffi:define-foreign-type intvarargs-type () ()
