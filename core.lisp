@@ -205,8 +205,11 @@
 (defstruct (bab (:constructor %make-bab-boa (sap))
                 (:include engine)))
 
-(defstruct (rbs (:constructor %make-rbs-boa (sap))
-                (:include engine)))
+(defstruct (rdfs (:constructor %make-rdfs-boa (sap))
+                 (:include engine)))
+
+(defstruct (rbab (:constructor %make-rbab-boa (sap))
+                 (:include engine)))
 
 ;;; depth first search (DFS)
 (defun make-dfs (space)
@@ -227,13 +230,23 @@
                        (gecode_bab_engine_delete bab)))
     bab))
 
-;;; depth-first restart best solution search (RBS)
-;;(defun make-rbs (space)
-;;  (declare (type gspace space))
-;;  (let ((rbs (%make-rbs-boa (gecode_rbs_engine_create space))))
-;;    (tg:finalize rbs (lambda ()
-;;                       (gecode_rbs_engine_delete rbs)))
-;;    rbs))
+;;; depth-first restart based solution search (RBS DFS)
+(defun make-rdfs (space)
+  (declare (type gspace space))
+  (let ((rbs (%make-rdfs-boa (gecode_rbs_dfs_engine_create space))))
+    (tg:finalize rbs (lambda ()
+                       (gecode_rbs_dfs_engine_delete rbs)))
+    rbs))
+
+;;; branch and bound restart based solution search (RBS BAB)
+(defun make-rbab (space min-var)
+  (declare (type gspace space)
+           (type intvar min-var))
+  (let ((rbs (%make-rbab-boa (gecode_rbs_bab_engine_create space
+                                                           (gvariable-index min-var)))))
+    (tg:finalize rbs (lambda ()
+                       (gecode_rbs_bab_engine_delete rbs)))
+    rbs))
 
 
 ;;; solution search for both engine types

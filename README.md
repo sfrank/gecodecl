@@ -7,7 +7,7 @@ library.
   (earlier versions will not work!)
 + GecodeCL is in an early stage so expect changes in the interface
 + there is currently no documentation; refer to the examples which
-  will be expanded as development moves along 
+  will be expanded as development moves along (or the Gecode docs)
 
 
 # Roadmap

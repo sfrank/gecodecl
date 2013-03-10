@@ -789,27 +789,48 @@ CLSpace *gecode_bab_engine_next(BAB<CLSpace> *bab){
     return NULL;
 }
 
-/*
-RBS<CLSpace> *gecode_rbs_engine_create(CLSpace *space){
+
+RBS<DFS, CLSpace> *gecode_rbs_dfs_engine_create(CLSpace *space){
   EXCSTART
     Search::Options options = Search::Options();
     
     // check whether there are any branchers defined at all
     checkBranchers(space);
-    return (new RBS<CLSpace>(space, options));
+    return (new RBS<DFS, CLSpace>(space, options));
   EXCSTOP
   return NULL;
 }
+  
+void gecode_rbs_dfs_engine_delete(RBS<DFS, CLSpace> *rbs){ delete rbs;}
 
-void gecode_rbs_engine_delete(RBS<CLSpace> *rbs){ delete rbs;}
-
-CLSpace *gecode_rbs_engine_next(RBS<CLSpace> *rbs){
+CLSpace *gecode_rbs_dfs_engine_next(RBS<DFS, CLSpace> *rbs){
   EXCSTART
     return rbs->next();
   EXCSTOP
     return NULL;
 }
-*/
+
+RBS<BAB, CLSpace> *gecode_rbs_bab_engine_create(CLSpace *space,
+                                                vector<IntVar>::size_type minVar){
+  EXCSTART
+    space->setCost(minVar);
+    Search::Options options = Search::Options(); 
+    // check whether there are any branchers defined at all
+    checkBranchers(space);
+    return (new RBS<BAB, CLSpace>(space, options));
+  EXCSTOP
+  return NULL;
+}
+  
+void gecode_rbs_bab_engine_delete(RBS<BAB, CLSpace> *rbs){ delete rbs;}
+
+CLSpace *gecode_rbs_bab_engine_next(RBS<BAB, CLSpace> *rbs){
+  EXCSTART
+    return rbs->next();
+  EXCSTOP
+    return NULL;
+}
+
 
 // Propagator interfaces 
 
