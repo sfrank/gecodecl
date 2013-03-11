@@ -391,6 +391,27 @@ public:
   }
 };
 
+class CLSymmetryHandleArgs : public ArgArray<SymmetryHandle> {
+public:
+  static void* operator new(size_t) {
+    return ::operator new(sizeof(CLSymmetryHandleArgs));
+  }
+
+  static void  operator delete(void* v) {
+    ::operator delete(v);
+  };
+  
+  CLSymmetryHandleArgs(int n) : ArgArray<SymmetryHandle>(n){};
+  ~CLSymmetryHandleArgs(void) {
+    if (capacity > onstack_size)
+      heap.free(a,capacity);
+  }
+
+  void set(int i, const SymmetryHandle& e) {
+    a[i] = e;
+  }
+};
+
 
 #include "gecodeglue.h"
 
@@ -440,6 +461,16 @@ void gecode_intsetargs_set(CLIntSetArgs *v, int i, const IntSet* e) {
   v->set(i, e);
 }
 void gecode_intsetargs_delete(CLIntSetArgs *v) {
+  delete v; }
+
+
+CLSymmetryHandleArgs* gecode_symhandleargs_create(int n) {
+    return new CLSymmetryHandleArgs(n); 
+}
+void gecode_symhandleargs_set(CLSymmetryHandleArgs *v, int i, const SymmetryHandle* e) {
+  v->set(i, *e);
+}
+void gecode_symhandleargs_delete(CLSymmetryHandleArgs *v) {
   delete v; }
 
 
@@ -527,6 +558,11 @@ STATUS gecode_get_set_info(CLSpace *space,
                            cardMin, cardMax);
 }
 
+// SymmetryHandles
+void gecode_symmetryhandle_delete(SymmetryHandle* sh) {
+  delete sh;
+}
+
 
 // BrancherHandles
 void gecode_brancherhandle_delete(BrancherHandle* bh) {
@@ -555,6 +591,66 @@ BrancherHandle* gecode_branch_bool_vars(CLSpace *space, BoolVarArgs* vars,
                                         IntVarBranch* varb, IntValBranch* valb) {
   return new BrancherHandle(branch(*space, *vars, *varb, *valb));
 }
+
+// Symmetries
+SymmetryHandle* gecode_VariableSymmetry_ivars(IntVarArgs* x) {
+  return new SymmetryHandle(VariableSymmetry(*x));
+}
+
+SymmetryHandle* gecode_VariableSymmetry_bvars(BoolVarArgs* x) {
+  return new SymmetryHandle(VariableSymmetry(*x));
+}
+
+SymmetryHandle* gecode_VariableSymmetry_ivars_ints(IntVarArgs* x,
+                                                   IntArgs* indices) {
+  return new SymmetryHandle(VariableSymmetry(*x, *indices));
+}
+
+SymmetryHandle* gecode_ValueSymmetry_ints(IntArgs* x) {
+  return new SymmetryHandle(ValueSymmetry(*x));
+}
+
+SymmetryHandle* gecode_ValueSymmetry_iset(IntSet* x) {
+  return new SymmetryHandle(ValueSymmetry(*x));
+}
+
+SymmetryHandle* gecode_ValueSymmetry_ivar(IntVar* var) {
+  return new SymmetryHandle(ValueSymmetry(*var));
+}
+
+SymmetryHandle* gecode_VariableSequenceSymmetry_ivars_int(IntVarArgs* x, int ss) {
+    return new SymmetryHandle(VariableSequenceSymmetry(*x, ss));
+}
+
+SymmetryHandle* gecode_VariableSequenceSymmetry_bvars_int(BoolVarArgs* x, int ss) {
+    return new SymmetryHandle(VariableSequenceSymmetry(*x, ss));
+}
+
+SymmetryHandle* gecode_ValueSequenceSymmetry_ints_int(IntArgs* x, int ss) {
+    return new SymmetryHandle(ValueSequenceSymmetry(*x, ss));
+}
+
+SymmetryHandle* gecode_values_reflect_int_int(int lower, int upper) {
+    return new SymmetryHandle(values_reflect(lower, upper));
+}
+
+SymmetryHandle* gecode_values_reflect_ivar(IntVar* x) {
+  return new SymmetryHandle(values_reflect(x->min(), x->max()));
+}
+
+// Branchers with symmetries
+BrancherHandle* gecode_branch_ivars_sym(CLSpace *space, IntVarArgs* vars,
+                                        IntVarBranch* varb, IntValBranch* valb,
+                                        Symmetries* sym) {
+  return new BrancherHandle(branch(*space, *vars, *varb, *valb, *sym));
+}
+
+BrancherHandle* gecode_branch_bvars_sym(CLSpace *space, BoolVarArgs* vars,
+                                        IntVarBranch* varb, IntValBranch* valb,
+                                        Symmetries* sym) {
+  return new BrancherHandle(branch(*space, *vars, *varb, *valb, *sym));
+}
+
 
 /* variable selectors for branchers */
 void gecode_ivar_selector_delete(IntVarBranch* s){
@@ -2244,6 +2340,22 @@ BrancherHandle* gecode_branch_svar(CLSpace *space, SetVar* var, SetValBranch* va
 BrancherHandle* gecode_branch_svars(CLSpace *space, SetVarArgs* vars,
                                     SetVarBranch* varb, SetValBranch* valb) {
   return new BrancherHandle(branch(*space, *vars, *varb, *valb));
+}
+
+// Symmetries
+SymmetryHandle* gecode_VariableSymmetry_svars(SetVarArgs* x) {
+  return new SymmetryHandle(VariableSymmetry(*x));
+}
+
+SymmetryHandle* gecode_VariableSequenceSymmetry_svars(SetVarArgs* x,
+                                                      int ss) {
+  return new SymmetryHandle(VariableSequenceSymmetry(*x, ss));
+}
+
+BrancherHandle* gecode_branch_svars_sym(CLSpace *space, SetVarArgs* vars,
+                                        SetVarBranch* varb, SetValBranch* valb,
+                                        Symmetries* sym) {
+  return new BrancherHandle(branch(*space, *vars, *varb, *valb, *sym));
 }
 
 

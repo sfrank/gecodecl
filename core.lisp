@@ -334,6 +334,17 @@
                           (gecode_brancherhandle_delete handle)))
     handle))
 
+
+(defstruct (symmetry-handle (:constructor %make-symmetry-handle (sap))
+                            (:include selector)))
+(defun make-symmetry-handle (sap)
+  (declare (type sb-sys:system-area-pointer sap))
+  (let ((handle (%make-symmetry-handle sap)))
+    (tg:finalize handle (lambda ()
+                          (gecode_symmetryhandle_delete handle)))
+    handle))
+
+
 ;;; sets
 
 (defstruct (intset (:constructor %make-intset (sap)))

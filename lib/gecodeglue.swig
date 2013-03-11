@@ -18,6 +18,9 @@
 %typemap(cin) BrancherHandle*  "brancherhandle-type";
 %typemap(cout) BrancherHandle*  "brancherhandle-type";
 
+%typemap(cin) SymmetryHandle*  "symmetryhandle-type";
+%typemap(cout) SymmetryHandle*  "symmetryhandle-type";
+
 %typemap(cin) IntVarBranch*  "intvarselector-type";
 %typemap(cout) IntVarBranch*  "intvarselector-type";
 %typemap(cin) IntValBranch*  "intvalselector-type";
@@ -52,6 +55,7 @@
 %typemap(cin) FloatVarArgs*  "floatvarargs-type";
 %typemap(cin) FloatValArgs*  "floatargs-type";
 %typemap(cin) IntSetArgs*  "intsetargs-type";
+%typemap(cin) Symmetries*  "symmetriesargs-type";
 
 %typemap(cin) IntRelType  "int-relation-type";
 %typemap(cin) BoolOpType  "bool-operation-type";

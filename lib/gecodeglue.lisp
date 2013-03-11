@@ -52,6 +52,17 @@
 (cffi:defcfun ("gecode_intsetargs_delete" gecode_intsetargs_delete) :void
   (v :pointer))
 
+(cffi:defcfun ("gecode_symhandleargs_create" gecode_symhandleargs_create) :pointer
+  (n :int))
+
+(cffi:defcfun ("gecode_symhandleargs_set" gecode_symhandleargs_set) :void
+  (v :pointer)
+  (i :int)
+  (e symmetryhandle-type))
+
+(cffi:defcfun ("gecode_symhandleargs_delete" gecode_symhandleargs_delete) :void
+  (v :pointer))
+
 (cffi:defcfun ("gecode_init_exceptionHandler" gecode_init_exceptionHandler) :void
   (fptr :pointer))
 
@@ -155,6 +166,9 @@
   (cardMin :pointer)
   (cardMax :pointer))
 
+(cffi:defcfun ("gecode_symmetryhandle_delete" gecode_symmetryhandle_delete) :void
+  (sh symmetryhandle-type))
+
 (cffi:defcfun ("gecode_brancherhandle_delete" gecode_brancherhandle_delete) :void
   (bh brancherhandle-type))
 
@@ -183,6 +197,58 @@
   (vars boolvarargs-type)
   (varb intvarselector-type)
   (valb intvalselector-type))
+
+(cffi:defcfun ("gecode_VariableSymmetry_ivars" gecode_VariableSymmetry_ivars) symmetryhandle-type
+  (x intvarargs-type))
+
+(cffi:defcfun ("gecode_VariableSymmetry_bvars" gecode_VariableSymmetry_bvars) symmetryhandle-type
+  (x boolvarargs-type))
+
+(cffi:defcfun ("gecode_VariableSymmetry_ivars_ints" gecode_VariableSymmetry_ivars_ints) symmetryhandle-type
+  (x intvarargs-type)
+  (indices intargs-type))
+
+(cffi:defcfun ("gecode_ValueSymmetry_ints" gecode_ValueSymmetry_ints) symmetryhandle-type
+  (x intargs-type))
+
+(cffi:defcfun ("gecode_ValueSymmetry_iset" gecode_ValueSymmetry_iset) symmetryhandle-type
+  (x intset-type))
+
+(cffi:defcfun ("gecode_ValueSymmetry_ivar" gecode_ValueSymmetry_ivar) symmetryhandle-type
+  (var intvar-type))
+
+(cffi:defcfun ("gecode_VariableSequenceSymmetry_ivars_int" gecode_VariableSequenceSymmetry_ivars_int) symmetryhandle-type
+  (x intvarargs-type)
+  (ss :int))
+
+(cffi:defcfun ("gecode_VariableSequenceSymmetry_bvars_int" gecode_VariableSequenceSymmetry_bvars_int) symmetryhandle-type
+  (x boolvarargs-type)
+  (ss :int))
+
+(cffi:defcfun ("gecode_ValueSequenceSymmetry_ints_int" gecode_ValueSequenceSymmetry_ints_int) symmetryhandle-type
+  (x intargs-type)
+  (ss :int))
+
+(cffi:defcfun ("gecode_values_reflect_int_int" gecode_values_reflect_int_int) symmetryhandle-type
+  (lower :int)
+  (upper :int))
+
+(cffi:defcfun ("gecode_values_reflect_ivar" gecode_values_reflect_ivar) symmetryhandle-type
+  (x intvar-type))
+
+(cffi:defcfun ("gecode_branch_ivars_sym" gecode_branch_ivars_sym) brancherhandle-type
+  (space space-type)
+  (vars intvarargs-type)
+  (varb intvarselector-type)
+  (valb intvalselector-type)
+  (sym symmetriesargs-type))
+
+(cffi:defcfun ("gecode_branch_bvars_sym" gecode_branch_bvars_sym) brancherhandle-type
+  (space space-type)
+  (vars boolvarargs-type)
+  (varb intvarselector-type)
+  (valb intvalselector-type)
+  (sym symmetriesargs-type))
 
 (cffi:defcfun ("gecode_ivar_selector_delete" gecode_ivar_selector_delete) :void
   (s intvarselector-type))
@@ -2006,6 +2072,20 @@
 
 (cffi:defcfun ("gecode_sval_selector_delete" gecode_sval_selector_delete) :void
   (s setvalselector-type))
+
+(cffi:defcfun ("gecode_VariableSymmetry_svars" gecode_VariableSymmetry_svars) symmetryhandle-type
+  (x :pointer))
+
+(cffi:defcfun ("gecode_VariableSequenceSymmetry_svars" gecode_VariableSequenceSymmetry_svars) symmetryhandle-type
+  (x :pointer)
+  (ss :int))
+
+(cffi:defcfun ("gecode_branch_svars_sym" gecode_branch_svars_sym) brancherhandle-type
+  (space space-type)
+  (vars :pointer)
+  (varb setvarselector-type)
+  (valb setvalselector-type)
+  (sym symmetriesargs-type))
 
 (cffi:defcfun ("SET_VAR_NONE" SET_VAR_NONE) setvarselector-type)
 

@@ -29,6 +29,12 @@ extern "C" {
   void gecode_intsetargs_set(CLIntSetArgs *v, int i, const IntSet* e);
   void gecode_intsetargs_delete(CLIntSetArgs *v);
 
+  /* SymmetryHandle argument array */
+  CLSymmetryHandleArgs* gecode_symhandleargs_create(int n);
+  void gecode_symhandleargs_set(CLSymmetryHandleArgs *v, int i, const SymmetryHandle* e);
+  void gecode_symhandleargs_delete(CLSymmetryHandleArgs *v);
+
+
   /* exceptions */
   void gecode_init_exceptionHandler(void (*fptr)(const char*));
 
@@ -72,6 +78,9 @@ extern "C" {
                              int* glbMin, int* glbMax,
                              int* cardMin, int* cardMax);
 
+  /* symmetry handle */
+  void gecode_symmetryhandle_delete(SymmetryHandle* sh);
+
   /* brancher handles */
   void gecode_brancherhandle_delete(BrancherHandle* bh);
   void gecode_brancherhandle_kill(BrancherHandle* bh, CLSpace* space);
@@ -84,6 +93,30 @@ extern "C" {
   BrancherHandle* gecode_branch_bvar(CLSpace *space, BoolVar* var, IntValBranch* valb);
   BrancherHandle* gecode_branch_bvars(CLSpace *space, BoolVarArgs* vars,
                                       IntVarBranch* varb, IntValBranch* valb);
+
+  /* symmetries */
+  SymmetryHandle* gecode_VariableSymmetry_ivars(IntVarArgs* x);
+  SymmetryHandle* gecode_VariableSymmetry_bvars(BoolVarArgs* x);
+  SymmetryHandle* gecode_VariableSymmetry_ivars_ints(IntVarArgs* x,
+                                                     IntArgs* indices);
+  SymmetryHandle* gecode_ValueSymmetry_ints(IntArgs* x);
+  SymmetryHandle* gecode_ValueSymmetry_iset(IntSet* x);
+  SymmetryHandle* gecode_ValueSymmetry_ivar(IntVar* var);
+  SymmetryHandle* gecode_VariableSequenceSymmetry_ivars_int(IntVarArgs* x,
+                                                            int ss);
+  SymmetryHandle* gecode_VariableSequenceSymmetry_bvars_int(BoolVarArgs* x,
+                                                            int ss);
+  SymmetryHandle* gecode_ValueSequenceSymmetry_ints_int(IntArgs* x, int ss);
+  SymmetryHandle* gecode_values_reflect_int_int(int lower, int upper);
+  SymmetryHandle* gecode_values_reflect_ivar(IntVar* x);
+
+  /* branchers with symmetries */
+  BrancherHandle* gecode_branch_ivars_sym(CLSpace *space, IntVarArgs* vars,
+                                          IntVarBranch* varb, IntValBranch* valb,
+                                          Symmetries* sym);
+  BrancherHandle* gecode_branch_bvars_sym(CLSpace *space, BoolVarArgs* vars,
+                                          IntVarBranch* varb, IntValBranch* valb,
+                                          Symmetries* sym);
 
   /* variable selectors for branchers */
   void gecode_ivar_selector_delete(IntVarBranch* s);
@@ -858,13 +891,21 @@ extern "C" {
                                                    IntVar* y, int h,
                                                    SetVar* z);
 
-  // set branchers
+  /* set branchers */
   BrancherHandle* gecode_branch_svar(CLSpace *space, SetVar* var, SetValBranch* valb);
   BrancherHandle* gecode_branch_svars(CLSpace *space, SetVarArgs* vars,
                                       SetVarBranch* varb, SetValBranch* valb);
 
   void gecode_svar_selector_delete(SetVarBranch* s);
   void gecode_sval_selector_delete(SetValBranch* s);
+
+  /* symmetries */
+  SymmetryHandle* gecode_VariableSymmetry_svars(SetVarArgs* x);
+  SymmetryHandle* gecode_VariableSequenceSymmetry_svars(SetVarArgs* x, int ss);
+
+  BrancherHandle* gecode_branch_svars_sym(CLSpace *space, SetVarArgs* vars,
+                                          SetVarBranch* varb, SetValBranch* valb,
+                                          Symmetries* sym);
 
   /* variable selectors for set branchers */
   SetVarBranch* SET_VAR_NONE(void);

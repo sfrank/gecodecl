@@ -281,6 +281,38 @@
          (gecode_intsetargs_delete ,var)))))
 
 
+;; symmetry handles
+(cffi:define-foreign-type symmetryhandle-type () ()
+  (:actual-type :pointer)
+  (:simple-parser symmetryhandle-type))
+
+(defmethod expand-to-foreign (handle (type symmetryhandle-type))
+  `(symmetry-handle-sap ,handle))
+(defmethod expand-from-foreign (sap (type symmetryhandle-type))
+  `(make-symmetry-handle ,sap))
+
+
+(cffi:define-foreign-type symmetriesargs-type () ()
+  (:actual-type :pointer)
+  (:simple-parser symmetriesargs-type))
+
+(defmethod expand-to-foreign-dyn (value var body (type symmetriesargs-type))
+  (let ((length (gensym))
+        (i (gensym)))
+    `(let* ((,length (length ,value))
+            (,var (gecode_symhandleargs_create ,length))
+            (,i -1))
+       (declare (type fixnum ,i ,length))
+       (map nil
+            (lambda (x)
+              (declare (type symmetry-handle x))
+              (gecode_symhandleargs_set ,var (incf ,i) x))
+            ,value)
+       (unwind-protect 
+            (progn ,@body)
+         (gecode_symhandleargs_delete ,var)))))
+
+
 (cffi:define-foreign-type tasktypeargs-type () ()
   (:actual-type :pointer)
   (:simple-parser tasktypeargs-type))
@@ -349,8 +381,8 @@
 (cffi:define-foreign-library gecode-search
   (t (:default "libgecodesearch")))
 
-(cffi:define-foreign-library gecode-minimodel
-  (t (:default "libgecodeminimodel")))
+;(cffi:define-foreign-library gecode-minimodel
+;  (t (:default "libgecodeminimodel")))
 
 (cffi:use-foreign-library gecode-kernel)
 (cffi:use-foreign-library gecode-support)
@@ -360,7 +392,7 @@
 (cffi:use-foreign-library gecode-float)
 (cffi:use-foreign-library gecode-set)
 (cffi:use-foreign-library gecode-search)
-(cffi:use-foreign-library gecode-minimodel)
+;(cffi:use-foreign-library gecode-minimodel)
 
 (defvar *gluelib-pathname*
   (merge-pathnames #P"lib/" gecode-config:*base-directory*))
