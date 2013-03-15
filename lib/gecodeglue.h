@@ -90,9 +90,15 @@ extern "C" {
   BrancherHandle* gecode_branch_ivar(CLSpace *space, IntVar* var, IntValBranch* valb);
   BrancherHandle* gecode_branch_ivars(CLSpace *space, IntVarArgs* vars,
                                       IntVarBranch* varb, IntValBranch* valb);
+  BrancherHandle* gecode_branch_ivars_tie(CLSpace *space, IntVarArgs* vars,
+                                          IntVarBranch* varb[], unsigned int cnt,
+                                          IntValBranch* valb);
   BrancherHandle* gecode_branch_bvar(CLSpace *space, BoolVar* var, IntValBranch* valb);
   BrancherHandle* gecode_branch_bvars(CLSpace *space, BoolVarArgs* vars,
                                       IntVarBranch* varb, IntValBranch* valb);
+  BrancherHandle* gecode_branch_bvars_tie(CLSpace *space, BoolVarArgs* vars,
+                                          IntVarBranch* varb[], unsigned int cnt,
+                                          IntValBranch* valb);
 
   /* symmetries */
   SymmetryHandle* gecode_VariableSymmetry_ivars(IntVarArgs* x);
@@ -750,6 +756,10 @@ extern "C" {
   BrancherHandle* gecode_branch_fvar(CLSpace *space, FloatVar* var, FloatValBranch* valb);
   BrancherHandle* gecode_branch_fvars(CLSpace *space, FloatVarArgs* vars,
                                       FloatVarBranch* varb, FloatValBranch* valb);
+  BrancherHandle* gecode_branch_fvars_tie(CLSpace *space, FloatVarArgs* vars,
+                                          FloatVarBranch* varb[], unsigned int cnt,
+                                          FloatValBranch* valb);
+
 
   void gecode_fvar_selector_delete(FloatVarBranch* s);
 
@@ -895,6 +905,11 @@ extern "C" {
   BrancherHandle* gecode_branch_svar(CLSpace *space, SetVar* var, SetValBranch* valb);
   BrancherHandle* gecode_branch_svars(CLSpace *space, SetVarArgs* vars,
                                       SetVarBranch* varb, SetValBranch* valb);
+  BrancherHandle* gecode_branch_svars_tie(CLSpace *space, SetVarArgs* vars,
+                                          SetVarBranch* varb[], unsigned int cnt,
+                                          SetValBranch* valb);
+
+
 
   void gecode_svar_selector_delete(SetVarBranch* s);
   void gecode_sval_selector_delete(SetValBranch* s);

@@ -583,14 +583,70 @@ BrancherHandle* gecode_branch_ivars(CLSpace *space, IntVarArgs* vars,
   return new BrancherHandle(branch(*space, *vars, *varb, *valb));
 }
 
+BrancherHandle* gecode_branch_ivars_tie(CLSpace *space, IntVarArgs* vars,
+                                        IntVarBranch* varb[], unsigned int cnt,
+                                        IntValBranch* valb) {
+  switch(cnt) {
+  case 1:
+    return gecode_branch_ivars(space, vars, varb[0], valb);
+    break;
+  case 2:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1]),
+                                     *valb));
+    break;
+  case 3:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1], *varb[2]),
+                                     *valb));
+    break;
+  case 4:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1], *varb[2], *varb[3]),
+                                     *valb));
+    break;
+  default:
+    return NULL;
+  }
+}
+
+
 BrancherHandle* gecode_branch_bvar(CLSpace *space, BoolVar* var, IntValBranch* valb) {
   return new BrancherHandle(branch(*space, *var, *valb));
 }
 
-BrancherHandle* gecode_branch_bool_vars(CLSpace *space, BoolVarArgs* vars,
-                                        IntVarBranch* varb, IntValBranch* valb) {
+BrancherHandle* gecode_branch_bvars(CLSpace *space, BoolVarArgs* vars,
+                                    IntVarBranch* varb, IntValBranch* valb) {
   return new BrancherHandle(branch(*space, *vars, *varb, *valb));
 }
+
+BrancherHandle* gecode_branch_bvars_tie(CLSpace *space, BoolVarArgs* vars,
+                                        IntVarBranch* varb[], unsigned int cnt,
+                                        IntValBranch* valb) {
+  switch(cnt) {
+  case 1:
+    return gecode_branch_bvars(space, vars, varb[0], valb);
+    break;
+  case 2:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1]),
+                                     *valb));
+    break;
+  case 3:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1], *varb[2]),
+                                     *valb));
+    break;
+  case 4:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1], *varb[2], *varb[3]),
+                                     *valb));
+    break;
+  default:
+    return NULL;
+  }
+}
+
 
 // Symmetries
 SymmetryHandle* gecode_VariableSymmetry_ivars(IntVarArgs* x) {
@@ -1925,6 +1981,34 @@ BrancherHandle* gecode_branch_fvars(CLSpace *space, FloatVarArgs* vars,
   return new BrancherHandle(branch(*space, *vars, *varb, *valb));
 }
 
+BrancherHandle* gecode_branch_fvars_tie(CLSpace *space, FloatVarArgs* vars,
+                                        FloatVarBranch* varb[], unsigned int cnt,
+                                        FloatValBranch* valb) {
+  switch(cnt) {
+  case 1:
+    return gecode_branch_fvars(space, vars, varb[0], valb);
+    break;
+  case 2:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1]),
+                                     *valb));
+    break;
+  case 3:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1], *varb[2]),
+                                     *valb));
+    break;
+  case 4:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1], *varb[2], *varb[3]),
+                                     *valb));
+    break;
+  default:
+    return NULL;
+  }
+}
+
+
 /* variable selectors for branchers */
 void gecode_fvar_selector_delete(FloatVarBranch* s){
   delete s;
@@ -2341,6 +2425,34 @@ BrancherHandle* gecode_branch_svars(CLSpace *space, SetVarArgs* vars,
                                     SetVarBranch* varb, SetValBranch* valb) {
   return new BrancherHandle(branch(*space, *vars, *varb, *valb));
 }
+
+BrancherHandle* gecode_branch_svars_tie(CLSpace *space, SetVarArgs* vars,
+                                        SetVarBranch* varb[], unsigned int cnt,
+                                        SetValBranch* valb) {
+  switch(cnt) {
+  case 1:
+    return gecode_branch_svars(space, vars, varb[0], valb);
+    break;
+  case 2:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1]),
+                                     *valb));
+    break;
+  case 3:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1], *varb[2]),
+                                     *valb));
+    break;
+  case 4:
+    return new BrancherHandle(branch(*space, *vars,
+                                     tiebreak(*varb[0], *varb[1], *varb[2], *varb[3]),
+                                     *valb));
+    break;
+  default:
+    return NULL;
+  }
+}
+
 
 // Symmetries
 SymmetryHandle* gecode_VariableSymmetry_svars(SetVarArgs* x) {

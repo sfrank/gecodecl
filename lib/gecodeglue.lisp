@@ -187,6 +187,13 @@
   (varb intvarselector-type)
   (valb intvalselector-type))
 
+(cffi:defcfun ("gecode_branch_ivars_tie" gecode_branch_ivars_tie) brancherhandle-type
+  (space space-type)
+  (vars intvarargs-type)
+  (varb :pointer)
+  (cnt :unsigned-int)
+  (valb intvalselector-type))
+
 (cffi:defcfun ("gecode_branch_bvar" gecode_branch_bvar) brancherhandle-type
   (space space-type)
   (var boolvar-type)
@@ -196,6 +203,13 @@
   (space space-type)
   (vars boolvarargs-type)
   (varb intvarselector-type)
+  (valb intvalselector-type))
+
+(cffi:defcfun ("gecode_branch_bvars_tie" gecode_branch_bvars_tie) brancherhandle-type
+  (space space-type)
+  (vars boolvarargs-type)
+  (varb :pointer)
+  (cnt :unsigned-int)
   (valb intvalselector-type))
 
 (cffi:defcfun ("gecode_VariableSymmetry_ivars" gecode_VariableSymmetry_ivars) symmetryhandle-type
@@ -1624,6 +1638,13 @@
   (varb floatvarselector-type)
   (valb floatvalselector-type))
 
+(cffi:defcfun ("gecode_branch_fvars_tie" gecode_branch_fvars_tie) brancherhandle-type
+  (space space-type)
+  (vars floatvarargs-type)
+  (varb :pointer)
+  (cnt :unsigned-int)
+  (valb floatvalselector-type))
+
 (cffi:defcfun ("gecode_fvar_selector_delete" gecode_fvar_selector_delete) :void
   (s floatvarselector-type))
 
@@ -2065,6 +2086,13 @@
   (space space-type)
   (vars :pointer)
   (varb setvarselector-type)
+  (valb setvalselector-type))
+
+(cffi:defcfun ("gecode_branch_svars_tie" gecode_branch_svars_tie) brancherhandle-type
+  (space space-type)
+  (vars :pointer)
+  (varb :pointer)
+  (cnt :unsigned-int)
   (valb setvalselector-type))
 
 (cffi:defcfun ("gecode_svar_selector_delete" gecode_svar_selector_delete) :void
