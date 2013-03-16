@@ -18,9 +18,10 @@
     (format t "# of propagators: ~S~%# of branchers: ~S~2%"
             (gecode_space_propagators_count *gspace*)
             (gecode_space_branchers_count *gspace*))
-    (setf bh (gecode_branch_ivars *gspace* (list x y)
-                                  (INT_VAR_NONE)                                  
-                                  (INT_VAL_MIN)))
+    ;(setf bh (gecode_branch_ivars *gspace* (list x y)
+    ;                              (INT_VAR_NONE)                                  
+    ;                              (INT_VAL_MIN)))
+    (setf bh (branch-g (list x y) (INT_VAR_NONE) (INT_VAL_MIN)))
     (format t "# of propagators: ~S~%# of branchers: ~S~2%"
             (gecode_space_propagators_count *gspace*)
             (gecode_space_branchers_count *gspace*))

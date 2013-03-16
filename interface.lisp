@@ -217,3 +217,100 @@
 
 (defun channel-bools-g (seq integer &key (offset 0) (clevel :icl-def))
   (gecode_channel_bvars_ivar_int *gspace* seq integer offset clevel))
+
+
+;;; branching
+
+(defgeneric branchval-g (var val-brancher))
+
+(defmethod branchval-g ((var intvar) (val-brancher ival-selector))
+  (gecode_branch_ivar *gspace* var val-brancher))
+
+(defmethod branchval-g ((var boolvar) (val-brancher ival-selector))
+  (gecode_branch_bvar *gspace* var val-brancher))
+
+(defmethod branchval-g ((var floatvar) (val-brancher fval-selector))
+  (gecode_branch_fvar *gspace* var val-brancher))
+
+(defmethod branchval-g ((var setvar) (val-brancher sval-selector))
+  (gecode_branch_svar *gspace* var val-brancher))
+
+
+(defgeneric branch-g (vars var-brancher val-brancher))
+
+(defmethod branch-g ((vars sequence)
+                     (var-brancher ivar-selector)
+                     (val-brancher ival-selector))
+  (cond
+    ((every #'intvar-p vars)
+     (gecode_branch_ivars *gspace* vars var-brancher val-brancher))
+    ((every #'boolvar-p vars)
+     (gecode_branch_bvars *gspace* vars var-brancher val-brancher))
+    (t
+     (error "Variable sequence VARS must contain a single type of variables of either type INTVAR or BOOLVAR."))))
+
+(defmethod branch-g ((vars sequence)
+                     (var-brancher fvar-selector)
+                     (val-brancher fval-selector))
+  (if (every #'floatvar-p vars)
+      (gecode_branch_fvars *gspace* vars var-brancher val-brancher)
+      (error "Variable sequence VARS must contain variables of type FLOATVAR.")))
+
+(defmethod branch-g ((vars sequence)
+                     (var-brancher svar-selector)
+                     (val-brancher sval-selector))
+  (if (every #'setvar-p vars)
+      (gecode_branch_svars *gspace* vars var-brancher val-brancher)
+      (error "Variable sequence VARS must contain variables of type SETVAR.")))
+
+(defmethod branch-g ((vars sequence)
+                     (var-brancher sequence)
+                     (val-brancher ival-selector))
+  (unless (every #'ivar-selector-p var-brancher)
+    (error "Brancher sequence VAR-BRANCHER must contain variables of type IVAR-SELECTOR."))
+  (let ((length (length var-brancher)))
+    (cond 
+      ((= length 1)
+       (branch-g vars (elt var-brancher 0) val-brancher))
+      ((<= 2 length 4)
+       (cond
+         ((every #'intvar-p vars)
+          (branch-ivars-tie *gspace* vars var-brancher val-brancher))
+         ((every #'boolvar-p vars)
+          (branch-bvars-tie *gspace* vars var-brancher val-brancher))
+         (t
+          (error "Variable sequence VARS must contain a single type of variables of either type INTVAR or BOOLVAR."))))
+      (t
+       (error "The variable bancher sequence VAR-BRANCHER must not exceed four branchers.")))))
+
+(defmethod branch-g ((vars sequence)
+                     (var-brancher sequence)
+                     (val-brancher fval-selector))
+  (unless (every #'floatvar-p vars)
+    (error "Variable sequence VARS must contain variables of type FLOATVAR."))
+  (unless (every #'fvar-selector-p var-brancher)
+    (error "Brancher sequence VAR-BRANCHER must contain variables of type FVAR-SELECTOR."))
+  (let ((length (length var-brancher)))
+    (cond 
+      ((= length 1)
+       (branch-g vars (elt var-brancher 0) val-brancher))
+      ((<= 2 length 4)
+       (branch-fvars-tie *gspace* vars var-brancher val-brancher))
+      (t
+       (error "The variable bancher sequence VAR-BRANCHER must not exceed four branchers.")))))
+
+(defmethod branch-g ((vars sequence)
+                     (var-brancher sequence)
+                     (val-brancher sval-selector))
+  (unless (every #'setvar-p vars)
+    (error "Variable sequence VARS must contain variables of type SETVAR."))
+  (unless (every #'svar-selector-p var-brancher)
+    (error "Brancher sequence VAR-BRANCHER must contain variables of type SVAR-SELECTOR."))
+  (let ((length (length var-brancher)))
+    (cond 
+      ((= length 1)
+       (branch-g vars (elt var-brancher 0) val-brancher))
+      ((<= 2 length 4)
+       (branch-svars-tie *gspace* vars var-brancher val-brancher))
+      (t
+       (error "The variable bancher sequence VAR-BRANCHER must not exceed four branchers.")))))
