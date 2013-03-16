@@ -91,13 +91,13 @@ extern "C" {
   BrancherHandle* gecode_branch_ivars(CLSpace *space, IntVarArgs* vars,
                                       IntVarBranch* varb, IntValBranch* valb);
   BrancherHandle* gecode_branch_ivars_tie(CLSpace *space, IntVarArgs* vars,
-                                          IntVarBranch* varb[], unsigned int cnt,
+                                          IntVarBranch** varb, unsigned int cnt,
                                           IntValBranch* valb);
   BrancherHandle* gecode_branch_bvar(CLSpace *space, BoolVar* var, IntValBranch* valb);
   BrancherHandle* gecode_branch_bvars(CLSpace *space, BoolVarArgs* vars,
                                       IntVarBranch* varb, IntValBranch* valb);
   BrancherHandle* gecode_branch_bvars_tie(CLSpace *space, BoolVarArgs* vars,
-                                          IntVarBranch* varb[], unsigned int cnt,
+                                          IntVarBranch** varb, unsigned int cnt,
                                           IntValBranch* valb);
 
   /* symmetries */
@@ -757,7 +757,7 @@ extern "C" {
   BrancherHandle* gecode_branch_fvars(CLSpace *space, FloatVarArgs* vars,
                                       FloatVarBranch* varb, FloatValBranch* valb);
   BrancherHandle* gecode_branch_fvars_tie(CLSpace *space, FloatVarArgs* vars,
-                                          FloatVarBranch* varb[], unsigned int cnt,
+                                          FloatVarBranch** varb, unsigned int cnt,
                                           FloatValBranch* valb);
 
 
@@ -906,7 +906,7 @@ extern "C" {
   BrancherHandle* gecode_branch_svars(CLSpace *space, SetVarArgs* vars,
                                       SetVarBranch* varb, SetValBranch* valb);
   BrancherHandle* gecode_branch_svars_tie(CLSpace *space, SetVarArgs* vars,
-                                          SetVarBranch* varb[], unsigned int cnt,
+                                          SetVarBranch** varb, unsigned int cnt,
                                           SetValBranch* valb);
 
 
