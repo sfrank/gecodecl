@@ -87,7 +87,7 @@
 
 
 ;;; IntVars
-(defun add-int-variable ( &optional (min -1000000000) (max 1000000000))
+(defun add-int-variable (min max)
   (make-intvar (gecode_int_addvar *gspace* min max)))
 
 (defun intvar-set (set)
@@ -108,11 +108,13 @@
                   (mem-ref size :int)))))
 
 (defun integer-value (variable)
-  (multiple-value-bind (result values)
-      (integer-info variable)
-    (if (eq result :var-assigned)
-        (car values)
-        (error "Value requested on unassigned variable ~A" variable))))
+  (if (intvar-p variable)
+      (multiple-value-bind (result values)
+          (integer-info variable)
+        (if (eq result :var-assigned)
+            (car values)
+            (error "Value requested on unassigned variable ~A" variable)))
+      variable))
 
 ;;; BoolVars
 (defun add-bool-variable ()

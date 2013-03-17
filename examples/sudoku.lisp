@@ -75,26 +75,12 @@
 
 ;;; modelling
 
-;; NOTE: at the moment this is rather verbose since the high-level
-;; modelling language is not yet used
 (defun sudoku (grid)
-  (let* ((*gspace* (make-gspace))
-         (v (mapcar (lambda (x)
-                      (if (integerp x)
-                          x
-                          (add-int-variable 1 9)))
-                    grid)))
-    (dolist (list (append (rows v) (columns v) (boxes v)))
-      (distinct-g list))
-    (let* ((dfs (make-dfs *gspace*))
-           (solution (search-next dfs)))
-      (when solution
-        (let ((*gspace* solution))
-          (mapcar (lambda (x)
-                    (if (integerp x)
-                        x
-                        (integer-value x)))
-                  v))))))
+  (with-gecode ()
+    (let ((v (integer-seq grid :min 1 :max 9)))
+      (dolist (list (append (rows v) (columns v) (boxes v)))
+        (distinct-g list))
+      (one-solution v #'make-dfs))))
 
 (defun sudoku-stress ()
   (loop for s in (list* *sudoku-problem* (read-sudokus))

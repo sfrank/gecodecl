@@ -2,6 +2,27 @@
 
 (in-package :gecodecl)
 
+(defmacro with-gecode (&rest body)
+  `(let ((*gspace* (make-gspace)))
+     ,@body))
+
+(defun one-solution (seq search-fun)
+  (let ((s (funcall search-fun *gspace*)))
+    (let ((solution (search-next s)))
+      (when solution
+        (let ((*gspace* solution))
+          (map (type-of seq) #'integer-value seq))))))
+
+(defun integer-seq (seq &key (min -1000000000) (max 1000000000) (result-type nil))
+  (map (if result-type
+           result-type
+           (type-of seq))
+       (lambda (x)
+         (if (numberp x)
+             x
+             (add-int-variable min max)))
+       seq))
+
 ;;;; Boolean and Integer Relations
 
 ;;; type dispatch function to the different constraint propagator
