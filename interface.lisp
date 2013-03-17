@@ -209,9 +209,21 @@
 
 
 ;;; binpacking
-
 (defun binpacking-g (loads bins sizes &key (clevel :icl-def))
   (gecode_binpacking *gspace* loads bins sizes clevel))
+
+
+;;; nooverlap
+(defun nooverlap-g (x w y h &key (o nil) (clevel :icl-def))
+  (if o
+      (gecode_nooverlap_optional *gspace* x w y h o clevel)
+      (gecode_nooverlap *gspace* x w y h clevel)))
+
+(defun nooverlap-coords-g (x0 w x1 y0 h y1 &key (o nil) (clevel :icl-def))
+  (if o
+      (gecode_nooverlap_coords_optional *gspace* x0 w x1 y0 h y1 o clevel)
+      (gecode_nooverlap_coords *gspace* x0 w x1 y0 h y1 clevel)))
+
 
 
 ;;; extensional constraint
