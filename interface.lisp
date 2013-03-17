@@ -187,6 +187,19 @@
         (unless (zerop xlength)
           (gecode_sorted_ivars_ivars_ivars *gspace* xseq yseq permseq clevel)))))
 
+;;; nvalues
+(defgeneric nvalues-g (irt x y &key (clevel :icl-def)))
+
+(defmethod nvalues-g (irt (x sequence) (y integer) &key (clevel :icl-def))
+  (if (intvar-p (elt x 0))
+      (gecode_nvalues_ivars_int *gspace* irt x y clevel)
+      (gecode_nvalues_bvars_int *gspace* irt x y clevel)))
+
+(defmethod nvalues-g (irt (x sequence) (y intvar) &key (clevel :icl-def))
+  (if (intvar-p (elt x 0))
+      (gecode_nvalues_ivars_int *gspace* irt x y clevel)
+      (gecode_nvalues_bvars_int *gspace* irt x y clevel)))
+
 
 ;;; sequence
 (defun sequence-g (seq set q l u &key (clevel :icl-def))
