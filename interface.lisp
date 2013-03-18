@@ -188,7 +188,7 @@
           (gecode_sorted_ivars_ivars_ivars *gspace* xseq yseq permseq clevel)))))
 
 ;;; nvalues
-(defgeneric nvalues-g (irt x y &key (clevel :icl-def)))
+(defgeneric nvalues-g (irt x y &key clevel))
 
 (defmethod nvalues-g (irt (x sequence) (y integer) &key (clevel :icl-def))
   (if (intvar-p (elt x 0))
@@ -224,6 +224,9 @@
       (gecode_nooverlap_coords_optional *gspace* x0 w x1 y0 h y1 o clevel)
       (gecode_nooverlap_coords *gspace* x0 w x1 y0 h y1 clevel)))
 
+;;; cumulatives
+(defun cumulatives (m s p e u c at_most &key (clevel :icl-def))
+  (gecode_cumulatives_ivars *gspace* m s p e u c at_most clevel))
 
 
 ;;; extensional constraint
