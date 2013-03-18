@@ -225,7 +225,7 @@
       (gecode_nooverlap_coords *gspace* x0 w x1 y0 h y1 clevel)))
 
 ;;; cumulatives
-(defun cumulatives (m s p e u c at_most &key (clevel :icl-def))
+(defun cumulatives-g (m s p e u c at_most &key (clevel :icl-def))
   (gecode_cumulatives_ivars *gspace* m s p e u c at_most clevel))
 
 
@@ -266,6 +266,23 @@
 
 (defun channel-bools-g (seq integer &key (offset 0) (clevel :icl-def))
   (gecode_channel_bvars_ivar_int *gspace* seq integer offset clevel))
+
+
+;;; integer arithmetic
+(defgeneric min-g (result &rest args))
+
+(defmethod min-g ((result intvar) &rest args)
+  (let ((length (length args)))
+    (cond
+      ((and (= 1 length)
+            (typep (car args) 'sequence))
+       (gecode_min_ivars_ivar *gspace* (car args) result *clevel*))
+      ((and (= 2 length)
+            (intvar-p (car args))
+            (intvar-p (cdar args)))
+       (gecode_min_ivar_ivar_ivar *gspace* (car args) (cdar args) result *clevel*))
+      (t
+       (gecode_min_ivars_ivar *gspace* args result *clevel*)))))
 
 
 ;;; branching

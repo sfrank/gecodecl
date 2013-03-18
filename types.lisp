@@ -39,7 +39,7 @@
     `(and keyword (satisfies ,operation))))
 
 (defparameter *gspace* nil)
-
+(defparameter *clevel* :icl-def)
 
 ;;; CFFI type translators
 
