@@ -1059,6 +1059,11 @@ void gecode_clause_bvars_bvars_bvar(CLSpace *space, BoolOpType op,
   clause(*space, op, *v1, *v2, *bvar, icl);
 }
 
+void gecode_ite_bvar_ivar_ivar_ivar(CLSpace *space, BoolVar* bvar,
+                                    IntVar* x, IntVar* y, IntVar* z) {
+  ite(*space, *bvar, *x, *y, *z);
+}
+
 /* finite domain integer relations */
 void gecode_dom_ivar_int(CLSpace *space,
                          IntVar* v, int value, IntConLevel icl) {

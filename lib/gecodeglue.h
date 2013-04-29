@@ -231,6 +231,9 @@ extern "C" {
                                       BoolVarArgs* v1, BoolVarArgs* v2,
                                       BoolVar* bvar, IntConLevel icl);
 
+  void gecode_ite_bvar_ivar_ivar_ivar(CLSpace *space, BoolVar* bvar,
+                                      IntVar* x, IntVar* y, IntVar* z);
+
 
   /* integer relations */
   void gecode_dom_ivar_int(CLSpace *space, IntVar* v, int value, IntConLevel icl);

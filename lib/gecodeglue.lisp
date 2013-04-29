@@ -480,6 +480,13 @@
   (bvar boolvar-type)
   (icl int-consistency-level))
 
+(cffi:defcfun ("gecode_ite_bvar_ivar_ivar_ivar" gecode_ite_bvar_ivar_ivar_ivar) :void
+  (space space-type)
+  (bvar boolvar-type)
+  (x intvar-type)
+  (y intvar-type)
+  (z intvar-type))
+
 (cffi:defcfun ("gecode_dom_ivar_int" gecode_dom_ivar_int) :void
   (space space-type)
   (v intvar-type)

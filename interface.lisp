@@ -148,6 +148,10 @@
     (error "Clauses are only defined for AND and OR."))
   (gecode_clause_bvars_bvars_bvar *gspace* bop x y b clevel))
 
+;;; if-then-else constraint: z = (b ? x : y)
+
+(defun ifthenelse-post ((z intvar) (b boolvar) (x intvar) (y intvar))
+  (gecode_ite_bvar_ivar_ivar_ivar *gspace* b x y z))
 
 ;;; distinct integer variables
 
@@ -268,7 +272,7 @@
   (gecode_channel_bvars_ivar_int *gspace* seq integer offset clevel))
 
 
-;;; integer arithmetic
+;;; arithmetic
 (defgeneric min-g (result &rest args))
 
 (defmethod min-g ((result intvar) &rest args)
