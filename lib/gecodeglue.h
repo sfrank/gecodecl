@@ -42,10 +42,10 @@ extern "C" {
   void gecode_init_callbackInt(void (*fptr)(unsigned, const ModEvent));
 
   /* space handling */
-  void gecode_intClChannel(CLSpace *space, size_t x0, unsigned idx);
+  void gecode_intClChannel(CLSpace* space, size_t x0, unsigned idx);
   CLSpace* gecode_space_create(void);
-  void gecode_space_delete(CLSpace *space);
-  CLSpace* gecode_space_copy(CLSpace *space);
+  void gecode_space_delete(void* space);
+  CLSpace* gecode_space_copy(CLSpace* space);
   unsigned int gecode_space_propagators_count(CLSpace* Space);
   unsigned int gecode_space_branchers_count(CLSpace* Space);
 

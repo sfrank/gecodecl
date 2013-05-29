@@ -77,7 +77,7 @@
 (cffi:defcfun ("gecode_space_create" gecode_space_create) :pointer)
 
 (cffi:defcfun ("gecode_space_delete" gecode_space_delete) :void
-  (space space-type))
+  (space :pointer))
 
 (cffi:defcfun ("gecode_space_copy" gecode_space_copy) :pointer
   (space space-type))

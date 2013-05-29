@@ -63,14 +63,15 @@
   (sap (gecode_space_create) :type sb-sys:system-area-pointer :read-only t)
   (int-notifiers))
 
-(defun reclaim-space (space)
+(defun reclaim-space (sap)
   (lambda ()
     ;(format t "Space GCed...~%")
-    (gecode_space_delete space)))
+    (gecode_space_delete sap)))
 
 (defun make-gspace ()
-  (let ((space (%make-space)))
-    (tg:finalize space (reclaim-space space))
+  (let* ((space (%make-space))
+         (sap (gspace-sap space)))
+    (tg:finalize space (reclaim-space sap))
     space))
 
 (defun make-gspace-from-ref (sap)

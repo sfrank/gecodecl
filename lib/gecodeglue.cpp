@@ -477,7 +477,7 @@ void gecode_symhandleargs_delete(CLSymmetryHandleArgs *v) {
 
 CLSpace* gecode_space_create(void) { return new CLSpace(); }
 
-void gecode_space_delete(CLSpace *space) { delete space; }
+void gecode_space_delete(void* space) { delete (CLSpace*)space; }
 
 CLSpace* gecode_space_copy(CLSpace *space) {
   return (CLSpace *) space->clone(false); }
