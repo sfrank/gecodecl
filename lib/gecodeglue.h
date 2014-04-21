@@ -13,26 +13,31 @@ extern "C" {
   CLVarArgs* gecode_varargs_create(int n);
   void gecode_varargs_set(CLVarArgs *v, int i, const IntVar* e);
   void gecode_varargs_delete(CLVarArgs *v);
+  void gecode_varargs_delete_sap(void *v);
 
   /* integer argument arrays */
   CLIntArgs* gecode_intargs_create(int n);
   int *gecode_intargs_adr(CLIntArgs *v);
   void gecode_intargs_delete(CLIntArgs *v);
+  void gecode_intargs_delete_sap(void *v);
 
   /* double argument arrays */
   CLFloatArgs* gecode_floatargs_create(int n);
   void gecode_floatargs_set(CLFloatArgs *v, int i, double e);
   void gecode_floatargs_delete(CLFloatArgs *v);
+  void gecode_floatargs_delete_sap(void *v);
 
   /* IntSet argument arrays */
   CLIntSetArgs* gecode_intsetargs_create(int n);
   void gecode_intsetargs_set(CLIntSetArgs *v, int i, const IntSet* e);
   void gecode_intsetargs_delete(CLIntSetArgs *v);
+  void gecode_intsetargs_delete_sap(void *v);
 
   /* SymmetryHandle argument array */
   CLSymmetryHandleArgs* gecode_symhandleargs_create(int n);
   void gecode_symhandleargs_set(CLSymmetryHandleArgs *v, int i, const SymmetryHandle* e);
   void gecode_symhandleargs_delete(CLSymmetryHandleArgs *v);
+  void gecode_symhandleargs_delete_sap(void *v);
 
 
   /* exceptions */
@@ -44,7 +49,8 @@ extern "C" {
   /* space handling */
   void gecode_intClChannel(CLSpace* space, size_t x0, unsigned idx);
   CLSpace* gecode_space_create(void);
-  void gecode_space_delete(void* space);
+  void gecode_space_delete(CLSpace* space);
+  void gecode_space_delete_sap(void* space);
   CLSpace* gecode_space_copy(CLSpace* space);
   unsigned int gecode_space_propagators_count(CLSpace* Space);
   unsigned int gecode_space_branchers_count(CLSpace* Space);
@@ -80,9 +86,11 @@ extern "C" {
 
   /* symmetry handle */
   void gecode_symmetryhandle_delete(SymmetryHandle* sh);
+  void gecode_symmetryhandle_delete_sap(void* sh);
 
   /* brancher handles */
   void gecode_brancherhandle_delete(BrancherHandle* bh);
+  void gecode_brancherhandle_delete_sap(void* bh);
   void gecode_brancherhandle_kill(BrancherHandle* bh, CLSpace* space);
 
 
@@ -126,6 +134,7 @@ extern "C" {
 
   /* variable selectors for branchers */
   void gecode_ivar_selector_delete(IntVarBranch* s);
+  void gecode_ivar_selector_delete_sap(void* s);
   IntVarBranch* INT_VAR_NONE(void);
   IntVarBranch* INT_VAR_RND(unsigned int seed);
   /* TODO: check whether to insert MERIT variants */
@@ -152,6 +161,7 @@ extern "C" {
 
   /* value selectors for branchers */
   void gecode_ival_selector_delete(IntValBranch* s);
+  void gecode_ival_selector_delete_sap(void* s);
   IntValBranch* INT_VAL_MIN(void);
   IntValBranch* INT_VAL_MED(void);
   IntValBranch* INT_VAL_MAX(void);
@@ -170,17 +180,21 @@ extern "C" {
   /* search engines */
   DFS<CLSpace> *gecode_dfs_engine_create(CLSpace *space);
   void gecode_dfs_engine_delete(DFS<CLSpace> *dfs);
+  void gecode_dfs_engine_delete_sap(void *dfs);
   CLSpace *gecode_dfs_engine_next(DFS<CLSpace> *dfs);
   BAB<CLSpace> *gecode_bab_engine_create(CLSpace *space, size_t minVar);
   void gecode_bab_engine_delete(BAB<CLSpace> *bab);
+  void gecode_bab_engine_delete_sap(void *bab);
   CLSpace *gecode_bab_engine_next(BAB<CLSpace> *bab);
-  
+
   RBS<DFS, CLSpace> *gecode_rbs_dfs_engine_create(CLSpace *space);
   void gecode_rbs_dfs_engine_delete(RBS<DFS, CLSpace> *rbs);
+  void gecode_rbs_dfs_engine_delete_sap(void *rbs);
   CLSpace *gecode_rbs_dfs_engine_next(RBS<DFS, CLSpace> *rbs);
 
   RBS<BAB, CLSpace> *gecode_rbs_bab_engine_create(CLSpace *space, size_t minVar);
   void gecode_rbs_bab_engine_delete(RBS<BAB, CLSpace> *rbs);
+  void gecode_rbs_bab_engine_delete_sap(void *rbs);
   CLSpace *gecode_rbs_bab_engine_next(RBS<BAB, CLSpace> *rbs);
   
 
@@ -405,6 +419,7 @@ extern "C" {
   /* DFA / extensional constraint */
   DFA* gecode_DFA_create(int s, DFA::Transition* trns, int* f);
   void gecode_DFA_delete(DFA* d);
+  void gecode_DFA_delete_sap(void* d);
 
   void gecode_extensional_ivars_dfa(CLSpace* space, IntVarArgs* x, DFA* d,
                                     IntConLevel icl);
@@ -414,6 +429,7 @@ extern "C" {
 
   TupleSet* gecode_TupleSet_create(void);
   void gecode_TupleSet_delete(TupleSet* d);
+  void gecode_TupleSet_delete_sap(void* d);
 
   void gecode_TupleSet_add(TupleSet* d, IntArgs* i);
 
@@ -765,6 +781,7 @@ extern "C" {
 
 
   void gecode_fvar_selector_delete(FloatVarBranch* s);
+  void gecode_fvar_selector_delete_sap(void* s);
 
   FloatVarBranch* FLOAT_VAR_NONE(void);
   FloatVarBranch* FLOAT_VAR_RND(unsigned int seed);
@@ -796,6 +813,7 @@ extern "C" {
   IntSet* gecode_intset_seq(int seq[], int count);
   IntSet* gecode_intset_ranges(int seq[][2], int count);
   void gecode_intset_delete(IntSet* iset);
+  void gecode_intset_delete_sap(void* iset);
   /* set domain constraints */
   void gecode_dom_svar_int(CLSpace *space, SetRelType r, SetVar* x, int i);
   void gecode_dom_svars_int(CLSpace *space, SetRelType r, SetVarArgs* x, int i);
@@ -915,7 +933,9 @@ extern "C" {
 
 
   void gecode_svar_selector_delete(SetVarBranch* s);
+  void gecode_svar_selector_delete_sap(void* s);
   void gecode_sval_selector_delete(SetValBranch* s);
+  void gecode_sval_selector_delete_sap(void* s);
 
   /* symmetries */
   SymmetryHandle* gecode_VariableSymmetry_svars(SetVarArgs* x);

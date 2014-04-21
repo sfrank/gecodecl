@@ -425,6 +425,8 @@ void gecode_varargs_set(CLVarArgs *v, int i, const IntVar* e) {
 }
 void gecode_varargs_delete(CLVarArgs *v) {
   delete v; }
+void gecode_varargs_delete_sap(void *v) {
+  delete (CLVarArgs*)v; }
 
 CLIntArgs* gecode_intargs_create(int n) {
     return new CLIntArgs(n); 
@@ -434,6 +436,8 @@ int* gecode_intargs_adr(CLIntArgs *v) {
 }
 void gecode_intargs_delete(CLIntArgs *v) {
   delete v; }
+void gecode_intargs_delete_sap(void *v) {
+  delete (CLIntArgs*)v; }
 
 void gecode_intClChannel(CLSpace *space, vector<IntVar>::size_type x0, unsigned idx) {
   Int::IntView x(space->getIntVar(x0));
@@ -452,6 +456,8 @@ void gecode_floatargs_set(CLFloatArgs *v, int i, double e) {
 }
 void gecode_floatargs_delete(CLFloatArgs *v) {
   delete v; }
+void gecode_floatargs_delete_sap(void *v) {
+  delete (CLFloatArgs*)v; }
 
 
 CLIntSetArgs* gecode_intsetargs_create(int n) {
@@ -462,6 +468,8 @@ void gecode_intsetargs_set(CLIntSetArgs *v, int i, const IntSet* e) {
 }
 void gecode_intsetargs_delete(CLIntSetArgs *v) {
   delete v; }
+void gecode_intsetargs_delete_sap(void *v) {
+  delete (CLIntSetArgs*)v; }
 
 
 CLSymmetryHandleArgs* gecode_symhandleargs_create(int n) {
@@ -472,12 +480,15 @@ void gecode_symhandleargs_set(CLSymmetryHandleArgs *v, int i, const SymmetryHand
 }
 void gecode_symhandleargs_delete(CLSymmetryHandleArgs *v) {
   delete v; }
+void gecode_symhandleargs_delete_sap(void *v) {
+  delete (CLSymmetryHandleArgs*)v; }
 
 
 
 CLSpace* gecode_space_create(void) { return new CLSpace(); }
 
-void gecode_space_delete(void* space) { delete (CLSpace*)space; }
+void gecode_space_delete(CLSpace* space) { delete space; }
+void gecode_space_delete_sap(void* space) { delete (CLSpace*)space; }
 
 CLSpace* gecode_space_copy(CLSpace *space) {
   return (CLSpace *) space->clone(false); }
@@ -562,11 +573,17 @@ STATUS gecode_get_set_info(CLSpace *space,
 void gecode_symmetryhandle_delete(SymmetryHandle* sh) {
   delete sh;
 }
+void gecode_symmetryhandle_delete_sap(void* sh) {
+  delete (SymmetryHandle*)sh;
+}
 
 
 // BrancherHandles
 void gecode_brancherhandle_delete(BrancherHandle* bh) {
   delete bh;
+}
+void gecode_brancherhandle_delete_sap(void* bh) {
+  delete (BrancherHandle*)bh;
 }
 void gecode_brancherhandle_kill(BrancherHandle* bh, CLSpace* space) {
   bh->kill(*space);
@@ -712,6 +729,9 @@ BrancherHandle* gecode_branch_bvars_sym(CLSpace *space, BoolVarArgs* vars,
 void gecode_ivar_selector_delete(IntVarBranch* s){
   delete s;
 }
+void gecode_ivar_selector_delete_sap(void* s){
+  delete (IntVarBranch*)s;
+}
 
 IntVarBranch* INT_VAR_NONE(void){
   // Gecode::INT_VAR_NONE();
@@ -807,6 +827,9 @@ IntVarBranch* INT_VAR_REGRET_MAX_MAX(void){
 /* value selectors for branchers */
 void gecode_ival_selector_delete(IntValBranch* s){
   delete s;
+}
+void gecode_ival_selector_delete_sap(void* s){
+  delete (IntValBranch*)s;
 }
 IntValBranch* INT_VAL_MIN(void){
   // Gecode::INT_VAL_MIN();
@@ -912,6 +935,7 @@ DFS<CLSpace> *gecode_dfs_engine_create(CLSpace *space){
 }
 
 void gecode_dfs_engine_delete(DFS<CLSpace> *dfs){ delete dfs;}
+void gecode_dfs_engine_delete_sap(void *dfs){ delete (DFS<CLSpace>*)dfs;}
 
 CLSpace *gecode_dfs_engine_next(DFS<CLSpace> *dfs){
   EXCSTART
@@ -933,6 +957,7 @@ BAB<CLSpace> *gecode_bab_engine_create(CLSpace *space,
 }
 
 void gecode_bab_engine_delete(BAB<CLSpace> *bab){ delete bab;}
+void gecode_bab_engine_delete_sap(void *bab){ delete (BAB<CLSpace>*)bab;}
 
 CLSpace *gecode_bab_engine_next(BAB<CLSpace> *bab){
   EXCSTART
@@ -954,6 +979,7 @@ RBS<DFS, CLSpace> *gecode_rbs_dfs_engine_create(CLSpace *space){
 }
   
 void gecode_rbs_dfs_engine_delete(RBS<DFS, CLSpace> *rbs){ delete rbs;}
+void gecode_rbs_dfs_engine_delete_sap(void *rbs){ delete (RBS<DFS, CLSpace>*)rbs;}
 
 CLSpace *gecode_rbs_dfs_engine_next(RBS<DFS, CLSpace> *rbs){
   EXCSTART
@@ -975,6 +1001,7 @@ RBS<BAB, CLSpace> *gecode_rbs_bab_engine_create(CLSpace *space,
 }
   
 void gecode_rbs_bab_engine_delete(RBS<BAB, CLSpace> *rbs){ delete rbs;}
+void gecode_rbs_bab_engine_delete_sap(void *rbs){ delete (RBS<BAB, CLSpace>*)rbs;}
 
 CLSpace *gecode_rbs_bab_engine_next(RBS<BAB, CLSpace> *rbs){
   EXCSTART
@@ -1547,6 +1574,7 @@ DFA* gecode_DFA_create(int s, DFA::Transition* trns, int* f) {
   return new DFA(s, trns, f, true);
 }
 void gecode_DFA_delete(DFA* d) { delete d; }
+void gecode_DFA_delete_sap(void* d) { delete (DFA*)d; }
 
 void gecode_extensional_ivars_dfa(CLSpace* space, IntVarArgs* x, DFA* d,
                                   IntConLevel icl) {
@@ -1562,6 +1590,7 @@ TupleSet* gecode_TupleSet_create(void) {
   return new TupleSet();
 }
 void gecode_TupleSet_delete(TupleSet* d) { delete d; }
+void gecode_TupleSet_delete_sap(void* d) { delete (TupleSet*)d; }
 
 void gecode_TupleSet_add(TupleSet* d, IntArgs* i) {
   EXCSTART
@@ -2018,6 +2047,9 @@ BrancherHandle* gecode_branch_fvars_tie(CLSpace *space, FloatVarArgs* vars,
 void gecode_fvar_selector_delete(FloatVarBranch* s){
   delete s;
 }
+void gecode_fvar_selector_delete_sap(void* s){
+  delete (FloatVarBranch*)s;
+}
 
 FloatVarBranch* FLOAT_VAR_NONE(void){
   // Gecode::FLOAT_VAR_NONE();
@@ -2098,6 +2130,9 @@ FloatVarBranch* FLOAT_VAR_AFC_SIZE_MAX(void){
 void gecode_fval_selector_delete(FloatValBranch* s){
   delete s;
 }
+void gecode_fval_selector_delete_sap(void* s){
+  delete (FloatValBranch*)s;
+}
 
 FloatValBranch* FLOAT_VAL_SPLIT_MIN(void){
   // Gecode::FLOAT_VAL_SPLIT_MIN();
@@ -2129,6 +2164,9 @@ IntSet* gecode_intset_ranges(int seq[][2], int count) {
 
 void gecode_intset_delete(IntSet* iset) {
   delete iset;
+}
+void gecode_intset_delete_sap(void* iset) {
+  delete (IntSet*)iset;
 }
 
 
@@ -2418,8 +2456,14 @@ void gecode_element_svars_ivar_int_ivar_int_svar(CLSpace *space, SetVarArgs* a,
 void gecode_svar_selector_delete(SetVarBranch* s){
   delete s;
 }
+void gecode_svar_selector_delete_sap(void* s){
+  delete (SetVarBranch*)s;
+}
 void gecode_sval_selector_delete(SetValBranch* s){
   delete s;
+}
+void gecode_sval_selector_delete_sap(void* s){
+  delete (SetValBranch*)s;
 }
 
 BrancherHandle* gecode_branch_svar(CLSpace *space, SetVar* var, SetValBranch* valb) {

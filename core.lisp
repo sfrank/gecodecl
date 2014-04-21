@@ -63,27 +63,31 @@
   (sap (gecode_space_create) :type sb-sys:system-area-pointer :read-only t)
   (int-notifiers))
 
-(defun reclaim-space (sap)
-  (lambda ()
-    ;(format t "Space GCed...~%")
-    (gecode_space_delete sap)))
-
 (defun make-gspace ()
   (let* ((space (%make-space))
          (sap (gspace-sap space)))
-    (tg:finalize space (reclaim-space sap))
+    (tg:finalize space
+                 (lambda ()
+                   ;;(format t "Space GCed...~%")
+                   (gecode_space_delete_sap sap)))
     space))
 
 (defun make-gspace-from-ref (sap)
-  (let ((space (%make-space-boa sap nil)))
-    (tg:finalize space (reclaim-space space))
+  (let* ((space (%make-space-boa sap nil)))
+    (tg:finalize space
+                 (lambda ()
+                   ;;(format t "Space GCed...~%")
+                   (gecode_space_delete_sap sap)))
     space))
 
 (defun copy-gspace (space)
   (declare (type gspace space))
-  (let ((copy (%make-space-boa (gecode_space_copy space)
-                               (gspace-int-notifiers space))))
-    (tg:finalize space (reclaim-space copy))
+  (let* ((sap (gecode_space_copy space))
+         (copy (%make-space-boa sap (gspace-int-notifiers space))))
+    (tg:finalize copy 
+                 (lambda ()
+                   ;;(format t "Space GCed...~%")
+                   (gecode_space_delete_sap sap)))
     copy))
 
 
@@ -217,38 +221,42 @@
 ;;; depth first search (DFS)
 (defun make-dfs (space)
   (declare (type gspace space))
-  (let ((dfs (%make-dfs-boa (gecode_dfs_engine_create space))))
+  (let* ((dfs (%make-dfs-boa (gecode_dfs_engine_create space)))
+         (sap (engine-sap dfs)))
     (tg:finalize dfs (lambda ()
-                       (gecode_dfs_engine_delete dfs)))
+                       (gecode_dfs_engine_delete_sap sap)))
     dfs))
 
 ;;; branch and bound (BAB)
 (defun make-bab (space min-var)
   (declare (type gspace space)
            (type intvar min-var))
-  (let ((bab (%make-bab-boa 
-              (gecode_bab_engine_create space
-                                        (gvariable-index min-var)))))
+  (let* ((bab (%make-bab-boa 
+               (gecode_bab_engine_create space
+                                         (gvariable-index min-var))))
+         (sap (engine-sap bab)))
     (tg:finalize bab (lambda ()
-                       (gecode_bab_engine_delete bab)))
+                       (gecode_bab_engine_delete_sap sap)))
     bab))
 
 ;;; depth-first restart based solution search (RBS DFS)
 (defun make-rdfs (space)
   (declare (type gspace space))
-  (let ((rbs (%make-rdfs-boa (gecode_rbs_dfs_engine_create space))))
+  (let* ((rbs (%make-rdfs-boa (gecode_rbs_dfs_engine_create space)))
+         (sap (engine-sap rbs)))
     (tg:finalize rbs (lambda ()
-                       (gecode_rbs_dfs_engine_delete rbs)))
+                       (gecode_rbs_dfs_engine_delete_sap sap)))
     rbs))
 
 ;;; branch and bound restart based solution search (RBS BAB)
 (defun make-rbab (space min-var)
   (declare (type gspace space)
            (type intvar min-var))
-  (let ((rbs (%make-rbab-boa (gecode_rbs_bab_engine_create space
-                                                           (gvariable-index min-var)))))
+  (let* ((rbs (%make-rbab-boa (gecode_rbs_bab_engine_create space
+                                                            (gvariable-index min-var))))
+         (sap (engine-sap rbs)))
     (tg:finalize rbs (lambda ()
-                       (gecode_rbs_bab_engine_delete rbs)))
+                       (gecode_rbs_bab_engine_delete_sap sap)))
     rbs))
 
 
@@ -289,14 +297,14 @@
   (let ((selector (%make-ivar-selector sap)))
     (tg:finalize selector 
                  (lambda ()
-                   (gecode_ivar_selector_delete selector)))
+                   (gecode_ivar_selector_delete_sap sap)))
     selector))
 (defun make-ival-selector (sap)
   (declare (type sb-sys:system-area-pointer sap))
   (let ((selector (%make-ival-selector sap)))
     (tg:finalize selector
                  (lambda ()
-                   (gecode_ival_selector_delete selector)))
+                   (gecode_ival_selector_delete_sap sap)))
     selector))
 
 (defun make-fvar-selector (sap)
@@ -304,27 +312,27 @@
   (let ((selector (%make-fvar-selector sap)))
     (tg:finalize selector
                  (lambda ()
-                   (gecode_fvar_selector_delete selector)))
+                   (gecode_fvar_selector_delete_sap sap)))
     selector))
 (defun make-fval-selector (sap)
   (declare (type sb-sys:system-area-pointer sap))
   (let ((selector (%make-fval-selector sap)))
     (tg:finalize selector
                  (lambda ()
-                   (gecode_fval_selector_delete selector)))
+                   (gecode_fval_selector_delete_sap sap)))
     selector))
 
 (defun make-svar-selector (sap)
   (declare (type sb-sys:system-area-pointer sap))
   (let ((selector (%make-svar-selector sap)))
     (tg:finalize selector (lambda ()
-                            (gecode_svar_selector_delete selector)))
+                            (gecode_svar_selector_delete_sap sap)))
     selector))
 (defun make-sval-selector (sap)
   (declare (type sb-sys:system-area-pointer sap))
   (let ((selector (%make-sval-selector sap)))
     (tg:finalize selector (lambda ()
-                            (gecode_sval_selector_delete selector)))
+                            (gecode_sval_selector_delete_sap sap)))
     selector))
 
 
@@ -334,7 +342,7 @@
   (declare (type sb-sys:system-area-pointer sap))
   (let ((handle (%make-brancher-handle sap)))
     (tg:finalize handle (lambda ()
-                          (gecode_brancherhandle_delete handle)))
+                          (gecode_brancherhandle_delete_sap sap)))
     handle))
 
 
@@ -344,7 +352,7 @@
   (declare (type sb-sys:system-area-pointer sap))
   (let ((handle (%make-symmetry-handle sap)))
     (tg:finalize handle (lambda ()
-                          (gecode_symmetryhandle_delete handle)))
+                          (gecode_symmetryhandle_delete_sap sap)))
     handle))
 
 
@@ -353,13 +361,12 @@
 (defstruct (intset (:constructor %make-intset (sap)))
   (sap nil :type sb-sys:system-area-pointer :read-only t))
 
-(defun reclaim-intset (set)
-  (lambda ()
-    (gecode_intset_delete set)))
-
 (defun intset-bounds (min max)
-  (let ((set (%make-intset (gecode_intset_bounds min max))))
-    (tg:finalize set (reclaim-intset set))
+  (let* ((set (%make-intset (gecode_intset_bounds min max)))
+         (sap (intset-sap set)))
+    (tg:finalize set
+                 (lambda ()
+                   (gecode_intset_delete_sap sap)))
     set))
 
 (defun intset-seq (seq)
@@ -370,8 +377,11 @@
            (lambda (x)
              (setf (mem-aref array :int (incf i)) x))
            seq)
-      (let ((set (%make-intset (gecode_intset_seq array length))))
-        (tg:finalize set (reclaim-intset set))
+      (let* ((set (%make-intset (gecode_intset_seq array length)))
+             (sap (intset-sap set)))
+        (tg:finalize set
+                     (lambda ()
+                       (gecode_intset_delete_sap sap)))
         set))))
 
 (defun intset-ranges (array)
@@ -405,9 +415,10 @@
                            symbol s
                            o_state o))))
            (append transitions '((-1 0 0))))
-      (let ((dfa (%make-dfa (gecode_DFA_create start trns f))))
+      (let* ((dfa (%make-dfa (gecode_DFA_create start trns f)))
+             (sap (dfa-sap dfa)))
         (tg:finalize dfa (lambda ()
-                           (gecode_DFA_delete (dfa-sap dfa))))
+                           (gecode_DFA_delete_sap sap)))
         dfa))))
 
 
@@ -416,9 +427,10 @@
   (sap nil :type sb-sys:system-area-pointer :read-only t))
 
 (defun make-tupleset ()
-  (let ((set (%make-tupleset (gecode_TupleSet_create))))
+  (let* ((set (%make-tupleset (gecode_TupleSet_create)))
+         (sap (tupleset-sap set)))
     (tg:finalize set (lambda ()
-                       (gecode_TupleSet_delete set)))
+                       (gecode_TupleSet_delete_sap sap)))
     set))
 
 (defun tupleset-add (set seq)
