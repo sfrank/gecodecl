@@ -246,7 +246,8 @@ extern "C" {
                                       BoolVar* bvar, IntConLevel icl);
 
   void gecode_ite_bvar_ivar_ivar_ivar(CLSpace *space, BoolVar* bvar,
-                                      IntVar* x, IntVar* y, IntVar* z);
+                                      IntVar* x, IntVar* y, IntVar* z,
+                                      IntConLevel icl);
 
 
   /* integer relations */

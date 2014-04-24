@@ -3,8 +3,11 @@
 (in-package :gecodecl)
 
 (defmacro with-gecode (&rest body)
-  `(let ((*gspace* (make-gspace)))
-     ,@body))
+  `(let ((*gspace* (%make-space)))
+     (unwind-protect
+          (progn
+            ,@body)
+       (gecode_space_delete *gspace*))))
 
 (defun one-solution (seq search-fun)
   (let ((s (funcall search-fun *gspace*)))
@@ -18,7 +21,7 @@
            result-type
            (type-of seq))
        (lambda (x)
-         (if (numberp x)
+         (if (integerp x)
              x
              (add-int-variable min max)))
        seq))
@@ -150,8 +153,10 @@
 
 ;;; if-then-else constraint: z = (b ? x : y)
 
-(defun ifthenelse-post ((z intvar) (b boolvar) (x intvar) (y intvar))
-  (gecode_ite_bvar_ivar_ivar_ivar *gspace* b x y z))
+(defgeneric ifthenelse-post (z b x y &key clevel))
+(defmethod ifthenelse-post ((z intvar) (b boolvar) (x intvar) (y intvar)
+                            &key (clevel :icl-def))
+  (gecode_ite_bvar_ivar_ivar_ivar *gspace* b x y z clevel))
 
 ;;; distinct integer variables
 

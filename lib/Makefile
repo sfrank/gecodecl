@@ -1,4 +1,4 @@
-LOCATION = /home/sfrank/prj/g
+#LOCATION = /home/sfrank/prj/g
 OPTIONS = -ggdb -L$(LOCATION) -I$(LOCATION)
 WARNINGS = -W -Wall -Wextra
 LIBS = -lgecodesearch -lgecodekernel -lgecodeint -lgecodefloat -lgecodeset -lgecodeminimodel -lgecodesupport -lstdc++

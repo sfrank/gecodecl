@@ -527,7 +527,8 @@
   (bvar boolvar-type)
   (x intvar-type)
   (y intvar-type)
-  (z intvar-type))
+  (z intvar-type)
+  (icl int-consistency-level))
 
 (cffi:defcfun ("gecode_dom_ivar_int" gecode_dom_ivar_int) :void
   (space space-type)

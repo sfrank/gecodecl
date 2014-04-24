@@ -123,6 +123,15 @@ public:
     rel(*this, cost(), IRT_LE, best.cost().val());
   }
 
+  /*
+  void master(unsigned long int i, const Space* s, NoGoods& ng) {
+    ng.post(* this);
+  }
+
+  void slave(unsigned long int i, const Space* s) {
+  }
+  */
+
   IntVar inline cost() const {
     return intVariables[minimizeVar];
   }
@@ -1087,8 +1096,9 @@ void gecode_clause_bvars_bvars_bvar(CLSpace *space, BoolOpType op,
 }
 
 void gecode_ite_bvar_ivar_ivar_ivar(CLSpace *space, BoolVar* bvar,
-                                    IntVar* x, IntVar* y, IntVar* z) {
-  ite(*space, *bvar, *x, *y, *z);
+                                    IntVar* x, IntVar* y, IntVar* z,
+                                    IntConLevel icl) {
+  ite(*space, *bvar, *x, *y, *z, icl);
 }
 
 /* finite domain integer relations */

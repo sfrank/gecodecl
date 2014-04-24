@@ -65,7 +65,7 @@
     _ _ 2   _ _ _   5 _ _))
 
 
-;; so accompanying sudokus.txt is from Peter Norvig's Sudoku
+;; the accompanying sudokus.txt is from Peter Norvig's Sudoku
 ;; experiments at http://norvig.com/sudoku.html
 (defun read-sudokus (&optional (file "examples/sudokus.txt"))
   (with-open-file (s file)
@@ -76,7 +76,7 @@
 ;;; modelling
 
 (defun sudoku (grid)
-  (with-gecode ()
+  (with-gecode
     (let ((v (integer-seq grid :min 1 :max 9)))
       (dolist (list (append (rows v) (columns v) (boxes v)))
         (distinct-g list))
