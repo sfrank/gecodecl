@@ -14,7 +14,7 @@
     (let ((solution (search-next s)))
       (when solution
         (let ((*gspace* solution))
-          (map (type-of seq) #'integer-value seq))))))
+          (map (type-of seq) #'variable-value seq))))))
 
 (defun integer-seq (seq &key (min -1000000000) (max 1000000000) (result-type nil))
   (map (if result-type
@@ -25,6 +25,25 @@
              x
              (add-int-variable min max)))
        seq))
+
+;;;; Variables
+
+(defgeneric variable-value (variable)
+  (:documentation "extracts the value of a singleton VARIABLE.")
+  (:method ((v boolvar)) (boolean-value v))
+  (:method ((v intvar)) (integer-value v))
+  (:method ((v floatvar)) (float-value v))
+  (:method ((v setvar)) (set-value v))
+  (:method (v) v))
+
+(defgeneric variable-info (variable)
+  (:documentation "extracts the information of a VARIABLE.")
+  (:method ((v boolvar)) (boolean-info v))
+  (:method ((v intvar)) (integer-info v))
+  (:method ((v floatvar)) (float-info v))
+  (:method ((v setvar)) (set-info v))
+  (:method (v) v))
+
 
 ;;;; Boolean and Integer Relations
 

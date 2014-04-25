@@ -113,13 +113,11 @@
                   (mem-ref size :int)))))
 
 (defun integer-value (variable)
-  (if (intvar-p variable)
-      (multiple-value-bind (result values)
-          (integer-info variable)
-        (if (eq result :var-assigned)
-            (car values)
-            (error "Value requested on unassigned variable ~A" variable)))
-      variable))
+  (multiple-value-bind (result values)
+      (integer-info variable)
+    (if (eq result :var-assigned)
+        (car values)
+        (error "Value requested on unassigned variable ~A" variable))))
 
 ;;; BoolVars
 (defun add-bool-variable ()
