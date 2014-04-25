@@ -269,10 +269,12 @@
     (bab (let ((space (gecode_bab_engine_next engine)))
            (unless (null-pointer-p space)
              (make-gspace-from-ref space))))
-;;    (rbs (let ((space (gecode_rbs_engine_next engine)))
-;;           (unless (null-pointer-p space)
-;;             (make-gspace-from-ref space))))
-    ))
+    (rdfs (let ((space (gecode_rbs_dfs_engine_next engine)))
+            (unless (null-pointer-p space)
+              (make-gspace-from-ref space))))
+    (rbab (let ((space (gecode_rbs_bab_engine_next engine)))
+            (unless (null-pointer-p space)
+              (make-gspace-from-ref space))))))
 
 
 ;;; branching selectors
