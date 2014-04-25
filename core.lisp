@@ -72,14 +72,6 @@
                    (gecode_space_delete_sap sap)))
     space))
 
-(defun make-gspace-from-ref (sap)
-  (let* ((space (%make-space-boa sap nil)))
-    (tg:finalize space
-                 (lambda ()
-                   ;;(format t "Space GCed...~%")
-                   (gecode_space_delete_sap sap)))
-    space))
-
 (defun copy-gspace (space)
   (declare (type gspace space))
   (let* ((sap (gecode_space_copy space))
@@ -219,43 +211,24 @@
 ;;; depth first search (DFS)
 (defun make-dfs (space)
   (declare (type gspace space))
-  (let* ((dfs (%make-dfs-boa (gecode_dfs_engine_create space)))
-         (sap (engine-sap dfs)))
-    (tg:finalize dfs (lambda ()
-                       (gecode_dfs_engine_delete_sap sap)))
-    dfs))
+  (%make-dfs-boa (gecode_dfs_engine_create space)))
 
 ;;; branch and bound (BAB)
 (defun make-bab (space min-var)
   (declare (type gspace space)
            (type intvar min-var))
-  (let* ((bab (%make-bab-boa 
-               (gecode_bab_engine_create space
-                                         (gvariable-index min-var))))
-         (sap (engine-sap bab)))
-    (tg:finalize bab (lambda ()
-                       (gecode_bab_engine_delete_sap sap)))
-    bab))
+  (%make-bab-boa (gecode_bab_engine_create space (gvariable-index min-var))))
 
 ;;; depth-first restart based solution search (RBS DFS)
 (defun make-rdfs (space)
   (declare (type gspace space))
-  (let* ((rbs (%make-rdfs-boa (gecode_rbs_dfs_engine_create space)))
-         (sap (engine-sap rbs)))
-    (tg:finalize rbs (lambda ()
-                       (gecode_rbs_dfs_engine_delete_sap sap)))
-    rbs))
+  (%make-rdfs-boa (gecode_rbs_dfs_engine_create space)))
 
 ;;; branch and bound restart based solution search (RBS BAB)
 (defun make-rbab (space min-var)
   (declare (type gspace space)
            (type intvar min-var))
-  (let* ((rbs (%make-rbab-boa (gecode_rbs_bab_engine_create space
-                                                            (gvariable-index min-var))))
-         (sap (engine-sap rbs)))
-    (tg:finalize rbs (lambda ()
-                       (gecode_rbs_bab_engine_delete_sap sap)))
-    rbs))
+  (%make-rbab-boa (gecode_rbs_bab_engine_create space (gvariable-index min-var))))
 
 
 ;;; solution search for both engine types
@@ -263,16 +236,16 @@
   (etypecase engine
     (dfs (let ((space (gecode_dfs_engine_next engine)))
            (unless (null-pointer-p space)
-             (make-gspace-from-ref space))))
+             (%make-space-boa space nil))))
     (bab (let ((space (gecode_bab_engine_next engine)))
            (unless (null-pointer-p space)
-             (make-gspace-from-ref space))))
+             (%make-space-boa space nil))))
     (rdfs (let ((space (gecode_rbs_dfs_engine_next engine)))
             (unless (null-pointer-p space)
-              (make-gspace-from-ref space))))
+              (%make-space-boa space nil))))
     (rbab (let ((space (gecode_rbs_bab_engine_next engine)))
             (unless (null-pointer-p space)
-              (make-gspace-from-ref space))))))
+              (%make-space-boa space nil))))))
 
 
 ;;; branching selectors

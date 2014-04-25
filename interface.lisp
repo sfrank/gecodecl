@@ -9,12 +9,16 @@
             ,@body)
        (gecode_space_delete *gspace*))))
 
-(defun one-solution (seq search-fun)
-  (let ((s (funcall search-fun *gspace*)))
-    (let ((solution (search-next s)))
-      (when solution
-        (let ((*gspace* solution))
-          (map (type-of seq) #'variable-value seq))))))
+(defun one-solution (seq search-fun &rest search-args)
+  (let ((e (apply search-fun (list* *gspace* search-args))))
+    (unwind-protect 
+         (let ((solution (search-next e)))
+           (when solution
+             (unwind-protect 
+                  (let ((*gspace* solution))
+                    (map (type-of seq) #'variable-value seq))
+               (gecode_space_delete solution))))
+      (engine-delete e))))
 
 (defun integer-seq (seq &key (min -1000000000) (max 1000000000) (result-type nil))
   (map (if result-type
