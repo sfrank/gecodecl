@@ -389,3 +389,16 @@
        (branch-svars-tie *gspace* vars var-brancher val-brancher))
       (t
        (error "The variable bancher sequence VAR-BRANCHER must not exceed four branchers.")))))
+
+
+;;;; search engine
+
+;;; generic engine delete
+(defgeneric engine-delete (engine)
+  (:documentation "Deletes an ENGINE")
+  (:method ((e dfs)) (gecode_dfs_engine_delete e))
+  (:method ((e bab)) (gecode_bab_engine_delete e))
+  (:method ((e rdfs)) (gecode_rds_dfs_engine_delete e))
+  (:method ((e rbab)) (gecode_rbs_bab_engine_delete e)))
+
+
